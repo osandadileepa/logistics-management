@@ -1,0 +1,79 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 8
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1000
+    cpu_required: 500
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  namespace: test
+  name: auth
+  port: 3000
+  env: test
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: test
+    node-type: spot
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/auth-quincus-images
+  tag: "fea98df"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: test/auth
+  versionId: ce51cb59-8b8f-48c9-8f1a-0e930d8f075c
+ingress:
+  enabled: true
+  hostName: api.auth.test.quincus.com
+  path: /
+  nginx_annotations:    
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.test.quincus.com, https://shipment.test.quincus.com, https://pricing.test.quincus.com, https://common.test.quincus.com, https://order.test.quincus.com, https://test.quincus.com, https://quincus.test.qship.quincus.com, http://localhost:3000, https://quincus.test.qship.quincus.com, https://SHPV2.test.qship.quincus.com, https://kafka.test.qship.quincus.com, https://nov72022.test.qship.quincus.com, https://tsv2.test.qship.quincus.com, https://qps.test.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: test
+      node-type: spot
+  auth:
+    enabled: false

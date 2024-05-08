@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-325-3
+      author: bertanasco
+      comment: "Add missing order json field"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: data
+                  type: json
+            tableName: shipment_order
+  - changeSet:
+      id: SHPV2-376-4
+      author: bertanasco
+      comment: "Add location code values to location_hierarcy table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: country_code
+                  type: varchar(64)
+              - column:
+                  name: state_code
+                  type: varchar(64)
+              - column:
+                  name: city_code
+                  type: varchar(64)
+            tableName: location_hierarchy
+        - modifyDataType:
+            columnName: shipment_id
+            newDataType: varchar(48)
+            tableName: milestone_events
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_destination_address
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_origin_address
+        - modifyDataType:
+            columnName: origin
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: destination
+            newDataType: varchar(48)
+            tableName: shipment
+        - addForeignKeyConstraint:
+            baseColumnNames: origin
+            baseTableName: shipment
+            constraintName: fk_shipment_origin_address
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: address
+        - addForeignKeyConstraint:
+            baseColumnNames: destination
+            baseTableName: shipment
+            constraintName: fk_shipment_destination_address
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: address

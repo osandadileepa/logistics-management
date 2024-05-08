@@ -1,0 +1,16 @@
+{
+  "correlation_id": "4f1b1c71-d605-4169-8d68-d75e9cf0f1e9",
+  "module": "APIG",
+  "event_payload": {
+    "carrier": "VN",
+    "flight_number": "6800",
+    "departure_date": "2023-04-17",
+    "origin": "BKK",
+    "destination": "SGN",
+    "success": false,
+    "error": "Flight not found"
+  },
+  "event_id": "e5b25785-591a-48f4-8a6c-a6976c297cf1",
+  "event_date_utc": "2023-04-19T03:52:31.553Z",
+  "event_type": "FLIGHT_SUBSCRIBE_RS"
+}

@@ -1,0 +1,132 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-4217
+      author: rahhi
+      comment: "Added timezone field for network lane segments datetime field"
+      changes:
+        - addColumn:
+            tableName: network_lane_segment
+            columns:
+              - column:
+                  name: pick_up_timezone
+                  type: varchar(255)
+              - column:
+                  name: drop_off_timezone
+                  type: varchar(255)
+              - column:
+                  name: lock_out_timezone
+                  type: varchar(255)
+              - column:
+                  name: departure_timezone
+                  type: varchar(255)
+              - column:
+                  name: arrival_timezone
+                  type: varchar(255)
+              - column:
+                  name: recovery_timezone
+                  type: varchar(255)
+  - changeSet:
+      id: SHPV2-4217-0
+      author: rahhi
+      comment: "Added timezone field for milestone datetime table field"
+      changes:
+        - addColumn:
+            tableName: milestone
+            columns:
+              - column:
+                  name: eta_timezone
+                  type: varchar(255)
+              - column:
+                  name: milestone_timezone
+                  type: varchar(255)
+              - column:
+                  name: proof_of_delivery_timezone
+                  type: varchar(255)
+  - changeSet:
+      id: SHPV2-4217-1
+      author: rahhi
+      comment: "update all pjs datetime field to proper datetime format"
+      changes:
+        - sql:
+            dbms: mysql
+            endDelimiter: ';'
+            splitStatements: true
+            sql: |
+              update package_journey_segment set pick_up_time = concat(SUBSTRING(pick_up_time, 1, 10),'T',SUBSTRING(pick_up_time,12,8), SUBSTRING(pick_up_time,21,3), ':', SUBSTRING(pick_up_time,24,2)) where pick_up_time is not null and REGEXP_LIKE(pick_up_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set pick_up_commit_time = concat(SUBSTRING(pick_up_commit_time, 1, 10),'T',SUBSTRING(pick_up_commit_time,12,8), SUBSTRING(pick_up_commit_time,21,3), ':', SUBSTRING(pick_up_commit_time,24,2)) where pick_up_commit_time is not null and REGEXP_LIKE(pick_up_commit_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set pick_up_actual_time = concat(SUBSTRING(pick_up_actual_time, 1, 10),'T',SUBSTRING(pick_up_actual_time,12,8), SUBSTRING(pick_up_actual_time,21,3), ':', SUBSTRING(pick_up_actual_time,24,2)) where pick_up_actual_time is not null and REGEXP_LIKE(pick_up_actual_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set pick_up_on_site_time = concat(SUBSTRING(pick_up_on_site_time, 1, 10),'T',SUBSTRING(pick_up_on_site_time,12,8), SUBSTRING(pick_up_on_site_time,21,3), ':', SUBSTRING(pick_up_on_site_time,24,2)) where pick_up_on_site_time is not null and REGEXP_LIKE(pick_up_on_site_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set drop_off_time = concat(SUBSTRING(drop_off_time, 1, 10),'T',SUBSTRING(drop_off_time,12,8), SUBSTRING(drop_off_time,21,3), ':', SUBSTRING(drop_off_time,24,2)) where drop_off_time is not null and REGEXP_LIKE(drop_off_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set drop_off_commit_time = concat(SUBSTRING(drop_off_commit_time, 1, 10),'T',SUBSTRING(drop_off_commit_time,12,8), SUBSTRING(drop_off_commit_time,21,3), ':', SUBSTRING(drop_off_commit_time,24,2)) where drop_off_commit_time is not null and REGEXP_LIKE(drop_off_commit_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set drop_off_actual_time = concat(SUBSTRING(drop_off_actual_time, 1, 10),'T',SUBSTRING(drop_off_actual_time,12,8), SUBSTRING(drop_off_actual_time,21,3), ':', SUBSTRING(drop_off_actual_time,24,2)) where drop_off_actual_time is not null and REGEXP_LIKE(drop_off_actual_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set drop_off_on_site_time = concat(SUBSTRING(drop_off_on_site_time, 1, 10),'T',SUBSTRING(drop_off_on_site_time,12,8), SUBSTRING(drop_off_on_site_time,21,3), ':', SUBSTRING(drop_off_on_site_time,24,2)) where drop_off_on_site_time is not null and REGEXP_LIKE(drop_off_on_site_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set lock_out_time = concat(SUBSTRING(lock_out_time, 1, 10),'T',SUBSTRING(lock_out_time,12,8), SUBSTRING(lock_out_time,21,3), ':', SUBSTRING(lock_out_time,24,2)) where lock_out_time is not null and REGEXP_LIKE(lock_out_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set recovery_time = concat(SUBSTRING(recovery_time, 1, 10),'T',SUBSTRING(recovery_time,12,8), SUBSTRING(recovery_time,21,3), ':', SUBSTRING(recovery_time,24,2)) where recovery_time is not null and REGEXP_LIKE(recovery_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set departure_time = concat(SUBSTRING(departure_time, 1, 10),'T',SUBSTRING(departure_time,12,8), SUBSTRING(departure_time,21,3), ':', SUBSTRING(departure_time,24,2)) where departure_time is not null and REGEXP_LIKE(departure_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+              update package_journey_segment set arrival_time = concat(SUBSTRING(arrival_time, 1, 10),'T',SUBSTRING(arrival_time,12,8), SUBSTRING(arrival_time,21,3), ':', SUBSTRING(arrival_time,24,2)) where arrival_time is not null and REGEXP_LIKE(arrival_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} [+-][0-9]{4}$');
+  - changeSet:
+      id: SHPV2-4217-2
+      author: rahhi
+      comment: "update all shipment order datetime field to proper datetime format"
+      changes:
+        - sql:
+            dbms: mysql
+            endDelimiter: ';'
+            splitStatements: true
+            sql: |
+              update shipment_order set pickup_start_time = concat(replace(pickup_start_time,' ','T'), substr(pickup_timezone,4,10)) where pickup_start_time is not null and  REGEXP_LIKE(pickup_start_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
+              update shipment_order set pickup_commit_time = concat(replace(pickup_commit_time,' ','T'), substr(pickup_timezone,4,10)) where pickup_commit_time is not null and REGEXP_LIKE(pickup_commit_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
+              update shipment_order set delivery_start_time = concat(replace(delivery_start_time,' ','T'), substr(delivery_timezone,4,10)) where delivery_start_time is not null and  REGEXP_LIKE(delivery_start_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
+              update shipment_order set delivery_commit_time = concat(replace(delivery_commit_time,' ','T'), substr(delivery_timezone,4,10)) where delivery_commit_time is not null and REGEXP_LIKE(delivery_commit_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$');
+  - changeSet:
+      id: SHPV2-4217-3
+      author: rahhi
+      comment: "update all milestone datetime fields format"
+      changes:
+        - sql:
+            dbms: mysql
+            endDelimiter: ';'
+            splitStatements: true
+            sql: |
+              update milestone set milestone_time = REPLACE(milestone_time,'Z','+00:00') where REGEXP_LIKE(milestone_time, '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$');
+              update milestone set eta = REPLACE(eta,'Z','+00:00') where REGEXP_LIKE(eta, '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$');
+              update milestone set proof_of_delivery_time = concat(replace(substr(proof_of_delivery_time,1,19),' ', 'T'),'+00:00') where proof_of_delivery_time is not null;
+  - changeSet:
+      id: SHPV2-4217-4
+      author: rahhi
+      comment: "update networklanesegment field to supply timezone from start or end location"
+      changes:
+        - sql:
+            dbms: mysql
+            endDelimiter: ';'
+            splitStatements: true
+            sql: |
+              update network_lane_segment ns
+              inner join location_hierarchy startlh on ns.start_location_hierarchy = startlh.id
+              left join location startcity on startcity.id = startlh.city_id
+              left join location startfacility on startfacility.id = startlh.facility_id
+              set 
+                pick_up_timezone = right((case when startfacility.timezone is not null then startfacility.timezone else startcity.timezone end),9),
+                departure_timezone = right((case when startfacility.timezone is not null then startfacility.timezone else startcity.timezone end),9),
+                lock_out_timezone = right((case when startfacility.timezone is not null then startfacility.timezone else startcity.timezone end),9);
+              
+              update network_lane_segment ns
+              inner join location_hierarchy endlh on ns.end_location_hierarchy = endlh.id
+              left join location endcity on endcity.id = endlh.city_id
+              left join location endfacility on endfacility.id = endlh.facility_id
+              set 
+                arrival_timezone = right((case when endfacility.timezone is not null then endfacility.timezone else endcity.timezone end),9),
+                recovery_timezone = right((case when endfacility.timezone is not null then endfacility.timezone else endcity.timezone end),9),
+                drop_off_timezone = right((case when endfacility.timezone is not null then endfacility.timezone else endcity.timezone end),9);
+
+  - changeSet:
+      id: SHPV2-6593
+      author: osanda
+      comment: "Add Distance UOM for Shipment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: distance_uom
+                  type: varchar(10)
+            tableName: shipment

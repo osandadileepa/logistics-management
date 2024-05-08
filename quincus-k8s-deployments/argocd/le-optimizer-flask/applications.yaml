@@ -1,0 +1,26 @@
+###le-optimizer-flask
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: le-optimizer-flask-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - le-optimizer-flask/values-dev.yaml
+  project: le-optimizer-flask
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

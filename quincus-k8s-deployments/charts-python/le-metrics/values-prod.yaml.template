@@ -1,0 +1,33 @@
+replicaCount: 1
+app:
+  region: ${REGION}
+  namespace: prod
+  name: le-metrics
+  port: 8081
+  env: prod
+  image_pull_policy: IfNotPresent
+  mem_limit: 3072
+  mem_required: 1024
+  cpu_limit: 3000
+  cpu_required: 500
+  node_selectors:
+    environment: prod
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/le-metrics
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: le-metrics.center.quincus.com
+  hostName_noram: le-metrics.center-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.org/client-max-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+#deployed on $date_build

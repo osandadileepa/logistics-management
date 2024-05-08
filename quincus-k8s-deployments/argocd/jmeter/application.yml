@@ -1,0 +1,177 @@
+###jmeter
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-order-be-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - order-be-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-admin-be-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin-be-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-shipment-be-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - shipment-be-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-qship-be-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - qship-be-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-logistics-engine-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - logistics-engine-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-geo-engine-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - geo-engine-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jmeter-dispatch-be-perf-job
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: perf
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-jmeter
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - dispatch-be-perf-job/values-perf.yaml
+  project: jmeter
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+---

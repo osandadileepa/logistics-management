@@ -1,0 +1,167 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-25
+      author: ajalbaniel
+      comment: "Updated field definition for Connection and related tables"
+      changes:
+        - dropColumn:
+            columnName: organization_id
+            tableName: connection
+        - dropColumn:
+            columnName: code
+            tableName: connection
+        - dropColumn:
+            columnName: vendor_code
+            tableName: connection
+        - dropColumn:
+            columnName: is_active
+            tableName: connection
+        - addColumn:
+            columns:
+              - column:
+                  name: active
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: deleted
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+                  defaultValue: 0
+              - column:
+                  name: connection_code
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: unique_connection_code
+              - column:
+                  name: partner_id
+                  type: VARCHAR(48)
+              - column:
+                  name: partner_name
+                  type: VARCHAR(256)
+              - column:
+                  name: partner_code
+                  type: VARCHAR(256)
+              - column:
+                  name: departure_node_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: arrival_node_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipment_profile_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transport_type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vehicle_type_id
+                  type: VARCHAR(48)
+              - column:
+                  name: vehicle_type_name
+                  type: VARCHAR(256)
+              - column:
+                  name: cost
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: currency_id
+                  type: VARCHAR(48)
+              - column:
+                  name: currency_code
+                  type: VARCHAR(48)
+              - column:
+                  name: currency_name
+                  type: VARCHAR(256)
+              - column:
+                  name: ground_duration
+                  type: integer
+              - column:
+                  name: air_schedule_departure
+                  type: time
+              - column:
+                  name: air_schedule_arrival
+                  type: time
+              - column:
+                  name: air_lockout_duration
+                  type: integer
+              - column:
+                  name: air_recovery_duration
+                  type: integer
+            tableName: connection
+        - addColumn:
+            columns:
+              - column:
+                  name: max_single_side
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: min_single_side
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: max_linear_dim
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: min_linear_dim
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: max_volume
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: min_volume
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: volume_unit
+                  type: VARCHAR(64)
+            tableName: shipment_profile
+        - createTable:
+            tableName: connection_tag
+            columns:
+              - column:
+                  name: connection_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: shipment_profile_id
+            baseTableName: connection
+            constraintName: fk_connection_shipment_profile
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_profile
+        - addForeignKeyConstraint:
+            baseColumnNames: connection_id
+            baseTableName: connection_tag
+            constraintName: fk_connection_tags
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: connection
+        - addForeignKeyConstraint:
+            baseColumnNames: departure_node_id
+            baseTableName: connection
+            constraintName: fk_connection_departure_node
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: node
+        - addForeignKeyConstraint:
+            baseColumnNames: arrival_node_id
+            baseTableName: connection
+            constraintName: fk_connection_arrival_node
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: node

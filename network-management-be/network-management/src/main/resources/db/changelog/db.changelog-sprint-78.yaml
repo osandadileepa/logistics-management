@@ -1,0 +1,370 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-72
+      author: ajalbaniel
+      comment: "Updated field definition for Node and related tables"
+      changes:
+        - dropColumn:
+            columnName: organization_id
+            tableName: node
+        - dropColumn:
+            columnName: type
+            tableName: node
+        - dropColumn:
+            columnName: code
+            tableName: node
+        - dropColumn:
+            columnName: is_active
+            tableName: node
+        - addColumn:
+            columns:
+              - column:
+                  name: active
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: deleted
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+                  defaultValue: 0
+              - column:
+                  name: node_type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: node_code
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: unique_node_code
+              - column:
+                  name: address_line_1
+                  type: varchar(256)
+              - column:
+                  name: address_line_2
+                  type: varchar(256)
+              - column:
+                  name: address_line_3
+                  type: varchar(256)
+              - column:
+                  name: facility_id
+                  type: VARCHAR(48)
+              - column:
+                  name: facility_name
+                  type: VARCHAR(256)
+              - column:
+                  name: capacity
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: capacity_unit
+                  type: VARCHAR(64)
+              - column:
+                  name: operating_hours_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipment_profile_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+            tableName: node
+        - createTable:
+            tableName: node_tag
+            columns:
+              - column:
+                  name: node_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: operating_hours
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: mon_start_time
+                  type: time
+              - column:
+                  name: mon_end_time
+                  type: time
+              - column:
+                  name: mon_processing_time
+                  type: integer
+              - column:
+                  name: tue_start_time
+                  type: time
+              - column:
+                  name: tue_end_time
+                  type: time
+              - column:
+                  name: tue_processing_time
+                  type: integer
+              - column:
+                  name: wed_start_time
+                  type: time
+              - column:
+                  name: wed_end_time
+                  type: time
+              - column:
+                  name: wed_processing_time
+                  type: integer
+              - column:
+                  name: thu_start_time
+                  type: time
+              - column:
+                  name: thu_end_time
+                  type: time
+              - column:
+                  name: thu_processing_time
+                  type: integer
+              - column:
+                  name: fri_start_time
+                  type: time
+              - column:
+                  name: fri_end_time
+                  type: time
+              - column:
+                  name: fri_processing_time
+                  type: integer
+              - column:
+                  name: sat_start_time
+                  type: time
+              - column:
+                  name: sat_end_time
+                  type: time
+              - column:
+                  name: sat_processing_time
+                  type: integer
+              - column:
+                  name: sun_start_time
+                  type: time
+              - column:
+                  name: sun_end_time
+                  type: time
+              - column:
+                  name: sun_processing_time
+                  type: integer
+              - column:
+                  name: processing_time_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: shipment_profile
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: max_length
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_length
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_width
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_width
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_height
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_height
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_weight
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_weight
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dimension_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: operating_hours_id
+            baseTableName: node
+            constraintName: fk_node_operating_hours
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: operating_hours
+        - addForeignKeyConstraint:
+            baseColumnNames: shipment_profile_id
+            baseTableName: node
+            constraintName: fk_node_shipment_profile
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_profile
+        - addForeignKeyConstraint:
+            baseColumnNames: node_id
+            baseTableName: node_tag
+            constraintName: fk_node_tags
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: node
+  - changeSet:
+      id: NW-72-2
+      author: ajalbaniel
+      comment: "Added new field timezone for Node"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: facility_code
+                  type: VARCHAR(256)
+              - column:
+                  name: timezone
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: partner_id
+                  type: VARCHAR(48)
+              - column:
+                  name: partner_name
+                  type: VARCHAR(256)
+              - column:
+                  name: partner_code
+                  type: VARCHAR(256)
+            tableName: node
+
+  - changeSet:
+      id: NW-126
+      author: osanda
+      comment: "Job Metrics table"
+      changes:
+        - createTable:
+            tableName: job_metrics
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: processed_records
+                  type: INTEGER
+              - column:
+                  name: status
+                  type: VARCHAR(15)
+              - column:
+                  name: successful_records
+                  type: INTEGER
+              - column:
+                  name: failed_records
+                  type: INTEGER
+              - column:
+                  name: total_records
+                  type: INTEGER
+              - column:
+                  name: data_with_error
+                  type: json
+              - column:
+                  name: fail_reason
+                  type: varchar(2000)
+              - column:
+                  name: record_class_type
+                  type: varchar(300)
+              - column:
+                  name: organization_id
+                  type: varchar(42)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_by_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_by_name
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: timestamp
+              - column:
+                  name: time_elapsed_ms
+                  type: integer unsigned

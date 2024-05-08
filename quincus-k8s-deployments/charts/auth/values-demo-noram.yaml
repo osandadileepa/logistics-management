@@ -1,0 +1,80 @@
+app:
+  region: us-west-2
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 2
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1000
+    cpu_required: 500
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  namespace: demo
+  name: auth
+  port: 3000
+  env: demo
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: demo
+    node-type: spot
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.us-west-2.amazonaws.com/auth-quincus-images
+  tag: "60bbc2b"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: demo/auth
+  versionId: 
+ingress:
+  enabled: true
+  hostName: api.auth.demo.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.preprod.quincus.com, https://shipment.preprod.quincus.com, https://pricing.preprod.quincus.com, https://common.preprod.quincus.com, https://order.preprod.quincus.com, https://preprod.quincus.com, https://quincus.preprod.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,timeout,platform"    
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: demo
+      node-type: on_demand
+  auth:
+    enabled: false

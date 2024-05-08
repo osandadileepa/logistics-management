@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-395
+      author: osanda
+      comment: "Add distance between two nodes to the connection table as distance with unit"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: distance_unit
+                  type: VARCHAR(64)
+              - column:
+                  name: distance
+                  type: DECIMAL(12, 4)
+            tableName: connection

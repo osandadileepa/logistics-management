@@ -1,0 +1,14 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: qship-be-perf
+  build_id: 80
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: 
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: "qship-be-34244f3"
+#deployed on Wed Jun  7 06:50:45 UTC 2023

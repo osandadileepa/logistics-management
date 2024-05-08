@@ -1,0 +1,17 @@
+{
+  "correlation_id": "bf30ca20-481e-4a56-9449-a9fada89de62",
+  "module": "APIG",
+  "event_id": "bf30ca20-481e-4a56-9449-a9fada89de62",
+  "event_date_utc": "2022-12-09T01:11:29.513Z",
+  "event_type": "FLIGHT_SUBSCRIBE_RS",
+  "event_payload": {
+    "carrier": "PR",
+    "flight_number": "112",
+    "departure_date": "2022-12-20",
+    "origin": "SIN",
+    "destination": "MNL",
+    "success": false,
+    "error": "Flight not found",
+    "event_name": "FLIGHT_NOT_FOUND"
+  }
+}

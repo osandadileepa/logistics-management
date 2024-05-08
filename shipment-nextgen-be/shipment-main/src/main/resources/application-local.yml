@@ -1,0 +1,19 @@
+feature:
+  shipment:
+    enabled: true
+  kafka:
+    enabled: true
+    admin:
+      enabled: true
+  qportal:
+    enabled: true
+  qlogger:
+    enabled: true
+  order:
+    enabled: true
+  api-gateway:
+    enabled: true
+  authentication:
+    enabled: true
+  s3-integration:
+    enabled: true

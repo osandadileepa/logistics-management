@@ -1,0 +1,182 @@
+image: atlassian/default-image:3
+
+definitions:
+  commonItems:
+    &setEnv export RELEASE_VERSION=$( [ -z $BITBUCKET_TAG ] && echo v$(echo $BITBUCKET_BRANCH | cut -d '-' -f 2-) || echo $(echo $BITBUCKET_TAG | cut -d '_' -f 3-)) && 
+        export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7) && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip";unzip awscliv2.zip;./aws/install && 
+        aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com; 
+  steps:
+    - step: &build-test-sonarcloud
+        name: Maven Build and SonarQube analysis
+        image: maven:3-eclipse-temurin-17
+        caches:
+          - maven
+        script:
+          - mvn install -N
+          - mvn clean verify package -f pom.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          - mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout > version.txt
+        artifacts:
+          - version.txt
+          - main/target/*.jar
+    - step: &build-artifact
+        name: Maven Build 
+        image: maven:3-eclipse-temurin-17
+        caches:
+          - maven
+        script:
+          - mvn install -N
+          - mvn clean verify package -f pom.xml -DskipTests
+          - mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout > version.txt
+        artifacts:
+          - version.txt
+          - main/target/*.jar          
+    - step: &docker-build   ## step specific for env 'dev'
+        name: Build Docker Image & Push to ECR
+        caches:
+          - docker
+        script:
+          - *setEnv        
+          - docker build -t network-management-be:${BITBUCKET_COMMIT_SHORT} .
+          - pipe: atlassian/aws-ecr-push-image:2.0.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ECR_ACCESS_KEY
+              AWS_SECRET_ACCESS_KEY: $AWS_ECR_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: ap-southeast-1
+              IMAGE_NAME: network-management-be
+              TAGS: '${BITBUCKET_COMMIT_SHORT}'
+          - echo successfully pushed latest image to ECR
+        services:
+          - docker
+        artifacts:
+          - "*.tar"
+          - version.txt
+    - step: &docker-pull   ## step specific for env 'staging,uat,poc,perf,perprod,demo'
+        name: docker-pull
+        script:
+         - *setEnv
+         - set +e;docker manifest inspect 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/network-management-be:${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT} > /dev/null; export imag_aval=$? ; echo $? ; echo $imag_aval;set -e;
+         - echo $imag_aval;
+         - |
+            if [ "$imag_aval" == '0' ];then 
+              echo "**** Image available in ECR ****";
+              exit 0  # Exit the script successfully
+            else 
+              echo "**** Image is not available in ECR and new image will be created ****";
+              docker build -t network-management-be:${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT} . ; 
+              docker images;              
+            fi   
+         - pipe: atlassian/aws-ecr-push-image:2.0.0
+           variables:
+              AWS_ACCESS_KEY_ID: $AWS_ECR_ACCESS_KEY  # Optional if already defined in the context.
+              AWS_SECRET_ACCESS_KEY: $AWS_ECR_SECRET_ACCESS_KEY  # Optional if already defined in the context.
+              AWS_DEFAULT_REGION: ap-southeast-1
+              IMAGE_NAME: network-management-be
+              TAGS: '${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT}'  
+        services:
+          - docker   
+    - step: &docker-pull-prod   ## step specific for env 'prod'
+        name: docker-pull-prod
+        script:
+         - *setEnv
+         - set +e;docker manifest inspect 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/network-management-be:${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT} > /dev/null; export imag_aval=$? ; echo $? ; echo $imag_aval;set -e;
+         - echo $imag_aval;         
+         - |
+            if [ "$imag_aval" == '0' ];then  
+              echo "**** Image available in ECR ****"; 
+              docker pull 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/network-management-be:${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT};
+              docker tag 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/network-management-be:${RELEASE_VERSION}-${BITBUCKET_COMMIT_SHORT} network-management-be:${RELEASE_VERSION}; 
+              docker images  
+            else 
+              echo "**** Image is not available in ECR and new image will be created ****";
+              docker build -t network-management-be:${RELEASE_VERSION} . ;
+              docker images;  
+            fi   
+         - pipe: atlassian/aws-ecr-push-image:2.0.0
+           variables:
+              AWS_ACCESS_KEY_ID: $AWS_ECR_ACCESS_KEY  #  Optional if already defined in the context.
+              AWS_SECRET_ACCESS_KEY: $AWS_ECR_SECRET_ACCESS_KEY  #  Optional if already defined in the context.
+              AWS_DEFAULT_REGION: ap-southeast-1
+              IMAGE_NAME: network-management-be
+              TAGS: '${RELEASE_VERSION}'           
+        services:   
+          - docker           
+    - step: &deploy-eks
+        name: deploy-eks
+        image: atlassian/default-image:3
+        script:
+          - *setEnv
+          - cd ..
+          - if [ ! -n "$(grep "^bitbucket.org " ~/.ssh/known_hosts)" ]; then ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts 2>/dev/null; fi
+          - git clone https://quincus-platform:$argocd_password@bitbucket.org/quincus-saas/quincus-k8s-deployments.git
+          - export REGION="ap-southeast-1"
+          # decide the image tag based on env
+          - set -e 
+          - |
+            if [ "$ARGO_ENV" == "prod" ];then
+              export IMAGE_TAG="$RELEASE_VERSION"
+            elif [ "$ARGO_ENV" == "staging" ] || [ "$ARGO_ENV" == "uat" ] || [ "$ARGO_ENV" == "poc" ] || [ "$ARGO_ENV" == "perf" ] || [ "$ARGO_ENV" == "perprod" ] || [ "$ARGO_ENV" == "demo" ];then
+              export IMAGE_TAG="$RELEASE_VERSION-$BITBUCKET_COMMIT_SHORT" 
+            else
+              export IMAGE_TAG="$BITBUCKET_COMMIT_SHORT"
+            fi  
+          - set +e
+          - cd quincus-k8s-deployments/charts-springboot/network-management
+          - export date_build=`date`
+          # update helm value
+          - envsubst < values-$ARGO_ENV.yaml.template > values-$ARGO_ENV.yaml
+          #noram
+          - export REGION="us-west-2"
+          - |
+            if [ "$ARGO_ENV" == "prod" ];then
+              envsubst < values-prod.yaml.template > values-prod-noram.yaml
+            elif [ "$ARGO_ENV" == "staging" ];then
+              envsubst < values-dev.yaml.template > values-dev-noram.yaml
+            fi
+          #push the change   
+          - git config --local user.email "platform@quincus.com" && git config --local user.name "quincus-platform" && git commit -am "Deploy new network-management-be version to $ARGO_ENV"
+          - git push
+        services:   
+          - docker           
+
+clone:
+  depth: full    # SonarCloud scanner needs the full history to assign issues properly
+
+pipelines:
+  pull-requests:
+    "**":
+      - step: *build-test-sonarcloud
+  branches:
+    develop:
+      - step: *build-test-sonarcloud
+      - step: *docker-build
+      - step:
+          <<: *deploy-eks
+          deployment: Development
+          name: Deploy to Dev
+      - step:
+          <<: *deploy-eks
+          deployment: Test
+          name: Deploy to Test
+          trigger: manual
+  tags:
+    staging_release_v*:
+      - step: *build-artifact
+      - step: *docker-pull      
+      - step:
+          <<: *deploy-eks
+          deployment: Staging
+          name: Deploy to Staging
+    uat_release_v*:
+      - step: *build-artifact
+      - step: *docker-pull      
+      - step:
+          <<: *deploy-eks
+          deployment: UAT
+          name: Deploy to UAT
+    prod_release_v*:
+      - step: *build-artifact
+      - step: *docker-pull-prod      
+      - step:
+          <<: *deploy-eks
+          deployment: Production
+          name: Deploy to Production

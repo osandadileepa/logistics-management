@@ -1,0 +1,93 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-70
+      author: ajalbaniel
+      comment: "Initial schema definition for Node and Connection"
+      changes:
+        - createTable:
+            tableName: node
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(256)
+              - column:
+                  name: is_active
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: connection
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vendor_code
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false

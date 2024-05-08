@@ -1,0 +1,76 @@
+###le-metrics
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: le-metrics-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - le-metrics/values-dev.yaml
+  project: le-metrics
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: le-metrics-test
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - le-metrics/values-test.yaml
+  project: le-metrics
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: le-metrics-prod
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: prod
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - le-metrics/values-prod.yaml
+  project: le-metrics
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

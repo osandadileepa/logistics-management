@@ -1,0 +1,54 @@
+{
+  "data": {
+    "connection_code": null,
+    "active": true,
+    "tags": [],
+    "transport_type": "GROUND",
+    "vendor": {
+      "id": null
+    },
+    "vehicle_type": {
+      "id": null
+    },
+    "departure_node": {
+      "id": null
+    },
+    "arrival_node": {
+      "id": null
+    },
+    "cost": 3000,
+    "currency": {
+      "id": "14289a09-4402-4f7b-8541-3a5b32afd539"
+    },
+    "capacity_profile": {
+      "max_shipment_count": 122,
+      "max_weight": 3002.2123,
+      "max_volume": 12233.2234
+    },
+    "measurement_units": {
+      "weight_unit": "KILOGRAMS",
+      "volume_unit": "CUBIC_METERS",
+      "dimension_unit": "METERS"
+    },
+    "shipment_profile": {
+      "max_length": 110,
+      "min_length": 10,
+      "max_width": 999999,
+      "min_width": 0,
+      "max_height": 999999,
+      "min_height": 0,
+      "max_weight": 999999,
+      "min_weight": 0,
+      "max_single_side": 999999,
+      "min_single_side": 0,
+      "max_linear_dim": 999999,
+      "min_linear_dim": 0,
+      "max_volume": 999999,
+      "min_volume": 0
+    },
+    "duration": 120,
+    "schedules": [
+      "RRULE:FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=MO,WE,FR;BYHOUR=10;BYMINUTE=30"
+    ]
+  }
+}

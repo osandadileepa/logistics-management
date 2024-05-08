@@ -1,0 +1,38 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: dev
+  name: dispatch-nextgen
+  port: 80
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 2048
+  mem_required: 1024
+  cpu_limit: 1024
+  cpu_required: 512
+  node_selectors:
+    environment: dev
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/dispatch-nextgen-be
+  tag: "57220e4"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/dispatch
+  versionId: 12b2409d-115a-4cd1-9e03-ef17e29c51e7
+ingress:
+  enabled: true
+  hostName: api.dispatch-nextgen.dev.quincus.com
+  path: /main-service(/|$)(.*)
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dev.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform,timeout"
+#deployed on Tue Aug  8 04:37:29 UTC 2023

@@ -1,0 +1,9 @@
+{
+  "data": {
+    "rounding_logic": {
+      "round_to": 1,
+      "threshold": 0.5
+    },
+    "value": 12345.6789
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "data": {
+    "id": "771a28f8-98e1-4e29-9864-f21696058746",
+    "cost_type": {
+      "id": "c28ddc77-d089-470a-8d09-34d23d8c1396",
+      "category": "NON_TIME_BASED"
+    },
+    "source": "VENDOR",
+    "cost_amount": 50.28,
+    "currency": {
+      "id": "14289a09-4402-4f7b-8541-3a5b32afd539"
+    },
+    "driver_id": "b293b8bc-adbe-43f7-af3e-f491530c6fc7",
+    "issued_date": "2023-02-11T14:50:00.000Z",
+    "issued_timezone": "UTC 9:00",
+    "shipments": [
+      {
+        "id": "b293b8bc-adbe-43f7-af3e-f491530c6fc7",
+        "segments": [
+          {
+            "segment_id": "b293b8bc-adbe-43f7-af3e-f491530c6fc7"
+          }
+        ]
+      }
+    ],
+    "proof_of_cost": [
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://www.example.com/#bike",
+        "file_name": "receipt1.png",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "http://www.example.com/#brother",
+        "file_name": "receipt2.png",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://example.com/birds/birth.htm",
+        "file_name": "receipt3.png",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://www.example.com/berry/bells",
+        "file_name": "receipt4.png",
+        "file_size": 1608
+      }
+    ],
+    "remarks": "4 receipts combined",
+    "organization_id": "82027602-402a-41f7-82dc-80cfbb011b4e"
+  }
+}

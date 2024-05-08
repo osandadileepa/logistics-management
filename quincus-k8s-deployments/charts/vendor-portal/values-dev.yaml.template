@@ -1,0 +1,87 @@
+replicaCount: 1
+
+app:
+  region: ${REGION}
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 2
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1000
+    cpu_required: 500
+  sidekiq:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  namespace: dev
+  name: vendor-portal
+  port: 3000
+  env: dev
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: dev
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    role_enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/vendor-portal
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/vendor-portal
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: false
+  hostName_noram: api.vendor-portal.dev-noram.quincus.com
+  hostName: api.vendor-portal.dev.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.dev-noram.quincus.com, https://shipment.dev-noram.quincus.com, https://pricing.dev-noram.quincus.com, https://common.dev-noram.quincus.com, https://order.dev-noram.quincus.com, https://dev-noram.quincus.com, https://quincus.dev-noram.qship.quincus.com, https://dispatch.dev.quincus.com, https://shipment.dev.quincus.com, https://pricing.dev.quincus.com, https://common.dev.quincus.com, https://order.dev.quincus.com, https://dev.quincus.com, https://dev.quincus.app, http://localhost:3000"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform,Access-Control-Allow-Origin"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: dev
+      node-type: spot
+  auth:
+    enabled: false

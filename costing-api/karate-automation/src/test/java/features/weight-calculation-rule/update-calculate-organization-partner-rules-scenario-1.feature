@@ -1,0 +1,51 @@
+Feature: Update rule with organization and partner Scenario 1
+
+  Background:
+    * url baseUrl
+    * path '/weight-calculation-rules'
+    * def requestJson = read('json/request.json')
+    * def uuid = function(){ return java.util.UUID.randomUUID().toString() }
+
+    * def orgId_1 = uuid()
+    * def partner_1 = read('json/partner.json')
+    * def partner_2 = read('json/partner.json')
+    * def partner_3 = read('json/partner.json')
+    * partner_1.id = uuid()
+    * partner_2.id = uuid()
+    * partner_3.id = uuid()
+
+    * requestJson.data.organization_id = orgId_1
+    * requestJson.data.active = true
+    * requestJson.data.partners = [partner_1, partner_2]
+    * multipart field data = requestJson
+    * method POST
+
+    * def id = response.data.id
+    * path '/weight-calculation-rules/' + id
+
+  @WeightCalculationRuleUpdate
+  Scenario: No duplicate active rule
+    Given requestJson.data.partners = [partner_3]
+    And requestJson.data.organization_id = orgId_1
+    And requestJson.data.active = true
+    And multipart field data = requestJson
+    When method PUT
+    Then status 200
+
+  @WeightCalculationRuleUpdate
+  Scenario: Duplicate active rule for partner_1
+    Given requestJson.data.partnerIds = [partner_1]
+    And requestJson.data.organizationId = orgId_1
+    And requestJson.data.active = true
+    And multipart field data = requestJson
+    When method PUT
+    Then status 400
+
+  @WeightCalculationRuleUpdate
+  Scenario: Create active rule for all organization only
+    Given requestJson.data.partners = []
+    And requestJson.data.organization_id = orgId_1
+    And requestJson.data.active = true
+    And multipart field data = requestJson
+    When method PUT
+    Then status 200

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: {{ .Values.app.namespace | default "default" }}
+  name: "{{ .Values.app.name }}-nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    {{- if .Values.ingress.nginx_annotations }}
+    {{- range $key, $val := .Values.ingress.nginx_annotations }}
+    {{ $key }}: {{ quote $val }}
+    {{- end }}
+    {{- end }}
+spec:
+  rules:
+  - host: {{ .Values.ingress.hostName }}
+    http: 
+      paths:
+      - pathType: Prefix
+        path: {{ .Values.ingress.path }}
+        backend:
+          service:
+            name: {{ .Values.app.name }}
+            port:
+              number: {{ .Values.app.port }}

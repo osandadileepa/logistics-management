@@ -1,0 +1,79 @@
+app:
+  healthcheck: true
+  region: ${REGION}
+  puma:
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4096
+    mem_required: 2048
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: poc
+  name: auth
+  port: 3000
+  env: poc
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: poc
+    node-type: on_demand
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/auth-quincus-images
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: poc/auth
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: true
+  hostName: api.auth.poc.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.poc.quincus.com, https://shipment.poc.quincus.com, https://pricing.poc.quincus.com, https://common.poc.quincus.com, https://order.poc.quincus.com, https://poc.quincus.com, https://quincus.poc.qship.quincus.com, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: poc
+      node-type: on_demand
+  auth:
+    enabled: false

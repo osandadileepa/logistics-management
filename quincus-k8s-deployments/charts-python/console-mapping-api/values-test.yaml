@@ -1,0 +1,39 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: test
+  name: console-mapping-api
+  port: 5000
+  env: test
+  image_pull_policy: IfNotPresent
+  mem_limit: 4096
+  mem_required: 4096
+  cpu_limit: 1024
+  cpu_required: 1024
+  node_selectors:
+    environment: test
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/console-mapping-api
+  tag: "f7280c1"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: test/console-mapping-api
+  versionId: ba0c6c85-a2e9-44b5-94ec-03874ff477a9
+ingress:
+  enabled: true
+  hostName: console-mapping-api.test.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://mme-console.test.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,Content-Encoding"
+#deployed on Fri Jul 21 13:46:30 UTC 2023

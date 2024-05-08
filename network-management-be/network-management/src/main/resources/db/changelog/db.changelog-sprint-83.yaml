@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-649
+      author: ajalbaniel
+      comment: "Add currency_exchange_rate on connection table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: currency_exchange_rate
+                  type: DECIMAL(16, 4)
+            tableName: connection
+
+  - changeSet:
+      id: NW-770
+      author: ajalbaniel
+      comment: "Training log schema"
+      changes:
+        - createTable:
+            tableName: training_log
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: create_time
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: VARCHAR(48)
+              - column:
+                  name: unique_id
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: unique_unique_id
+              - column:
+                  name: training_request_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: unique_training_request_id
+              - column:
+                  name: status
+                  type: VARCHAR(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: complete_time
+                  type: TIMESTAMP
+              - column:
+                  name: generate_request_elapsed_time
+                  type: INTEGER
+                  constraints:
+                    nullable: false

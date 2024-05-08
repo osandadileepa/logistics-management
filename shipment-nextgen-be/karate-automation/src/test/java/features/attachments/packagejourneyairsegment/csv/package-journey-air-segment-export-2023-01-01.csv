@@ -1,0 +1,7 @@
+Shipment ID,Unit (Do not edit),Volume Weight (Do not edit),Gross Weight (Do not edit),Airline Code,Flight Number,Departure DateTime,Departure Timezone,Origin Facility,Origin Country,Origin State/Province,Origin City,Segment Note/Instruction Content,Airway Bill,Vendor,Lockout DateTime,Lockout Timezone,Arrival Datetime,Arrival Timezone,Recovery DateTime,Recovery Timezone
+EXAMPLE1,metric,5,20,SG,1923,2023-09-19T07:00:00,UTC+08:00,SINGAPORE_AIRPORT,SINGAPORE,Central Singapore Community Development Council,SINGAPORE,New segment notes here,50712345675,Singapore Airlines,2023-09-19T05:00:00,UTC+08:00,2023-09-19T11:00:00,UTC+08:00,2023-09-19T15:00:00,UTC+08:00
+SHPd9271858-4ad,metric,5,20
+SHPa51f95a9-b78,metric,5,20
+SHP9fc3a108-aa9,metric,5,20
+SHP6008b424-78a,metric,5,20
+SHP6c87e1a7-145,metric,5,20

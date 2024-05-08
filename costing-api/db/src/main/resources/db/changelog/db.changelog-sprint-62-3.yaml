@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: ajalbaniel
+      comment: "QFIN-25 Initial schema definition for rate_card"
+      changes:
+        - createTable:
+            tableName: rate_card
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: TIMESTAMP
+              - column:
+                  name: deleted
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: calculation_type
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rate_value
+                  type: DECIMAL(15, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min
+                  type: DECIMAL(15, 4)
+              - column:
+                  name: max
+                  type: DECIMAL(15, 4)
+  - changeSet:
+      id: 6
+      author: ajalbaniel
+      comment: "QFIN-25 Removed deprecated fields in weight_calculation_rule"
+      changes:
+        - dropColumn:
+            columnName: validity_date
+            tableName: weight_calculation_rule
+        - dropColumn:
+            columnName: expiry_date
+            tableName: weight_calculation_rule
+        - dropColumn:
+            columnName: length_unit
+            tableName: weight_calculation_rule
+        - dropColumn:
+            columnName: weight_unit
+            tableName: weight_calculation_rule

@@ -1,0 +1,82 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 8
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 1000
+    mem_required: 500
+    cpu_limit: 200
+    cpu_required: 100
+  namespace: uat
+  name: admin
+  port: 3000
+  env: uat
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: uat
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/admin-quincus-images
+  tag: "e366f33"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: uat/admin
+  versionId: 1b93e741-9334-468e-a96b-1c81df86c7af
+ingress:
+  enabled: true
+  hostName: api.uat.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 300
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.uat.quincus.com, https://shipment.uat.quincus.com, https://pricing.uat.quincus.com, https://common.uat.quincus.com, https://order.uat.quincus.com, https://uat.quincus.com, https://quincus.uat.qship.quincus.com, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: uat
+      node-type: on_demand
+  auth:
+    enabled: false

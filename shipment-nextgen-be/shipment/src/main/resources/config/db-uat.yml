@@ -1,0 +1,3 @@
+db:
+  datasource:
+    db: shipment_v2_uat

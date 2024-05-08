@@ -1,0 +1,45 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: dev
+  name: logisticengine-service
+  port: 8081
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  lifecycle_check: true 
+  lifecycle:
+    preStop:
+      command:
+       - /bin/sh
+       - '-c'
+       - |
+          kill -TERM $(ps -ef | grep -i 'java' | awk 'NR==1{print $2}')  
+  node_selectors:
+    environment: dev
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/logisticengine-service
+  tag: "4dc90a0"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/le/logisticengine-service
+  versionId: 58d609fa-9e1b-4859-ae47-1ddf30e1b010  
+ingress:
+  enabled: true
+  hostName: api.logistics-service.dev.quincus.com
+  hostName_noram: api.logistics-service.dev-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.org/client-max-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+#deployed on 

@@ -1,0 +1,75 @@
+app:
+  region: us-west-2
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4096
+    mem_required: 2048
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: prod
+  name: auth
+  port: 3000
+  env: prod
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: prod
+    node-type: on_demand
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.us-west-2.amazonaws.com/auth-quincus-images
+  tag: "4a67867"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: prod/auth
+  versionId: 9e0e0417-e7d6-47db-9399-89af647c471e
+ingress:
+  enabled: true
+  hostName: api.auth.center.quincus.com
+  hostName_noram: api.auth.center-noram.quincus.com
+  path: /
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: prod
+      node-type: on_demand
+  auth:
+    enabled: false

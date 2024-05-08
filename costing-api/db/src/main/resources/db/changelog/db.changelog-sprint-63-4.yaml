@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 10
+      author: ajalbaniel
+      comment: "QFINB-12 Removed round_up in weight_calculation_rule"
+      changes:
+        - dropColumn:
+            columnName: round_up
+            tableName: weight_calculation_rule

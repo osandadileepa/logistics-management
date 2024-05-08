@@ -1,0 +1,96 @@
+app:
+  region: ${REGION}
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 2
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 3072
+    mem_required: 1024
+    cpu_limit: 3000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - -c
+         - sidekiq_pid=`ps -aux | grep -i 'sidekiq 6.4.1 current' | awk 'NR==1{print $2}'`;kill -s TSTP -s TERM $sidekiq_pid
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 6144
+    mem_required: 3072
+    cpu_limit: 3000
+    cpu_required: 1500    
+  namespace: demo
+  name: pricing
+  port: 3000
+  env: demo
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: demo
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/pricing-quincus-images
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: demo/pricing
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: true
+  hostName: api.pricing.demo.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.preprod.quincus.com, https://shipment.preprod.quincus.com, https://pricing.preprod.quincus.com, https://common.preprod.quincus.com, https://order.preprod.quincus.com, https://preprod.quincus.com, https://quincus.preprod.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform,timeout"  
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: demo
+  auth:
+    enabled: false

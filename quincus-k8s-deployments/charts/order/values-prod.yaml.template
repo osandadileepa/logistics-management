@@ -1,0 +1,105 @@
+app:
+  region: ${REGION}
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4000
+    mem_required: 2000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    healthcheck: true
+    healthcheck_command:
+       - sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi    
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 8192
+    mem_required: 3500
+    cpu_limit: 6000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 3000
+    cpu_required: 1500
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 12288
+    mem_required: 3500
+    cpu_limit: 4000
+    cpu_required: 2000 
+  namespace: prod
+  name: order
+  port: 3000
+  env: prod
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: prod
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/order-quincus-images
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: prod/order
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: true
+  hostName: api.order.center.quincus.com
+  hostName_noram: api.order.center-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://upsec.center.qship.quincus.com, https://upsapspl.center.qship.quincus.com, https://apxgroup.center.qship.quincus.com, https://ups.center.qship.quincus.com, https://mgxpress.center.qship.quincus.com, https://quincus.center.qship.quincus.com, https://qmodel.center.qship.quincus.com, https://qdemo.center.qship.quincus.com, https://upsecde.center.qship.quincus.com, https://apxpoc.center.qship.quincus.com, https://transtama.center.qship.quincus.com, https://schneider.center.qship.quincus.com, https://upsdryrun.center.qship.quincus.com, https://apxdm.center.qship.quincus.com, https://bbg.center.qship.quincus.com, https://finfleet.center.qship.quincus.com, https://acloudary.center.qship.quincus.com, https://blk.center.qship.quincus.com, https://acloudery.center.qship.quincus.com, https://apxprod.center.qship.quincus.com, https://proabc.center.qship.quincus.com, https://ship60.center.qship.quincus.com, https://ship60vn.center.qship.quincus.com, https://mcgill.center.qship.quincus.com, https://lzdtrl.center.qship.quincus.com, https://gudings.center.qship.quincus.com, https://121100.center.qship.quincus.com, https://price2.center.qship.quincus.com, https://sap.center.qship.quincus.com, https://upsuat.center.qship.quincus.com, https://upsus.center.qship.quincus.com, https://krg.center.qship.quincus.com, https://krgt.center.qship.quincus.com, https://upsecp.center.qship.quincus.com, https://ll888.center.qship.quincus.com, https://bltznui.center.qship.quincus.com, https://upsrun.center.qship.quincus.com, https://upsex.center.qship.quincus.com, https://shr.center.qship.quincus.com, https://she.center.qship.quincus.com, https://tnd.center.qship.quincus.com, https://sapx.center.qship.quincus.com, https://oslog.center.qship.quincus.com, https://paxel.center.qship.quincus.com, https://upsapuat.center.qship.quincus.com, https://e2eauto.center.qship.quincus.com, https://qdemo1.center.qship.quincus.com, https://qdemo2.center.qship.quincus.com, https://qdem.center.qship.quincus.com, https://impexpmx.center.qship.quincus.com, https://qtcsdemo.center.qship.quincus.com, https://qtcs1demo.center.qship.quincus.com, https://jnecarind.center.qship.quincus.com, https://simtmsphl.center.qship.quincus.com, https://skllogaus.center.qship.quincus.com, https://qtd.center.qship.quincus.com, https://hmstmssgp.center.qship.quincus.com, https://upstmsapc.center.qship.quincus.com, https://qtrain.center.qship.quincus.com, https://upsexpc.center.qship.quincus.com, https://qps.center.qship.quincus.com, https://as01.center.qship.quincus.com, https://segorg.center.qship.quincus.com, https://qsol.center.qship.quincus.com, https://apxsb.center.qship.quincus.com, https://as02.center.qship.quincus.com, https://apxgrp.center.qship.quincus.com, https://upsecsb.center.qship.quincus.com, https://bltzarn.center.qship.quincus.com, https://dhlopsmex.center.qship.quincus.com, https://bvatmscol.center.qship.quincus.com, https://apxtst.center.qship.quincus.com, https://ops.apx.group, https://oms.postsales.ups.com, https://oms.expresscritical.ups.com, https://track.postsales.ups.com, https://track.expresscritical.ups.com, https://dispatch.center.quincus.com, https://shipment.center.quincus.com, https://pricing.center.quincus.com, https://common.center.quincus.com, https://order.center.quincus.com, https://center.quincus.com, https://quincus.center.qship.quincus.com, https://ops.skycargo.quincus.com, https://cust.skycargo.quincus.com, https://center.quincus.app, https://qsol2.center.qship.quincus.com, https://qsol.center.qship.quincus.com, https://sekoau.center.qship.quincus.com, https://qpsv2.center.qship.quincus.com, https://sptintsin.center.qship.quincus.com, https://haikurir1.center.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,timeout,platform"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: prod
+      node-type: on_demand
+  auth:
+    enabled: false
+#deployed on $date_build

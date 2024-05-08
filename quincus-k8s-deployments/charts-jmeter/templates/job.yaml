@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: {{ .Values.app.name }}-job-
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+      - name: "{{ .Values.app.name }}-job"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        args: ["{{ .Values.job.args }}"]
+      restartPolicy: Never
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}

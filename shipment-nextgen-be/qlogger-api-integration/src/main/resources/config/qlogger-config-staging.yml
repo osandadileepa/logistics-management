@@ -1,0 +1,4 @@
+qlogger:
+  s2stoken: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoic2hpcG1lbnRfdjIiLCJqdGkiOiJhZWUyMTNiYi0yY2QyLTQ1YTMtOGU4MS0yMDIwNmNkNjliYzIiLCJvcmdhbmlzYXRpb25zIjpbXSwiZXhwaXJlc19hdCI6IiJ9.5ONbKQ3mQOqUGmoqbHGucPa7okA7KjDcWWW0d0sSZf0
+  baseUrl: https://api.staging.quincus.com/
+  publishEventAPI: api/v1/q_logger/events.json

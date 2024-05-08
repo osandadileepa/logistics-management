@@ -1,0 +1,41 @@
+{
+  "file_uploaded": "csvTemplate.csv",
+  "custom_formula": "l+w+h",
+  "conversions": [
+    {
+      "from": 0.0,
+      "to": 10.0,
+      "result": 5.0
+    },
+    {
+      "from": 10.0,
+      "to": 20.0,
+      "result": 8.0
+    },
+    {
+      "from": 25.0,
+      "to": 30.0,
+      "result": 10.0
+    },
+    {
+      "from": 30.0,
+      "to": 40.0,
+      "result": 12.0
+    },
+    {
+      "from": 40.0,
+      "to": 90.0,
+      "result": 20.0
+    },
+    {
+      "from": 90.0,
+      "to": 120.0,
+      "result": 30.0
+    },
+    {
+      "from": 120.0,
+      "to": 9999.0,
+      "result": 50.0
+    }
+  ]
+}

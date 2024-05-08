@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-118
+      author: clarc
+      comment: "Add BTREE indexes for flight number and master waybill for searching"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: flight_number
+            indexName: package_journey_segment_flight_number_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: master_waybill
+            indexName: package_journey_segment_master_waybill_idx
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-112
+      author: ajalbaniel
+      comment: "Removed transport_category from package_journey_segment since it is a duplicate of transport_type"
+      changes:
+        - dropColumn:
+            columnName: transport_category
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-998-1
+      author: leilcabahug
+      comment: "Add ETA Status for Shipment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: eta_status
+                  type: varchar(8)
+            tableName: shipment

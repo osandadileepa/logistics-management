@@ -1,0 +1,5 @@
+order:
+  s2stoken: cduTttoT8wpXqwTIb8tkgA #confirm?
+  scheme: https
+  host: api.order.quincus.com #confirm?
+  rollbackApi: /api_s2s/v1/rollback

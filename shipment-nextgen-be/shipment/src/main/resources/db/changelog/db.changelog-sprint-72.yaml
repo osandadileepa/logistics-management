@@ -1,0 +1,170 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-266
+      author: ajalbaniel
+      comment: "Cost Entity and related entities"
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: cost_amount
+                  type: DECIMAL(15, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: driver_name
+                  type: VARCHAR(256)
+              - column:
+                  name: issued_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipments
+                  type: JSON
+              - column:
+                  name: proof_of_cost
+                  type: JSON
+              - column:
+                  name: remarks
+                  type: VARCHAR(2000)
+              - column:
+                  name: partner_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: partner_name
+                  type: VARCHAR(256)
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cost_type_id
+                  type: VARCHAR(48)
+              - column:
+                  name: cost_type_name
+                  type: VARCHAR(256)
+              - column:
+                  name: cost_type_description
+                  type: VARCHAR(256)
+              - column:
+                  name: cost_type_cost_category
+                  type: VARCHAR(64)
+              - column:
+                  name: cost_type_proof
+                  type: VARCHAR(16)
+              - column:
+                  name: cost_type_status
+                  type: VARCHAR(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: currency_id
+                  type: VARCHAR(48)
+              - column:
+                  name: currency_name
+                  type: VARCHAR(256)
+              - column:
+                  name: currency_code
+                  type: VARCHAR(8)
+              - column:
+                  name: currency_symbol
+                  type: VARCHAR(8)
+            tableName: cost
+  - changeSet:
+      id: SHPV2-2319
+      author: ajalbaniel
+      comment: "Change maximum decimal places for cost amount"
+      changes:
+        - modifyDataType:
+            columnName: cost_amount
+            newDataType: DECIMAL(15, 2)
+            tableName: cost
+  - changeSet:
+      id: SHPV2-2301
+      author: leilcabahug
+      comment: "Added table for segments processed (lockout time passed)"
+      changes:
+        - createTable:
+            tableName: segment_lockout_time_passed
+            columns:
+              - column:
+                  name: id
+                  type: varchar(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: segment_id
+                  type: varchar(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+        - createIndex:
+            columns:
+              - column:
+                  name: segment_id
+            indexName: idx_segment_id
+            tableName: segment_lockout_time_passed
+  - changeSet:
+      id: SHPV2-257
+      author: clarc
+      comment: "Change maximum characters for milestone code"
+      changes:
+        - modifyDataType:
+            columnName: code
+            newDataType: varchar(100)
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-1562
+      author: ajalbaniel
+      comment: "Added constraint_type on alert"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: constraint_type
+                  type: varchar(64)
+            tableName: alert

@@ -1,0 +1,332 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-2315
+      author: rmahhi
+      comment: "Job Metrics table"
+      changes:
+        - createTable:
+            tableName: job_metrics
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: processed_records
+                  type: INTEGER
+              - column:
+                  name: status
+                  type: VARCHAR(15)
+              - column:
+                  name: successful_records
+                  type: INTEGER
+              - column:
+                  name: failed_records
+                  type: INTEGER
+              - column:
+                  name: total_records
+                  type: INTEGER
+              - column:
+                  name: data_with_error
+                  type: json
+              - column:
+                  name: fail_reason
+                  type: varchar(2000)
+              - column:
+                  name: record_class_type
+                  type: varchar(300)
+              - column:
+                  name: organization_id
+                  type: varchar(42)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_by_id
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_by_name
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: SHPV2-3028-Network-Lane-Table
+      author: rmahhi
+      comment: "Network Lane Table"
+      changes:
+        - createTable:
+            tableName: network_lane
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  name: create_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: organization_id
+                  type: varchar(42)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: service_type_id
+                  type: varchar(48)
+              - column:
+                  name: origin_location_hierarchy
+                  type: varchar(48)
+              - column:
+                  name: destination_location_hierarchy
+                  type: varchar(48)
+        - addForeignKeyConstraint:
+            baseColumnNames: origin_location_hierarchy
+            baseTableName: network_lane
+            constraintName: fk_network_lane_origin_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+        - addForeignKeyConstraint:
+            baseColumnNames: destination_location_hierarchy
+            baseTableName: network_lane
+            constraintName: fk_network_lane_destination_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+
+
+  - changeSet:
+      id: SHPV2-3028-Network-Lane-Segments-Table
+      author: rmahhi
+      comment: "Network Lane Segment Table"
+      changes:
+        - createTable:
+            tableName: network_lane_segment
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  name: create_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: organization_id
+                  type: varchar(42)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: network_lane_id
+                  type: varchar(48)
+              - column:
+                  name: sequence
+                  type: varchar(48)
+              - column:
+                  name: transport_type
+                  type: varchar(48)
+              - column:
+                  name: partner_id
+                  type: varchar(48)
+              - column:
+                  name: vehicle_info
+                  type: varchar(50)
+              - column:
+                  name: flight_number
+                  type: varchar(50)
+              - column:
+                  name: airline
+                  type: varchar(65)
+              - column:
+                  name: airline_code
+                  type: varchar(50)
+              - column:
+                  name: master_waybill
+                  type: varchar(50)
+              - column:
+                  name: start_location_hierarchy
+                  type: varchar(48)
+              - column:
+                  name: end_location_hierarchy
+                  type: varchar(48)
+              - column:
+                  name: pick_up_instruction
+                  type: varchar(2000)
+              - column:
+                  name: delivery_instruction
+                  type: varchar(2000)
+              - column:
+                  name: duration
+                  type: decimal(15, 4)
+              - column:
+                  name: duration_unit
+                  type: varchar(60)
+              - column:
+                  name: pick_up_time
+                  type: varchar(50)
+              - column:
+                  name: drop_off_time
+                  type: varchar(50)
+              - column:
+                  name: lock_out_time
+                  type: varchar(50)
+              - column:
+                  name: departure_time
+                  type: varchar(50)
+              - column:
+                  name: arrival_time
+                  type: varchar(50)
+              - column:
+                  name: recovery_time
+                  type: varchar(50)
+              - column:
+                  name: calculated_mileage
+                  type: decimal(15, 4)
+              - column:
+                  name: calculated_mileage_unit
+                  type: varchar(60)
+        - addForeignKeyConstraint:
+            baseColumnNames: network_lane_id
+            baseTableName: network_lane_segment
+            constraintName: fk_network_lane_network_lane_segment
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: network_lane
+        - addForeignKeyConstraint:
+            baseColumnNames: partner_id
+            baseTableName: network_lane_segment
+            constraintName: fk_network_lane_segment_partner
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: partner
+        - addForeignKeyConstraint:
+            baseColumnNames: start_location_hierarchy
+            baseTableName: network_lane_segment
+            constraintName: fk_network_lane_segment_start_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+        - addForeignKeyConstraint:
+            baseColumnNames: end_location_hierarchy
+            baseTableName: network_lane_segment
+            constraintName: fk_network_lane_segment_end_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+  - changeSet:
+      id: SHPV2-3028-Drop-Service-Type-Organization-Foreign-key
+      author: rmahhi
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: service_type
+            constraintName: fk_service_organization
+  - changeSet:
+      id: SHPV2-3028-Drop-Location-Organization-Foreign-key
+      author: rmahhi
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: location
+            constraintName: fk_location_organization
+  - changeSet:
+      id: SHPV2-3028-Drop-Location-Hierarchy-Organization-Foreign-key
+      author: rmahhi
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_organization
+  - changeSet:
+      id: SHPV2-3028-Drop-Partner-Organization-Foreign-key
+      author: rmahhi
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: partner
+            constraintName: fk_partner_organization
+  - changeSet:
+      id: SHPV2-2313
+      author: leilcabahug
+      comment: "Added start_time and time_elapsed_ms on job metrics"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: start_time
+                  type: timestamp
+              - column:
+                  name: time_elapsed_ms
+                  type: integer unsigned
+            tableName: job_metrics
+  - changeSet:
+      id: SHPV2-538
+      author: imeehablero
+      comment: "Added fields for APIG milestone updates"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: order_number
+                  type: VARCHAR(64)
+              - column:
+                  name: vendor_id
+                  type: VARCHAR(48)
+              - column:
+                  name: waybill_number
+                  type: VARCHAR(50)
+              - column:
+                  name: department_floor_suite_comments
+                  type: VARCHAR(2000)
+              - column:
+                  name: branch_name
+                  type: VARCHAR(120)
+              - column:
+                  name: proof_of_delivery_time
+                  type: VARCHAR(50)
+              - column:
+                  name: external_segment_id
+                  type: VARCHAR(50)
+            tableName: milestone

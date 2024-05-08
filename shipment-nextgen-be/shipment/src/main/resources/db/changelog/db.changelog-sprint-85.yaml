@@ -1,0 +1,208 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-5929
+      author: argel
+      comment: "add source on milestone"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: source
+                  type: varchar(255)
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-838
+      author: rahhi
+      comment: "Added Source field for package entity"
+      changes:
+        - addColumn:
+            tableName: package
+            columns:
+              - column:
+                  name: source
+                  type: VARCHAR(5)
+  - changeSet:
+      id: SHPV2-838-2
+      author: rahhi
+      comment: "Added Package Log Table"
+      changes:
+        - createTable:
+            tableName: package_log
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: shipment_id
+                  constraints:
+                    nullable: false
+                  type: VARCHAR(48)
+              - column:
+                  name: package_id
+                  constraints:
+                    nullable: false
+                  type: VARCHAR(48)
+              - column:
+                  name: source
+                  type: VARCHAR(5)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: measurement_unit
+                  type: VARCHAR(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: volume_weight
+                  type: DECIMAL(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gross_weight
+                  type: DECIMAL(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: chargeable_weight
+                  type: decimal(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: length
+                  type: DECIMAL(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: width
+                  type: DECIMAL(19, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: height
+                  type: DECIMAL(19, 4)
+              - column:
+                  name: is_custom
+                  type: boolean
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+  - changeSet:
+      id: SHPV2-838-3
+      author: rahhi
+      comment: "Added Unique Index"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_id
+              - column:
+                  name: source
+            indexName: package_log_shipment_id_source_idx
+            tableName: package_log
+            unique: true
+  - changeSet:
+      id: SHPV2-6419
+      author: clarc
+      comment: "Change description and note from varchar to TEXT"
+      changes:
+        - modifyDataType:
+            columnName: description
+            newDataType: TEXT
+            tableName: commodity
+        - modifyDataType:
+            columnName: note
+            newDataType: TEXT
+            tableName: commodity
+  - changeSet:
+      id: SHPV2-839
+      author: clarc
+      comment: "Added source to cost table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: source
+                  type: VARCHAR(50)
+            tableName: cost
+  - changeSet:
+      id: SHPV2-6320
+      author: osanda
+      comment: "drop 'additional_tracking_numbers' and add 'order_references_attributes' columns"
+      changes:
+        - dropColumn:
+            columnName: additional_tracking_numbers
+            tableName: shipment
+        - addColumn:
+            columns:
+              - column:
+                  name: order_references
+                  type: json
+            tableName: shipment_order
+
+  - changeSet:
+      id: SHPV2-6418
+      author: clarc
+      comment: "Change remarks (cost), notes (shipment), delivery_instruction & delivery_instruction (network_lane_segment), value (instruction), instruction(pjs)  from VARCHAR to TEXT"
+      changes:
+        - modifyDataType:
+            columnName: remarks
+            newDataType: TEXT
+            tableName: cost
+        - modifyDataType:
+            columnName: notes
+            newDataType: TEXT
+            tableName: shipment
+        - modifyDataType:
+            columnName: notes
+            newDataType: TEXT
+            tableName: shipment_order
+        - modifyDataType:
+            columnName: pick_up_instruction
+            newDataType: TEXT
+            tableName: network_lane_segment
+        - modifyDataType:
+            columnName: delivery_instruction
+            newDataType: TEXT
+            tableName: network_lane_segment
+        - modifyDataType:
+            columnName: value
+            newDataType: TEXT
+            tableName: instruction
+        - modifyDataType:
+            columnName: instruction
+            newDataType: TEXT
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-6524
+      author: clarc
+      comment: "Added index to reference and organization id AND expand size of reference id to 255"
+      changes:
+        - modifyDataType:
+            columnName: reference_id
+            newDataType: VARCHAR(255)
+            tableName: archived
+        - createIndex:
+            columns:
+              - column:
+                  name: reference_id
+              - column:
+                  name: organization_id
+            indexName: archived_reference_id_organization_id_idx
+            tableName: archived

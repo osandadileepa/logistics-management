@@ -1,0 +1,39 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: test
+  name: mme-prediction
+  port: 5000
+  env: test
+  image_pull_policy: IfNotPresent
+  mem_limit: 32768
+  mem_required: 32768
+  cpu_limit: 30720
+  cpu_required: 16384
+  node_selectors:
+    environment: test
+    functionality: data-science
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/mme-prediction-api
+  tag: "52f5f57"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: test/mme-prediction-api
+  versionId: e4757f8a-d9cd-4ca3-9c8a-2da1d49ec7d4
+ingress:
+  enabled: true
+  hostName: mme-prediction.test.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://mme-console.test.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,Content-Encoding"
+#deployed on Fri Jul 21 13:50:26 UTC 2023

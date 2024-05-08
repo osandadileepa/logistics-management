@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: ajalbaniel
+      comment: "QFINB-82 Added column name on partner table"
+      changes:
+        - addColumn:
+            tableName: partner
+            columns:
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false

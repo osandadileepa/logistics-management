@@ -1,0 +1,8 @@
+{
+  "data": {
+    "calculation_type": "FLAT",
+    "rate_value": 0.25,
+    "min": 0,
+    "max": 200
+  }
+}

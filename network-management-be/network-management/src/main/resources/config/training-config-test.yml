@@ -1,0 +1,3 @@
+mme:
+  trainingDelay: 240 # delay is set higher due to how active test env is, QAs can request update if needed
+  debounceKeyPrefix: NETWORK-TRAINING-

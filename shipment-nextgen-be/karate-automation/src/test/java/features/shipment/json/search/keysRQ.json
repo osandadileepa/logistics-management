@@ -1,0 +1,18 @@
+{
+  "data": {
+    "keys": [
+      "trackingId1",
+      "trackingId2",
+      "orderIdLabel1",
+      "orderIdLabel2",
+      "flightNumber",
+      "waybill",
+      "internalOrderId",
+      "externalOrderId",
+      "customerOrderId"
+    ],
+    "journey_status": "ACTIVE",
+    "size": 1,
+    "page_number": 1
+  }
+}

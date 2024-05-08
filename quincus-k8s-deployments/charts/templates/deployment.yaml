@@ -1,0 +1,97 @@
+{{- if .Values.app.puma.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.app.namespace | default "default" }}
+  name: {{ .Values.app.name }}
+  labels:
+    env: {{ .Values.app.env }}
+    name: {{ .Values.app.name }}
+    tags.datadoghq.com/env: {{ .Values.app.env }}
+    tags.datadoghq.com/service: {{ .Values.app.name }}
+spec:
+  selector:
+    matchLabels:
+      env: {{ .Values.app.env }}
+      name: {{ .Values.app.name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 40%
+  progressDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        env: {{ .Values.app.env }}
+        name: {{ .Values.app.name }}
+        admission.datadoghq.com/enabled: 'true'
+        tags.datadoghq.com/env: {{ .Values.app.env }}
+        tags.datadoghq.com/service: {{ .Values.app.name }}
+    spec:
+      {{- if .Values.app.puma.service_account }}
+      serviceAccountName: "{{ .Values.app.name }}-{{ .Values.app.puma.service_account }}"
+      {{- end }}
+      containers:
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image_pull_policy | default "IfNotPresent" }}
+          lifecycle:
+            preStop:
+               exec: 
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - |
+                    ps -ef | grep puma | awk '{if ($3=="1") { print $2 }}' | xargs kill
+          env:
+          - name: role
+            value: "puma"
+          envFrom:
+          - secretRef:
+              name: {{ .Values.app.name }}
+          {{- if .Values.app.port }}
+          ports:
+            - containerPort: {{ .Values.app.port }}
+          {{- end }}
+          {{- if .Values.app.puma.healthcheck }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          {{- end }}
+          resources:
+            limits:
+              {{- if (gt (.Values.app.puma.cpu_limit | default 0.0) 0.0) }}
+              cpu: {{.Values.app.puma.cpu_limit}}m
+              {{- end }}
+              {{- if (gt (.Values.app.puma.mem_limit | default 0.0) 0.0) }}
+              memory: {{.Values.app.puma.mem_limit}}Mi
+              {{- end }}
+            requests:
+              {{- if (gt (.Values.app.puma.cpu_required | default 0.0) 0.0) }}
+              cpu: {{.Values.app.puma.cpu_required}}m
+              {{- end }}
+              {{- if (gt (.Values.app.puma.mem_required | default 0.0) 0.0) }}
+              memory: {{.Values.app.puma.mem_required}}Mi
+              {{- end }}
+      {{- if .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.app.imagePullSecrets }}
+      {{- end}}
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}
+{{- end }}

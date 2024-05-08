@@ -1,0 +1,190 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-1006
+      author: clarc
+      comment: "Add name in location table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: name
+                  type: varchar(255)
+            tableName: location
+  - changeSet:
+      id: SHPV2-1006-2
+      author: clarc
+      comment: "Add facility_name in location_hierarchy table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: facility_name
+                  type: varchar(255)
+            tableName: location_hierarchy
+  - changeSet:
+      id: SHPV2-236
+      author: ajalbaniel
+      comment: "Introduction of alert entity"
+      changes:
+        - dropColumn:
+            columnName: alerts
+            tableName: shipment_journey
+        - dropColumn:
+            columnName: alerts_dismissed
+            tableName: shipment_journey
+        - createTable:
+            tableName: alert
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: message
+                  type: VARCHAR(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dismissed
+                  type: TINYINT(1)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dismiss_time
+                  type: timestamp
+              - column:
+                  name: dismissed_by
+                  type: VARCHAR(256)
+              - column:
+                  name: shipment_journey_id
+                  type: VARCHAR(32)
+              - column:
+                  name: package_journey_segment_id
+                  type: VARCHAR(32)
+        - addForeignKeyConstraint:
+            baseColumnNames: shipment_journey_id
+            baseTableName: alert
+            constraintName: fk_alert_shipment_journey
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+        - addForeignKeyConstraint:
+            baseColumnNames: package_journey_segment_id
+            baseTableName: alert
+            constraintName: fk_alert_package_journey_segment
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-241
+      author: imeehablero
+      comment: "Modified impacted table structures to reflect shipment_journey's one-to-many relationship with package_journey_segment"
+      changes:
+        - dropNotNullConstraint:
+            columnDataType: varchar(48)
+            columnName: shipmentjourney_id
+            tableName: shipment_journey_package_journey_segment
+        - dropNotNullConstraint:
+            columnDataType: varchar(48)
+            columnName: packagejourneysegments_id
+            tableName: shipment_journey_package_journey_segment
+        - dropNotNullConstraint:
+            columnDataType: integer
+            columnName: version
+            tableName: shipment_journey_package_journey_segment
+        - dropIndex:
+            indexName: shipment_journey_package_journey_segment1_idx
+            tableName: shipment_journey_package_journey_segment
+        - dropIndex:
+            indexName: shipment_journey_package_journey_segment2_idx
+            tableName: shipment_journey_package_journey_segment
+        - dropForeignKeyConstraint:
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment2
+        - dropForeignKeyConstraint:
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment1
+        - dropTable:
+            cascadeConstraints: true
+            tableName: shipment_journey_package_journey_segment
+        - addColumn:
+            tableName: package_journey_segment
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shipmentjourney_id
+                  type: varchar(48)
+        - addForeignKeyConstraint:
+            baseColumnNames: shipmentjourney_id
+            baseTableName: package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+  - changeSet:
+      id: SHPV2-241-2
+      author: banasco
+      comment: "Added is_deleted flag to package_journey_segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: is_deleted
+                  type: boolean
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-241-3
+      author: imeehablero
+      comment: "Added constraint and default value to is_deleted flag"
+      changes:
+        - addNotNullConstraint:
+            columnDataType: boolean
+            columnName: is_deleted
+            constraintName: is_deleted_not_null
+            defaultNullValue: false
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-233-2
+      author: leilcabahug
+      comment: "Added type reference ID, package code, total items count"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: type_reference_id
+                  type: varchar(48)
+              - column:
+                  name: code
+                  type: varchar(45)
+              - column:
+                  name: total_items_count
+                  type: integer unsigned
+            tableName: package
+  - changeSet:
+      id: SHPV2-299
+      author: leilcabahug
+      comment: "Added shipment tags"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: shipment_tags
+                  type: json
+            tableName: shipment

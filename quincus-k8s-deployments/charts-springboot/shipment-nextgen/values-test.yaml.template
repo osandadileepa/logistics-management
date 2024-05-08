@@ -1,0 +1,32 @@
+replicaCount: 2
+app:
+  namespace: test
+  name: shipment-nextgen
+  port: 8080
+  env: test
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  node_selectors:
+    environment: test
+    node-type: spot
+  hpa:
+    minReplicas: 2
+    maxReplicas: 4
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/shipment-nextgen-be
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: api.shipment-nextgen.test.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/custom-http-errors: "502,503,504"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
+#deployed on $date_build

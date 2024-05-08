@@ -1,0 +1,15 @@
+api-gateway:
+  baseUrl: https://api.gateway.staging.quincus.com
+  flightPath: /flight
+  flightSchedulePath: /schedules
+  assignVendorDetailsWebhook: /webhook/assignVendorDetails
+  updateOrderProgressWebhook: /webhook/updateOrderProgress
+  updateOrderAdditionalChargesWebhook: /webhook/updateOrderAdditionalCharges
+  s2sToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiU0hQVjItc3RhZ2luZyIsImp0aSI6ImE3MWY5YjllLTlmNGUtNGQ4OC1iMTllLWUyZDU2YjY1YjYyMSIsIm9yZ2FuaXNhdGlvbnMiOltdLCJleHBpcmVzX2F0IjoiIiwiaWF0IjoxNjc4MDg0MjQ5fQ.kkaHn-zZoNYz3gcaXpBv1z1PrXgS1YPFCpBIydnuAfw
+  webhookBaseUrl: https://api.gateway-ups.staging.quincus.com
+  checkInWebhook: /webhook/checkin
+apig-retry:
+  initialDelay: 1000
+  maxDelay: 4000
+  maxAttempts: 3
+  multiplier: 2

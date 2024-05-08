@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: local
+logging:
+  execution-time: true
+  level:
+    com.quincus.shipment.impl.web: DEBUG
+    org.apache.kafka: OFF
+
+feature:
+  shipment:
+    enabled: true
+  kafka:
+    enabled: true
+    admin:
+      enabled: true
+  qlogger:
+    enabled: true
+  order:
+    enabled: true
+  api-gateway:
+    enabled: true
+  authentication:
+    enabled: true
+  s3-integration:
+    enabled: true
+
+management:
+  cache:
+    enabled: true
+  enabled-by-default: false
+  web:
+    base-path: "/actuator"
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info,env  # List of endpoints to expose
+  endpoint:
+    health:
+      enabled: true
+      show-details: never  # This line ensures group details are not shown
+    info:
+      enabled: true
+    env:
+      enabled: true

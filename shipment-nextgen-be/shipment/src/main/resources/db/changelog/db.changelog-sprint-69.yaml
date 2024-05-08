@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-1114
+      author: imeehablero
+      comment: "Added time zone fields to package_journey_segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: arrival_timezone
+                  type: varchar(255)
+              - column:
+                  name: pick_up_timezone
+                  type: varchar(255)
+              - column:
+                  name: pick_up_commit_timezone
+                  type: varchar(255)
+              - column:
+                  name: drop_off_timezone
+                  type: varchar(255)
+              - column:
+                  name: drop_off_commit_timezone
+                  type: varchar(255)
+              - column:
+                  name: lock_out_timezone
+                  type: varchar(255)
+              - column:
+                  name: recovery_timezone
+                  type: varchar(255)
+              - column:
+                  name: departure_timezone
+                  type: varchar(255)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-244
+      author: mariaencinas
+      comment: "Added flightId and flightSubscriptionStatus columns"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: flight_id
+                  type: varchar(50)
+              - column:
+                  name: flight_subscription_status
+                  type: varchar(50)
+            tableName: package_journey_segment

@@ -1,0 +1,14 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: shipment-be-perf
+  build_id: 93
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: 
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: "shipment-be-df91836"
+#deployed on Tue Jun 13 02:35:47 UTC 2023

@@ -1,0 +1,17 @@
+{
+  "correlation_id": "4f1b1c71-d605-4169-8d68-d75e9cf0f1e9",
+  "module": "APIG",
+  "event_payload": {
+    "carrier": "QF",
+    "flight_number": "19",
+    "departure_date": "2023-02-18",
+    "origin": "SYD",
+    "destination": "MNL",
+    "success": true,
+    "error": "",
+    "flight_id": 1122334455
+  },
+  "event_id": "f156796e-0c8a-4ed1-9337-4696bb5b3778",
+  "event_date_utc": "2023-02-16T01:04:30.883Z",
+  "event_type": "FLIGHT_SUBSCRIBE_RS"
+}

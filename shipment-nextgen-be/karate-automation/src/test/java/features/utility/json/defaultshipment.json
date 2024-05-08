@@ -1,0 +1,14 @@
+{
+  "data": {
+    "id": "",
+    "shipment_tracking_id": "",
+    "order": {},
+    "user_id": "8131f514-f39d-4949-ba9a-2f95b289abf7",
+    "organization": {
+      "id": ""
+    },
+    "shipment_package": {},
+    "milestone": {},
+    "shipment_journey": {}
+  }
+}

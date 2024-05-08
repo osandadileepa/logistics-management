@@ -1,0 +1,5 @@
+order:
+  s2stoken: 8ClAROQXtEThb1KSjztLPA
+  scheme: https
+  host: api.order.poc.quincus.com
+  rollbackApi: /api_s2s/v1/rollback

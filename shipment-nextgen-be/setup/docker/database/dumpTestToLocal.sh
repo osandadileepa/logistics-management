@@ -1,0 +1,1 @@
+mysqldump -P 4000 -h tidb.ctusmuu1r7l.clusters.tidb-cloud.com -u shpv2.root -p shipment_v2_test > ~/testdump.sql

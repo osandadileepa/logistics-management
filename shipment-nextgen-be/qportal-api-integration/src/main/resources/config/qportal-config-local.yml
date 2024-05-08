@@ -1,0 +1,29 @@
+qportal:
+  s2sToken: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoic2hpcG1lbnQtdjIiLCJqdGkiOiI5ZWJkNWU0ZS1kOWQyLTQ2NzItODliMi0zMzJlNWZiNzE1M2QiLCJvcmdhbmlzYXRpb25zIjpbXSwiZXhwaXJlc19hdCI6IiJ9.qvEPCOA0ieOGBWwcXd9SmzTguelh5DhgY5OVNanYIZs
+  baseUrl: https://api.test.quincus.com/
+  packageTypesAPI: api/open_api/v1/package_types/
+  partnersAPI: api/open_api/v1/partners/
+  locationsAPI: api/open_api/v1/locations.json/
+  serviceTypeAPI: api/open_api/v1/services.json/
+  listUsersAPI: api/open_api/v1/users.json # returns name and id, used in listing
+  usersAPI: api/v1/users/ # returns more details
+  usersGetMyProfileApi: api/v1/users/get_my_profile
+  milestonesAPI: api/open_api/v1/milestones.json/
+  costTypesAPI: api/v1/cost_types/
+  currenciesAPI: api/v1/currencies/
+  vehiclesAPI: api/open_api/v1/vehicles/
+  notificationAPI: api/open_api/v1/notifications/trigger.json/
+  organizationAPI: api/v1/organisations/
+  vehicleTypesAPI: api/v1/vehicle_types.json/
+spring:
+  cache:
+    type: caffeine
+cache:
+  expireAfterWriteMinutes: 60
+  maximumSize: 10000
+  cacheNames: costType,costTypes,currencies,currencyById,currentUserProfile,drivers,locationById,locations,locationsByName,organization,packageTypes,userById,users,vehicles,partnerById,partnerByName,vehicleTypes,driversByPartners
+q-retry:
+  initialDelay: 1000
+  maxDelay: 4000
+  maxAttempts: 3
+  multiplier: 2

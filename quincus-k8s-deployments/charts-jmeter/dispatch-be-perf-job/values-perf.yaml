@@ -1,0 +1,13 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: dispatch-be-perf
+  build_id: $UUID
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: 
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: ""

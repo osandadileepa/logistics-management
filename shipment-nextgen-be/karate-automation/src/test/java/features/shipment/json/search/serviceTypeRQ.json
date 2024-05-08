@@ -1,0 +1,17 @@
+{
+  "data": {
+    "journey_status": "ACTIVE",
+    "service_type": [
+      {
+        "id": "ff80808183caae1a0183cb6eb18b06f4",
+        "code": "st-code-one",
+        "group": "service type group",
+        "name": "service type one",
+        "status": "active",
+        "remark": "remark"
+      }
+    ],
+    "size": 1,
+    "page_number": 1
+  }
+}

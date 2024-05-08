@@ -1,0 +1,12 @@
+db:
+  datasource:
+    db: costing_local
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/${db.datasource.db}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: 2ZaWcMUbgbz8DAm.root
+    password: 8AZDUqN6efUgdrry
+  jpa:
+    databasePlatform: org.hibernate.dialect.MySQL8Dialect
+    generateDdl: false
+    showSql: false
+    modelPackages: ["com.quincus.db.model", "com.quincus.finance.costing.weightcalculation.db.model", "com.quincus.finance.costing.ratecard.db.model"]

@@ -1,0 +1,3 @@
+mme:
+  trainingDelay: 240 # delay is set higher due to how active local env is, devs can update this if needed
+  debounceKeyPrefix: NETWORK-TRAINING-

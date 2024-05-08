@@ -1,0 +1,10 @@
+apiVersion: v1
+appVersion: "1.0"
+description: Helm chart for Quincus services
+name: quincus-k8s
+version: 0.1.0
+dependencies:
+  - name: redis
+    version: 16.13.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

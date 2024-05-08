@@ -1,0 +1,23 @@
+security:
+  allowed:
+    - "/sessions"
+  origins:
+    - "*"
+  methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "OPTIONS"
+    - "DELETE"
+    - "PATCH"
+  headers:
+    - "*"
+  token:
+    value: YOUR_TOKEN_HERE
+  s2sTokens:
+    - token:
+        name: "ORDER_MODULE"
+        value: YOUR_TOKEN_HERE
+    - token:
+        name: "APIG"
+        value: YOUR_TOKEN_HERE

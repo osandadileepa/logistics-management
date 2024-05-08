@@ -1,0 +1,246 @@
+{
+  "data": {
+    "partner_id": "frankpartner",
+    "order": {
+      "status": null,
+      "id": "ORDER-MMMM-11",
+      "customer_reference_id": [
+        "CUSTOMER_REFERENCE_ID_TEST1",
+        "CUSTOMER_REFERENCE_ID_TEST2",
+        "CUSTOMER_REFERENCE_ID_TEST3"
+      ],
+      "group": null,
+      "order_id_label": null,
+      "pickup_start_time": null,
+      "pickup_commit_time": "2022-12-09T23:59:59+07:00",
+      "pickup_timezone": "GMT+07:00",
+      "delivery_start_time": "2022-12-12T06:00:00+07:00",
+      "delivery_commit_time": "2022-12-12T23:59:59+07:00",
+      "delivery_timezone": "GMT+07:00",
+      "note": "order notes",
+      "tags": [
+        "ORDER-S11",
+        "ORDER-S12"
+      ],
+      "attachments": [
+        {
+          "id": "uuid_single_attachment1",
+          "file_name": "Single1-Attachment1.png",
+          "file_size": 10,
+          "file_url": "https://single1-attachment.example.com/12345"
+        }
+      ]
+    },
+    "sender": {
+      "name": "Tom Brady",
+      "contact_number": "202-555-0166",
+      "email": "tombrady@example.com"
+    },
+    "origin": {
+      "country_id": "denmark1",
+      "state_id": "denmark_midtjylland1",
+      "city_id": "denmark_midtjylland_hvide_sande1",
+      "country_name": "Denmark",
+      "state_name": "Region Midtjylland",
+      "city_name": "Hvide Sande",
+      "line1": "Denmark Address 1",
+      "line2": "Denmark Address 2",
+      "line3": "Denmark Address 3",
+      "postal_code": "postal",
+      "latitude": "",
+      "longitude": "",
+      "manual_coordinates": false,
+      "address": "123 Virginia Avenue propertyValue"
+    },
+    "consignee": {
+      "id": "Con111",
+      "name": "Michael Jordan",
+      "contact_number": "202-555-0193",
+      "email": "michaeljordan@example.com"
+    },
+    "destination": {
+      "country_id": "egypt1",
+      "state_id": "egypt_alexandria1",
+      "city_id": "egypt_alexandria_sidi_beshr1",
+      "country_name": "Egypt",
+      "state_name": "Alexandria",
+      "city_name": "Sidi Beshr",
+      "line1": "Egypt Address 1",
+      "line2": "Egypt Address 2",
+      "line3": "Egypt Address 3",
+      "postal_code": "postal",
+      "latitude": "",
+      "longitude": "",
+      "manual_coordinates": false,
+      "address": "123 Virginia Avenue propertyValue"
+    },
+    "pick_up_location": "propertyValue",
+    "delivery_location": "propertyValue",
+    "return_location": "propertyValue",
+    "extra_care_info": [
+      "Care-1",
+      "EX-CARE2"
+    ],
+    "insurance_info": [
+      "Insurance1",
+      "safety2"
+    ],
+    "service_type": {
+      "code": "st-code-one-single",
+      "group": "service type group",
+      "name": "service type one",
+      "status": "active",
+      "remark": "remark"
+    },
+    "shipment_package": {
+      "total_value": 199.69,
+      "total_items_count": 120012,
+      "currency": "USD",
+      "type": "packageType",
+      "type_ref_id": "type-id-1",
+      "value": "10000",
+      "ready_time": "2022-12-25T08:30:00",
+      "additional_data1": "UP387429834T",
+      "dimension": {
+        "measurement_unit": "METRIC",
+        "length": null,
+        "width": null,
+        "height": 3.03,
+        "volume_weight": 0.22,
+        "gross_weight": 0.33,
+        "chargeable_weight": 0.11,
+        "is_custom": false
+      },
+      "commodities": [
+        {
+          "name": "Food",
+          "quantity": 12,
+          "value": 205.69
+        },
+        {
+          "name": "Electronics",
+          "quantity": 120000,
+          "value": 20.22
+        }
+      ],
+      "pricing_info": {
+        "currency": "PHP",
+        "base_tariff": 73.79,
+        "service_type_charge": 34.35,
+        "surcharge": 13.96,
+        "insurance_charge": 32.26,
+        "extra_care_charge": 43.94,
+        "discount": 30.43,
+        "tax": 23.22,
+        "cod": 334.68,
+        "total": 199.10
+      }
+    },
+    "user_id": "ac0429fd-9eb5-432c-b364-675e76ed3c79",
+    "shipment_journey": {
+      "status": "ACTIVE",
+      "alerts": [
+        {
+          "short_message": "this is a warning message.",
+          "message": "This is a warning message in your third segment",
+          "type": "WARNING"
+        },
+        {
+          "short_message": "this is an error message.",
+          "message": "This is a error message in your third segment",
+          "type": "ERROR"
+        }
+      ],
+      "package_journey_segments": [
+        {
+          "ref_id": "1",
+          "sequence": "1",
+          "ops_type": "type-a1",
+          "type": "first_mile",
+          "status": "Planned",
+          "pick_up_time": "2022-12-09T00:00:00+08:00",
+          "drop_off_time": "2022-12-12T23:59:00+08:00",
+          "transport_type": "Ground",
+          "start_facility": {
+            "external_id": "denmark_nordjylland_fjerritslev_fac1",
+            "name": "denmark_nordjylland_fjerritslev_fac1",
+            "group": "group",
+            "code": "denmark_nordjylland_fjerritslev_fac1",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "country_id": "denmark1",
+              "state_id": "denmark_nordjylland1",
+              "city_id": "denmark_nordjylland_fjerritslev1",
+              "country_name": "Denmark",
+              "state_name": "Region Nordjylland",
+              "city_name": "Fjerritslev",
+              "line1": "Denmark Address 11",
+              "line2": "Denmark Address 12",
+              "line3": "Denmark Address 13",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "end_facility": {
+            "external_id": "egypt_cairo_cairo_fac1",
+            "name": "egypt_cairo_cairo_fac1",
+            "group": "group",
+            "code": "egypt_cairo_cairo_fac1",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "country_id": "egypt1",
+              "state_id": "egypt_cairo1",
+              "city_id": "egypt_cairo_cairo1",
+              "country_name": "Egypt",
+              "state_name": "Cairo",
+              "city_name": "Cairo",
+              "line1": "Egypt Address 11",
+              "line2": "Egypt Address 12",
+              "line3": "Egypt Address 13",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "serviced_by": "propertyValue",
+          "master_waybill": "123-12345675",
+          "flight_number": "AR1324"
+        }
+      ]
+    },
+    "organization": {
+      "id": "SINGLE-ORG-ID-ONE"
+    },
+    "milestone": {
+      "code": "Created",
+      "description": "Shipment Created"
+    },
+    "customer": {
+      "code": "CORPORATE",
+      "name": "CORPORATE"
+    },
+    "status": "Created",
+    "eta_status": "On Time",
+    "pickup_instruction": "pickup S1",
+    "delivery_instruction": "delivery S1",
+    "notes": "shipment notes S1",
+    "shipment_reference_id": [
+      "SHIPMENT_REFERENCE_ID_TEST1",
+      "SHIPMENT_REFERENCE_ID_TEST2",
+      "SHIPMENT_REFERENCE_ID_TEST3"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+replicaCount: 1
+app:
+  region: us-west-2
+  namespace: dev
+  name: network-management
+  port: 8080
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  node_selectors:
+    environment: dev
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 2
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.us-west-2.amazonaws.com/network-management-be
+  tag: "5.6.0-SNAPSHOT-12db136"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName_noram: api.network-management.dev-noram.quincus.com
+  hostName: api.network-management.dev.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/custom-http-errors: "502,503,504"
+#deployed on Tue Aug  8 04:12:10 UTC 2023

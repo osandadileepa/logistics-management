@@ -1,0 +1,6 @@
+db:
+  datasource:
+    db: network_management
+    url: jdbc:mysql://private-tidb.qjztbzftwfs.clusters.tidb-cloud.com:4000/${db.datasource.db}
+    username: networkman.cntr
+    password: quCtktDY8V4LssH3

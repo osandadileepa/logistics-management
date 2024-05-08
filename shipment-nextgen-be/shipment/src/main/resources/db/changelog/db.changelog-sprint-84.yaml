@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-5929
+      author: clarc
+      comment: "add description on shipment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: description
+                  type: varchar(255)
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-2933
+      author: paullabis
+      comment: "add segment type on network lane segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: type
+                  type: varchar(16)
+            tableName: network_lane_segment
+  - changeSet:
+      id: SHPV2-6077
+      author: rahhi
+      comment: "Change maximum decimal places for cost amount - (17,2) 17 total digit means 15 for non decimal and 2 for decimal"
+      changes:
+        - modifyDataType:
+            columnName: cost_amount
+            newDataType: DECIMAL(17, 2)
+            tableName: cost
+  - changeSet:
+      id: SHPV2-832
+      author: rahhi
+      comment: "add booking field in segment"
+      changes:
+        - addColumn:
+            tableName: package_journey_segment
+            columns:
+              - column:
+                  name: internal_booking_reference
+                  type: VARCHAR(64)
+              - column:
+                  name: external_booking_reference
+                  type: VARCHAR(64)
+              - column:
+                  name: booking_status
+                  type: VARCHAR(64)
+              - column:
+                  name: assignment_status
+                  type: VARCHAR(64)
+              - column:
+                  name: rejection_reason
+                  type: VARCHAR(255)
+  - changeSet:
+      id: SHPV2-4670
+      author: leilcabahug
+      comment: "add short_message on alert"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: short_message
+                  type: varchar(128)
+              - column:
+                  name: level
+                  type: varchar(16)
+            tableName: alert
+        - createIndex:
+            tableName: alert
+            indexName: idx_short_message
+            columns:
+              - column:
+                  name: short_message

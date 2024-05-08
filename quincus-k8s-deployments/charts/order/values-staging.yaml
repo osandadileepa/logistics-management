@@ -1,0 +1,105 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4000
+    mem_required: 2000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    service_account: "sidekiq-sa"
+    healthcheck: true
+    healthcheck_command:
+       - sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi    
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 6000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 3000
+    cpu_required: 1500
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 4000
+    cpu_required: 2000
+  namespace: staging
+  name: order
+  port: 3000
+  env: staging
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: staging
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/order-quincus-images
+  tag: "3c80ec3"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: staging/order
+  versionId: 6cddc83d-8cb4-467a-8a01-7e7957cded62
+ingress:
+  enabled: true
+  hostName: api.order.staging.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.staging.quincus.com, https://shipment.staging.quincus.com, https://shipment-nextgen.staging.quincus.com, https://pricing.staging.quincus.com, https://common.staging.quincus.com, https://order.staging.quincus.com, https://staging.quincus.com, https://quincus.staging.qship.quincus.com, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com, https://shpstg08.staging.qship.quincus.com, https://3011sg.staging.qship.quincus.com, https://segorg.staging.qship.quincus.com, https://qship.quincus.app, https://staging.quincus.app, https://140223.staging.qship.quincus.com, https://e2eauto.staging.qship.quincus.com, https://07022023.staging.qship.quincus.com, https://UPSSTG.staging.qship.quincus.com, https://VYPM.staging.qship.quincus.com, https://seg1512.staging.qship.quincus.com, https://nseg1512.staging.qship.quincus.com, https://kafka.staging.qship.quincus.com, https://shpstg08.staging.qship.quincus.com, https://qapistg.staging.qship.quincus.com, https://140223.staging.qship.quincus.com, https://520e2e.staging.qship.quincus.com, https://nseg1512.staging.qship.quincus.com, https://seg1512.staging.qship.quincus.com, https://e2eauto.staging.qship.quincus.com, https://qps.staging.qship.quincus.com, https://v549.staging.qship.quincus.com, https://wlstg.staging.qship.quincus.com, https://orgshpv2.staging.qship.quincus.com, https://jkct.staging.qship.quincus.com, https://shpv2r1.staging.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,timeout,platform"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: staging
+      node-type: spot
+  auth:
+    enabled: false
+#deployed on Wed Jul 26 05:04:36 UTC 2023

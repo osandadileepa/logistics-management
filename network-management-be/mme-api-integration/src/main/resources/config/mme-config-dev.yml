@@ -1,0 +1,7 @@
+mme:
+  authValue: alskjdf98098sfsf9898908sdf9s8f09s809s8f09s8f9890sfdsdfd809809sfs
+  baseUrl: https://mme-training.dev.quincus.com/
+  trainModel: train-model/
+  checkTrainModel: get-trained-model/
+  predict: predict/
+  checkPrediction: get-prediction/

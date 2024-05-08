@@ -1,0 +1,4 @@
+authentication:
+  baseUrl: https://api.auth.dev.quincus.com/
+  loginAPI: api/v1/users/login.json/
+  validateTokenAPI: api/v1/users/validate_token.json/

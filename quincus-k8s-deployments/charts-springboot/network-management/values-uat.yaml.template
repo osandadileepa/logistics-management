@@ -1,0 +1,31 @@
+replicaCount: 1
+app:
+  namespace: uat
+  name: network-management
+  port: 8080
+  env: uat
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  node_selectors: 
+    environment: uat
+    node-type: on_demand
+  hpa:
+    minReplicas: 2
+    maxReplicas: 4
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/network-management-be
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: api.network-management.uat.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/custom-http-errors: "502,503,504"
+#deployed on $date_build

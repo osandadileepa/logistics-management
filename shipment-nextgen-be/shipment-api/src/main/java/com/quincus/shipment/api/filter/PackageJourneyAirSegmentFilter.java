@@ -1,0 +1,14 @@
+package com.quincus.shipment.api.filter;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+public class PackageJourneyAirSegmentFilter extends Filter {
+    private String airline;
+    private String key;
+    private Integer level;
+}

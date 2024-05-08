@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-2108
+      author: imeehablero
+      comment: "Added location_code"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: facility_location_code
+                  type: varchar(64)
+            tableName: location_hierarchy
+  - changeSet:
+      id: SHPV2-849
+      author: imeehablero
+      comment: "Added new fields for Partner and PackageJourneySegment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: pick_up_instruction
+                  type: varchar(2000)
+              - column:
+                  name: delivery_instruction
+                  type: varchar(2000)
+              - column:
+                  name: calculated_mileage_unit
+                  type: varchar(60)
+              - column:
+                  name: duration_unit
+                  type: varchar(60)
+              - column:
+                  name: pick_up_actual_time
+                  type: varchar(50)
+              - column:
+                  name: pick_up_actual_timezone
+                  type: varchar(255)
+              - column:
+                  name: drop_off_actual_time
+                  type: varchar(50)
+              - column:
+                  name: drop_off_actual_timezone
+                  type: varchar(255)
+            tableName: package_journey_segment
+        - addColumn:
+            columns:
+              - column:
+                  name: code
+                  type: varchar(128)
+              - column:
+                  name: contact_name
+                  type: varchar(128)
+              - column:
+                  name: contact_number
+                  type: varchar(50)
+              - column:
+                  name: contact_code
+                  type: varchar(50)
+              - column:
+                  name: email
+                  type: varchar(128)
+            tableName: partner
+        - addColumn:
+            columns:
+              - column:
+                  name: departure_timezone
+                  type: varchar(60)
+              - column:
+                  name: arrival_timezone
+                  type: varchar(60)
+            tableName: flight_status

@@ -1,0 +1,39 @@
+{
+  "correlation_id": "bf30ca20-481e-4a56-9449-a9fada89de62",
+  "module": "APIG",
+  "event_id": "bf30ca20-481e-4a56-9449-a9fada89de62",
+  "event_date_utc": "2022-12-09T01:11:29.513Z",
+  "event_type": "FLIGHT_STATUS_RS",
+  "event_payload": {
+    "carrier": "PR",
+    "flight_number": "112",
+    "departure_date": "2022-12-09",
+    "origin": "MNL",
+    "destination": "LAX",
+    "success": true,
+    "error": "",
+    "event_name": "DEPARTURE_DELAY",
+    "flight_id": 1121799569,
+    "flight_status": {
+      "status": "L",
+      "flight_id": 1121799569,
+      "departure_airport_code": "MNL",
+      "departure_airport_name": "Ninoy Aquino International Airport",
+      "arrival_airport_code": "LAX",
+      "arrival_airport_name": "Los Angeles International Airport",
+      "scheduled_departure": "2022-11-29T12:57:00.000+08:00",
+      "estimated_departure": "2022-11-29T12:58:00.000+08:00",
+      "actual_departure": "2022-11-29T12:59:00.000+08:00",
+      "scheduled_arrival": "2022-11-29T13:03:00.000-08:00",
+      "estimated_arrival": "2022-11-29T13:04:00.000-08:00",
+      "actual_arrival": "2022-11-29T12:54:00.000-08:00",
+      "airline_code": "PR",
+      "airline_name": "Philippine Airlines",
+      "operating_airline_code": "PR",
+      "longitude": null,
+      "latitude": null,
+      "speed_mph": null,
+      "altitude_ft": null
+    }
+  }
+}

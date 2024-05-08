@@ -1,0 +1,11 @@
+{{- if or (eq .Values.app.env  "uat") (eq .Values.app.env  "test") (eq .Values.app.env  "prod")  }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  minAvailable: 30%
+  selector:
+    matchLabels:
+      name: {{ .Values.app.name }}
+{{- end }}

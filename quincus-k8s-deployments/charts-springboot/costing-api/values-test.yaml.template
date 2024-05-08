@@ -1,0 +1,39 @@
+replicaCount: 2
+app:
+  namespace: test
+  name: costing-api
+  port: 8080
+  env: test
+  image_pull_policy: IfNotPresent
+  mem_limit: 2048
+  mem_required: 1024
+  cpu_limit: 1000
+  cpu_required: 500
+  node_selectors:
+    environment: test
+    node-type: spot
+  hpa:
+    minReplicas: 2
+    maxReplicas: 4
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/costing-api
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: api.costing.test.quincus.com
+  path: /
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:244836737383:certificate/2e4711fd-db5a-464c-b5cf-14496a753228
+    alb.ingress.kubernetes.io/group.name: nonprod-public-alb
+    alb.ingress.kubernetes.io/load-balancer-name: nonprod-public-alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/security-groups: alb-sg-rule
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=300
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+#deployed on $date_build

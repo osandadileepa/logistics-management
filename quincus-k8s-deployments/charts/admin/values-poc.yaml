@@ -1,0 +1,82 @@
+app:
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 8000
+    mem_required: 4000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 11000
+    mem_required: 5500
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 11000
+    mem_required: 5500
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: poc
+  name: admin
+  port: 3000
+  env: poc
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: poc
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/admin-quincus-images
+  tag: "904cadf"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: poc/admin
+  versionId: da635d05-9812-4c65-ba80-6f89697907be
+ingress:
+  enabled: true
+  hostName: api.poc.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 300
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.poc.quincus.com, https://shipment.poc.quincus.com, https://pricing.poc.quincus.com, https://common.poc.quincus.com, https://order.poc.quincus.com, https://poc.quincus.com, https://quincus.poc.qship.quincus.com, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: poc
+      node-type: on_demand
+  auth:
+    enabled: false

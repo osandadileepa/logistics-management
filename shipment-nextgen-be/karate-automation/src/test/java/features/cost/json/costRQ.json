@@ -1,0 +1,49 @@
+{
+  "data": {
+    "cost_type": {
+      "id": "10d95526-4f18-4497-93b4-e74747f71f13"
+    },
+    "cost_amount": 42,
+    "currency": {
+      "id": "14289a09-4402-4f7b-8541-3a5b32afd539"
+    },
+    "source": "VENDOR",
+    "driver_id": "08a07fb0-e854-4d8b-86d9-c2fa9241fe20",
+    "issued_date": "2023-02-11T14:50:00.000Z",
+    "issued_timezone": "UTC 14:00",
+    "shipments": [
+      {
+        "id": "",
+        "segments": [
+          {
+            "segment_id": ""
+          }
+        ]
+      }
+    ],
+    "proof_of_cost": [
+      {
+        "url": "https://www.example.com/#bike",
+        "file_name": "receipt1.png",
+        "file_size": 160
+      },
+      {
+        "url": "http://www.example.com/#brother",
+        "file_name": "receipt2.png",
+        "file_size": 160
+      },
+      {
+        "url": "https://example.com/birds/birth.htm",
+        "file_name": "receipt3.png",
+        "file_size": 160
+      },
+      {
+        "url": "https://www.example.com/berry/bells",
+        "file_name": "receipt4.png",
+        "file_size": 160
+      }
+    ],
+    "remarks": "4 receipts combined",
+    "organization_id": "14289a09-4402-4f7b-8541-3a5b32afd539"
+  }
+}

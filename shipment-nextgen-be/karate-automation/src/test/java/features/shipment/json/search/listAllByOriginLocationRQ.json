@@ -1,0 +1,13 @@
+{
+  "data": {
+    "journey_status": "ACTIVE",
+    "origin_locations": {
+    },
+    "destination_locations": {
+    },
+    "facility_locations": {
+    },
+    "size": 1,
+    "page_number": 1
+  }
+}

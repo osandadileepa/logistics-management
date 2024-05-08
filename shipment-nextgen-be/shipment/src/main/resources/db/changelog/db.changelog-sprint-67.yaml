@@ -1,0 +1,162 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-243
+      author: ajalbaniel
+      comment: "Added create_time and modify_time in milestone events"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+            tableName: milestone_events
+  - changeSet:
+      id: SHPV2-250
+      author: clarc
+      comment: "Added organization id in package journey segment table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: varchar(42)
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+            indexName: package_journey_segment_organization_id_idx
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-250-2
+      author: clarc
+      comment: "Added multi-column index for airline, flight_number and organization_id."
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+              - column:
+                  name: airline
+              - column:
+                  name: flight_number
+            indexName: package_journey_segment_org_id_airline_flight_no_idx
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-1165
+      author: imeehablero
+      comment: "Create Partner table"
+      changes:
+        - createTable:
+            tableName: partner
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+              - column:
+                  name: external_id
+                  type: VARCHAR(48)
+              - column:
+                  name: address_id
+                  type: VARCHAR(48)
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+              - column:
+                  name: type
+                  type: VARCHAR(128)
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+        - addUniqueConstraint:
+            columnNames: external_id, organization_id
+            constraintName: partner_unique_constraint
+            tableName: partner
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: partner
+            constraintName: fk_partner_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: partner
+            constraintName: fk_partner_address
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: address
+        - addForeignKeyConstraint:
+            baseColumnNames: partner_id
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_partner
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: partner
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+            indexName: idx_organization_id
+            tableName: partner
+  - changeSet:
+      id: SHPV2-232
+      author: mariaencinas
+      comment: "Added Pickup and Delivery Commit Time to Segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: pick_up_commit_time
+                  type: varchar(50)
+              - column:
+                  name: drop_off_commit_time
+                  type: varchar(50)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-232-2
+      author: mariaencinas
+      comment: "Added fields column to Alert"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: fields
+                  type: JSON
+            tableName: alert
+  - changeSet:
+      id: SHPV2-1497
+      author: leilcabahug
+      comment: "remove null constraints for package total value, commodity value"
+      changes:
+        - dropNotNullConstraint:
+            columnName: total_value
+            columnDataType: decimal(16, 4)
+            tableName: package
+        - dropNotNullConstraint:
+            columnName: value
+            columnDataType: decimal(15, 4)
+            tableName: commodity

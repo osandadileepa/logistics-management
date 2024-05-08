@@ -1,0 +1,20 @@
+{
+  "data": {
+    "airline_keys": [
+      {
+        "airline_name": "Singapore Airlines",
+        "flight_numbers": []
+      },
+      {
+        "airline_name": "Cathay Pacific",
+        "flight_numbers": [
+          "D456",
+          "E567",
+          "F678"
+        ]
+      }
+    ],
+    "size": 10,
+    "page_number": 1
+  }
+}

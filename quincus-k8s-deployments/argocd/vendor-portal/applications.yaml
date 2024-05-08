@@ -1,0 +1,177 @@
+###vendor-portal
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-dev.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-test
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-test.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-uat
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: uat
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-uat.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-staging
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: staging
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-staging.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-poc
+spec:
+  destination:
+    name: ''
+    namespace: poc
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-poc.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-prod
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: prod
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-prod.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+piVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vendor-portal-demo
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: demo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - vendor-portal/values-demo.yaml
+  project: vendor-portal
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

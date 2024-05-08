@@ -1,0 +1,39 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: dev
+  name: mme-training
+  port: 5000
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 32768
+  mem_required: 32768
+  cpu_limit: 30720
+  cpu_required: 16384
+  node_selectors:
+    environment: dev
+    functionality: data-science
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/mme-training-api
+  tag: "a0513bc"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/mme-training-api
+  versionId: e8cd9765-5c9a-45f2-8424-f84cbc912413
+ingress:
+  enabled: true
+  hostName: mme-training.dev.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://mme-console.dev.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,Content-Encoding"
+#deployed on Tue Jun 20 14:45:08 UTC 2023

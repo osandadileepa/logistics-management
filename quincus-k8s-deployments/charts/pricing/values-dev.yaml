@@ -1,0 +1,97 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 2
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 2000
+    cpu_required: 500
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - -c
+         - sidekiq_pid=`ps -aux | grep -i 'sidekiq 6.4.1 current' | awk 'NR==1{print $2}'`;kill -s TSTP -s TERM 
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 2000
+    cpu_required: 1000     
+  namespace: dev
+  name: pricing
+  port: 3000
+  env: dev
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: dev
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/pricing-quincus-images
+  tag: "09a01fd"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/pricing
+  versionId: e2993caf-1b9f-4cdf-b36b-0f541bf9a43b
+ingress:
+  enabled: true
+  hostName_noram: api.pricing.dev-noram.quincus.com
+  hostName: api.pricing.dev.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.dev.quincus.com, https://shipment.dev.quincus.com, https://pricing.dev.quincus.com, https://common.dev.quincus.com, https://order.dev.quincus.com, https://dev.quincus.com, https://quincus.dev.qship.quincus.com, http://localhost:3000, http://pricing.local.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: dev
+      node-type: spot
+  auth:
+    enabled: false

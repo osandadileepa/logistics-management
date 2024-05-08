@@ -1,0 +1,87 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - -c
+         - sidekiq_pid=`ps -aux | grep -i 'sidekiq 6.4.1 current' | awk 'NR==1{print $2}'`;kill -s TSTP -s TERM $sidekiq_pid
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 10000
+    mem_required: 5000
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 10000
+    mem_required: 5000
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: poc
+  name: pricing
+  port: 3000
+  env: poc
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: poc
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/pricing-quincus-images
+  tag: "cc88f55"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: poc/pricing
+  versionId: ac900fb3-2457-4fd7-b4e6-62eaace4b132
+ingress:
+  enabled: true
+  hostName: api.pricing.poc.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.poc.quincus.com, https://shipment.poc.quincus.com, https://pricing.poc.quincus.com, https://common.poc.quincus.com, https://order.poc.quincus.com, https://poc.quincus.com, https://quincus.poc.qship.quincus.com, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: poc
+      node-type: on_demand
+  auth:
+    enabled: false
+#deployed on 

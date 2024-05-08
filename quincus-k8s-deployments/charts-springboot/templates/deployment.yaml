@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.app.namespace | default "default" }}
+  name: {{ .Values.app.name }}
+  labels:
+    env: {{ .Values.app.env }}
+    name: {{ .Values.app.name }}
+spec:
+  selector:
+    matchLabels:
+      env: {{ .Values.app.env }}
+      name: {{ .Values.app.name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 40%
+  progressDeadlineSeconds: 300
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        env: {{ .Values.app.env }}
+        name: {{ .Values.app.name }}
+        admission.datadoghq.com/enabled: 'true'
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image_pull_policy | default "IfNotPresent" }}
+          {{- if .Values.app.lifecycle_check }}
+          lifecycle:
+            preStop:
+               exec: 
+                command: 
+                {{- range .Values.app.lifecycle.preStop.command}}
+                 - {{.}}
+                {{- end}}
+          {{- end }}          
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: {{ .Values.app.env }}
+          envFrom:
+          {{- if .Values.secretManager }}
+          - secretRef:
+              name: {{ .Values.app.name }}
+          {{- end}}
+          {{- if .Values.app.port }}
+          ports:
+            - containerPort: {{ .Values.app.port }}
+          {{- end }}
+          {{- if .Values.app.healthcheck }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          {{- end }}
+          resources:
+            limits:
+              {{- if (gt (.Values.app.cpu_limit | default 0.0) 0.0) }}
+              cpu: {{.Values.app.cpu_limit}}m
+              {{- end }}
+              {{- if (gt (.Values.app.mem_limit | default 0.0) 0.0) }}
+              memory: {{.Values.app.mem_limit}}Mi
+              {{- end }}
+            requests:
+              {{- if (gt (.Values.app.cpu_required | default 0.0) 0.0) }}
+              cpu: {{.Values.app.cpu_required}}m
+              {{- end }}
+              {{- if (gt (.Values.app.mem_required | default 0.0) 0.0) }}
+              memory: {{.Values.app.mem_required}}Mi
+              {{- end }}
+      {{- if .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.app.imagePullSecrets }}
+      {{- end}}
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}

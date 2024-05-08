@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-3501
+      author: leilcabahug
+      comment: "added additional milestone fields"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: from_ward_id
+                  type: varchar(48)
+              - column:
+                  name: from_district_id
+                  type: varchar(48)
+              - column:
+                  name: from_coordinates
+                  type: json
+              - column:
+                  name: to_ward_id
+                  type: varchar(48)
+              - column:
+                  name: to_district_id
+                  type: varchar(48)
+              - column:
+                  name: to_coordinates
+                  type: json
+              - column:
+                  name: driver_email
+                  type: varchar(128)
+              - column:
+                  name: sender_company
+                  type: varchar(128)
+              - column:
+                  name: sender_department
+                  type: varchar(128)
+              - column:
+                  name: receiver_company
+                  type: varchar(128)
+              - column:
+                  name: receiver_department
+                  type: varchar(128)
+              - column:
+                  name: failed_reason
+                  type: varchar(255)
+              - column:
+                  name: failed_reason_code
+                  type: varchar(32)
+            tableName: milestone
+        - dropColumn:
+            columnName: remarks
+            tableName: milestone
+        - dropColumn:
+            columnName: failed_pickup_reason
+            tableName: milestone
+        - dropColumn:
+            columnName: failed_delivery_reason
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-111
+      author: imeehablero
+      comment: "Added cancel_reason to shipment_order"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: cancel_reason
+                  type: VARCHAR(255)
+            tableName: shipment_order

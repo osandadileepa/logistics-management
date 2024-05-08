@@ -1,0 +1,234 @@
+{
+  "data": {
+    "id": "013c5daa-ea8c-455e-b8b8-298b2e99f232",
+    "shipment_tracking_id": "thisisshipmentTrackingId",
+    "order": {
+      "id": "ORDER-MMMM",
+      "customer_reference_id": [
+        "propertyValue"
+      ],
+      "group": "propertyValue",
+      "order_id_label": "ORDER-LABEL-INV",
+      "pickup_start_time": "2022-12-24T08:30:00-04:00",
+      "pickup_commit_time": "2022-12-26T17:59:59-04:00",
+      "pickup_timezone": "UTC-4:00",
+      "delivery_start_time": "2023-01-04T06:00:00+08:00",
+      "delivery_commit_time": "2023-01-05T22:59:59+08:00",
+      "delivery_timezone": "GMT+8:00",
+      "note": "order notes",
+      "tags": [
+        "ORDER-I11",
+        "ORDER-I12"
+      ],
+      "attachments": [
+        {
+          "id": "uuid-attachment-1b",
+          "file_name": "Invalid1-Attachment1.png",
+          "file_size": 12345,
+          "file_url": "https://invalid1-attachment.example.com/12345"
+        }
+      ],
+      "status": "Created"
+    },
+    "sender": {
+      "name": "Tom Brady",
+      "contact_number": "202-555-0166",
+      "email": "tombrady@example.com",
+      "address": {
+        "country": "US",
+        "state": "MA",
+        "city": "Boston",
+        "line1": "123",
+        "line2": "Virginia Avenue",
+        "line3": "propertyValue",
+        "country_id": "testid",
+        "state_id": "state_id",
+        "city_id": "cityid",
+        "postal_code": "postal",
+        "latitude": "",
+        "longitude": "",
+        "manual_coordinates": false,
+        "address": "123 Virginia Avenue propertyValue"
+      }
+    },
+    "consignee": {
+      "id": "Con111",
+      "name": "Michael Jordan",
+      "contact_number": "202-555-0193",
+      "email": "michaeljordan@example.com",
+      "address": {
+        "country": "Mexico",
+        "state": "MA",
+        "city": "Boston",
+        "line1": "123",
+        "line2": "Virginia Avenue",
+        "line3": "propertyValue",
+        "country_id": "testid",
+        "state_id": "state_id",
+        "city_id": "cityid",
+        "postal_code": "postal",
+        "latitude": "",
+        "longitude": "",
+        "manual_coordinates": false,
+        "address": "123 Virginia Avenue propertyValue"
+      }
+    },
+    "pick_up_location": "propertyValue",
+    "delivery_location": "propertyValue",
+    "return_location": "propertyValue",
+    "extra_care_info": [
+      "Care-1",
+      "EX-CARE2"
+    ],
+    "insurance_info": [
+      "Insurance1",
+      "safety2"
+    ],
+    "service_type": {
+      "code": "code",
+      "name": "name"
+    },
+    "shipment_package": {
+      "ref_id": "8b572b93-8b2a-40cc-828a-34fda48fdbfb",
+      "total_value": 199.69,
+      "total_items_count": 1,
+      "currency": "USD",
+      "type": "packageType",
+      "type_ref_id": "type-id-1",
+      "value": "propertyValue",
+      "ready_time": "2022-12-25T08:30:00",
+      "dimension": {
+        "measurement_unit": "METRIC",
+        "length": 1.01,
+        "width": 2.02,
+        "height": 3.03,
+        "volume_weight": 0.22,
+        "gross_weight": 0.33,
+        "chargeable_weight": 0.11,
+        "is_custom": false
+      },
+      "commodities": [
+        {
+          "name": "Drugs",
+          "quantity": 1,
+          "value": 500.69
+        }
+      ],
+      "pricing_info": {
+        "currency": "USD",
+        "base_tariff": 17.79,
+        "service_type_charge": 14.35,
+        "surcharge": 11.96,
+        "insurance_charge": 12.26,
+        "extra_care_charge": 14.94,
+        "discount": 10.43,
+        "tax": 12.22,
+        "cod": 534.68,
+        "total": 1000
+      }
+    },
+    "user_id": "013c5daa-ea8c-455f-b8b8-298b2e99f234",
+    "shipment_journey": {
+      "order_id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+      "journey_id": "7fcec673-cc5d-5f33-ae99-5981a517b0bc",
+      "shipment_id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+      "status": "PLANNED",
+      "package_journey_segments": [
+        {
+          "ref_id": "1",
+          "journey_id": "a235c05c-34a1-11ed-a261-0242ac120002",
+          "ops_type": "type-a1",
+          "status": "PLANNED",
+          "type": "LAST_MILE",
+          "transport_type": "GROUND",
+          "start_facility": {
+            "external_id": "startfacid",
+            "name": "facilityname",
+            "group": "group",
+            "code": "code",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "id": "facilityid",
+              "country": "Mexico",
+              "state": "MA",
+              "city": "Boston",
+              "line1": "123 1",
+              "line2": "Virginia Avenue",
+              "line3": "propertyValue",
+              "country_id": "testid",
+              "state_id": "state_id",
+              "city_id": "cityid",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "end_facility": {
+            "external_id": "endfacid",
+            "name": "facilityname",
+            "group": "group",
+            "code": "facilityname",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "id": "endfailicyasf",
+              "country": "Mexico",
+              "state": "MA",
+              "city": "Boston",
+              "line1": "123 1",
+              "line2": "Virginia Avenue",
+              "line3": "propertyValue",
+              "country_id": "testid",
+              "state_id": "state_id",
+              "city_id": "cityid",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "serviced_by": "propertyValue"
+        }
+      ]
+    },
+    "milestone": {
+      "code": "1100",
+      "milestone_name": "Order Booked",
+      "milestone_time": "2023-08-15T11:01:43.112Z",
+      "organization_id": "Org111111"
+    },
+    "milestone_events": [
+      {
+        "milestone_code": "1100",
+        "milestone_name": "Order Booked",
+        "milestone_time": "2023-08-15T11:01:43.112Z",
+        "organization_id": "8b572b93-8b2a-40cc-828a-34fda48fdbfb"
+      }
+    ],
+    "organization": {
+      "id": "Org111111",
+      "name": "Org One",
+      "code": "Org Code 111111"
+    },
+    "customer": {
+      "code": "CUST1",
+      "name": "UPS-SG",
+      "orgId": "Org111111"
+    },
+    "status": "CREATED",
+    "eta_status": "ON_TIME",
+    "pickup_instruction": "pickup I1",
+    "delivery_instruction": "delivery I1",
+    "notes": "shipment notes I1"
+  }
+}

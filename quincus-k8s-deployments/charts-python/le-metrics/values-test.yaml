@@ -1,0 +1,41 @@
+replicaCount: 1
+app:
+  namespace: test
+  name: le-metrics
+  port: 8081
+  env: test
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  terminationGracePeriodSeconds: 30  
+  node_selectors:
+    environment: test
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/le-metrics
+  tag: "43e55fd"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: le-metrics.test.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.org/client-max-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:244836737383:certificate/45fe27a5-cfd4-4aab-b5dc-6696bb0950c0
+    alb.ingress.kubernetes.io/group.name: nonprod-public-alb
+    alb.ingress.kubernetes.io/load-balancer-name: nonprod-public-alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/security-groups: alb-sg-rule
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+#deployed on Thu Feb 23 05:10:56 UTC 2023

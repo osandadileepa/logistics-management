@@ -1,0 +1,103 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-4251
+      author: leilcabahug
+      comment: "Update flight_id data type in flight status table to reflect data type in flight table"
+      changes:
+        - dropNotNullConstraint:
+            columnName: flight_id
+            tableName: flight_status
+            columnDataType: integer
+        - modifyDataType:
+            columnName: flight_id
+            newDataType: bigint
+            tableName: flight_status
+        - addNotNullConstraint:
+            columnDataType: bigint
+            columnName: flight_id
+            constraintName: flight_id_not_null
+            tableName: flight_status
+            
+  - changeSet:
+      id: SHPV2-4724
+      author: rahhi
+      comment: "Drop shipment_shipment_tracking_id_org_id_idx index to be change to unique in SHPV2-4724-2"
+      preConditions:
+        onFail: MARK_RAN
+        indexExists:
+          indexName: shipment_shipment_tracking_id_org_id_idx
+          tableName: shipment
+      changes:
+        - dropIndex:
+            indexName: shipment_shipment_tracking_id_org_id_idx
+            tableName: shipment
+
+  - changeSet:
+      id: SHPV2-4724-2
+      author: rahhi
+      comment: "Add shipment_shipment_tracking_id_org_id_idx unique index"
+      changes:
+        - addUniqueConstraint:
+            columnNames: shipment_tracking_id, organization_id
+            constraintName: shipment_shipment_tracking_id_org_id_unique_idx
+            tableName: shipment
+
+  - changeSet:
+      id: SHPV2-4821-1
+      author: clarc
+      comment: "Adding issued_timezone, created_by, modified_by, and created_timezone fields to the 'cost'."
+      changes:
+        - addColumn:
+            tableName: cost
+            columns:
+              - column:
+                  name: issued_timezone
+                  type: VARCHAR(15)
+              - column:
+                  name: created_by
+                  type: VARCHAR(50)
+              - column:
+                  name: modified_by
+                  type: VARCHAR(50)
+              - column:
+                  name: created_timezone
+                  type: VARCHAR(15)
+
+  - changeSet:
+      id: SHPV2-4821-2
+      author: clarc
+      comment: "Renaming 'org_id' column to 'organization_id' in 'customer', 'service_type', and 'milestone' tables."
+      changes:
+        - renameColumn:
+            newColumnName: organization_id
+            oldColumnName: org_id
+            columnDataType: varchar(48)
+            tableName: customer
+        - renameColumn:
+            newColumnName: organization_id
+            oldColumnName: org_id
+            columnDataType: varchar(48)
+            tableName: service_type
+        - renameColumn:
+            newColumnName: organization_id
+            oldColumnName: org_id
+            columnDataType: varchar(48)
+            tableName: milestone
+
+  - changeSet:
+      id: SHPV2-4821-3
+      author: clarc
+      comment: "Resizing id columns in the 'alert' table to accommodate UUIDV4 format"
+      changes:
+        - modifyDataType:
+            tableName: alert
+            columnName: id
+            newDataType: VARCHAR(48)
+        - modifyDataType:
+            tableName: alert
+            columnName: package_journey_segment_id
+            newDataType: VARCHAR(48)
+        - modifyDataType:
+            tableName: alert
+            columnName: shipment_journey_id
+            newDataType: VARCHAR(48)

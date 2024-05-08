@@ -1,0 +1,85 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-325-1
+      author: bertanasco
+      comment: "Add package dimensions table"
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: dimension
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: volume_weight
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gross_weight
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: measurement_unit
+                  type: VARCHAR(16)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: height
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: width
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: length
+                  type: DECIMAL(15, 4)
+            tableName: package_dimensions
+  - changeSet:
+      id: SHPV2-325-2
+      author: bertanasco
+      comment: "Change id size to 48"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment1
+        - dropForeignKeyConstraint:
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment2
+        - modifyDataType:
+            columnName: shipmentjourney_id
+            newDataType: varchar(48)
+            tableName: shipment_journey_package_journey_segment
+        - modifyDataType:
+            columnName: packagejourneysegments_id
+            newDataType: varchar(48)
+            tableName: shipment_journey_package_journey_segment
+        - addForeignKeyConstraint:
+            baseColumnNames: shipmentjourney_id
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment1
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+        - addForeignKeyConstraint:
+            baseColumnNames: packagejourneysegments_id
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment2
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment

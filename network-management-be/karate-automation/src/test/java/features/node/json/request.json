@@ -1,0 +1,50 @@
+{
+  "data": {
+    "node_type": "CARGO",
+    "node_code": null,
+    "description": "The Samsung pickup point in HCMC.",
+    "active": true,
+    "timezone": "GMT",
+    "tags": [],
+    "address_line1": "KIV",
+    "address_line2": "KIV",
+    "address_line3": "KIV",
+    "facility": {
+      "id": "fa248bc3-3870-4aa7-9694-6c72771e18ce"
+    },
+    "vendor": {
+      "id": "d874a9ed-eabe-4cbe-93af-ac7285cccd51"
+    },
+    "capacity_profile": {
+      "max_shipment_count": 122,
+      "max_weight": 3002.2123,
+      "max_volume": 12233.2234
+    },
+    "measurement_units": {
+      "weight_unit": "KILOGRAMS",
+      "volume_unit": "CUBIC_METERS",
+      "dimension_unit": "METERS"
+    },
+    "operating_hours": {
+      "tue_start_time": "01:00",
+      "tue_end_time": "10:59",
+      "tue_processing_time": 0,
+      "wed_start_time": "01:00",
+      "wed_end_time": "10:59",
+      "wed_processing_time": 0,
+      "processing_time_unit": "HOURS"
+    },
+    "capacity": 1000,
+    "capacity_unit": "CUBIC_METERS",
+    "shipment_profile": {
+      "max_length": 999999,
+      "min_length": 0,
+      "max_width": 999999,
+      "min_width": 0,
+      "max_height": 999999,
+      "min_height": 0,
+      "max_weight": 999999,
+      "min_weight": 0
+    }
+  }
+}

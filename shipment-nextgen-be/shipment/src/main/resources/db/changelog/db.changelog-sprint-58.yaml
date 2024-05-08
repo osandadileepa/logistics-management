@@ -1,0 +1,630 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-121-1
+      author: bertanasco
+      comment: "Initial shipment module DDL changes"
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(32)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+              - column:
+                  name: contact_number
+                  type: VARCHAR(24)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(128)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address
+                  type: VARCHAR(256)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: consignee
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: origin
+                  type: VARCHAR(256)
+              - column:
+                  name: destination
+                  type: VARCHAR(256)
+              - column:
+                  name: status
+                  type: VARCHAR(256)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: milestone
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_value
+                  type: DECIMAL(16, 4)
+              - column:
+                  name: currency
+                  type: VARCHAR(4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(45)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: dimension
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: volume_weight
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: gross_weight
+                  type: DECIMAL(15, 4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: commodity
+                  type: VARCHAR(45)
+              - column:
+                  name: value
+                  type: VARCHAR(45)
+              - column:
+                  name: ready_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: package
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: ops_type
+                  type: VARCHAR(45)
+              - column:
+                  name: status
+                  type: VARCHAR(45)
+              - column:
+                  name: transport_type
+                  type: VARCHAR(45)
+              - column:
+                  name: start_facility_id
+                  type: VARCHAR(48)
+              - column:
+                  name: serviced_by
+                  type: VARCHAR(45)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: package_journey_segment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(32)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(128)
+              - column:
+                  name: contact_number
+                  type: VARCHAR(24)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address
+                  type: VARCHAR(256)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: email
+                  type: VARCHAR(128)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: sender
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shipment_tracking_id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: customer_reference_id
+                  type: JSON
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sender_id
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: consignee_id
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shipment_journey_id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: milestone_id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: package_id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: pick_up_location
+                  type: VARCHAR(256)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: delivery_location
+                  type: VARCHAR(256)
+              - column:
+                  name: return_location
+                  type: VARCHAR(256)
+              - column:
+                  name: tag
+                  type: VARCHAR(128)
+              - column:
+                  name: extra_care_info
+                  type: JSON
+              - column:
+                  name: insurance_info
+                  type: JSON
+              - column:
+                  name: service
+                  type: VARCHAR(45)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: userId
+                  type: VARCHAR(45)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: shipment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(16)
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: shipment_journey
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shipmentjourney_id
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: packagejourneysegments_id
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: shipment_journey_package_journey_segment
+        - addForeignKeyConstraint:
+            baseColumnNames: shipmentjourney_id
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment1
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+        - addForeignKeyConstraint:
+            baseColumnNames: packagejourneysegments_id
+            baseTableName: shipment_journey_package_journey_segment
+            constraintName: fk_shipment_journey_package_journey_segment2
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: packagejourneysegments_id
+            indexName: shipment_journey_package_journey_segment2_idx
+            tableName: shipment_journey_package_journey_segment
+            unique: true
+        - createIndex:
+            columns:
+              - column:
+                  name: shipmentjourney_id
+            indexName: shipment_journey_package_journey_segment1_idx
+            tableName: shipment_journey_package_journey_segment
+            unique: true
+        - addForeignKeyConstraint:
+            baseColumnNames: consignee_id
+            baseTableName: shipment
+            constraintName: fk_shipment_consignee
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: consignee
+        - addForeignKeyConstraint:
+            baseColumnNames: shipment_journey_id
+            baseTableName: shipment
+            constraintName: fk_shipment_journey
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+        - addForeignKeyConstraint:
+            baseColumnNames: milestone_id
+            baseTableName: shipment
+            constraintName: fk_shipment_milestone
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: milestone
+        - addForeignKeyConstraint:
+            baseColumnNames: package_id
+            baseTableName: shipment
+            constraintName: fk_shipment_package
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package
+        - addForeignKeyConstraint:
+            baseColumnNames: sender_id
+            baseTableName: shipment
+            constraintName: fk_shipment_sender
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: sender
+        - createIndex:
+            columns:
+              - column:
+                  name: consignee_id
+            indexName: fk_shipment_consignee_idx
+            tableName: shipment
+            unique: true
+        - createIndex:
+            columns:
+              - column:
+                  name: package_id
+            indexName: fk_shipment_package_idx
+            tableName: shipment
+            unique: true
+        - createIndex:
+            columns:
+              - column:
+                  name: milestone_id
+            indexName: fk_shipment_milestone_idx
+            tableName: shipment
+            unique: true
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_journey_id
+            indexName: fk_shipment_shipment_journey_idx
+            tableName: shipment
+            unique: true
+        - createIndex:
+            columns:
+              - column:
+                  name: sender_id
+            indexName: fk_shipment_sender_idx
+            tableName: shipment
+            unique: true
+  - changeSet:
+      id: SHPV2-152-2
+      author: bertanasco
+      comment: "Refactor shipment module entities"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: end_facility_id
+                  type: VARCHAR(48)
+            tableName: package_journey_segment
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: chargeable_weight
+                  type: DECIMAL(15, 4)
+            tableName: package
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: org_id
+                  type: VARCHAR(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: org_name
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: org_code
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: sender
+                  type: JSON
+              - column:
+                  constraints:
+                    nullable: false
+                  name: consignee
+                  type: JSON
+            tableName: shipment
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_consignee
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_sender
+        - dropTable:
+            cascadeConstraints: true
+            tableName: consignee
+        - dropTable:
+            cascadeConstraints: true
+            tableName: sender
+        - dropColumn:
+            columnName: consignee_id
+            tableName: shipment
+        - dropColumn:
+            columnName: sender_id
+            tableName: shipment
+        - addNotNullConstraint:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: milestone
+            validate: true
+        - dropDefaultValue:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: milestone
+        - addNotNullConstraint:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: package
+            validate: true
+        - dropDefaultValue:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: package
+        - addNotNullConstraint:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: package_journey_segment
+            validate: true
+        - dropDefaultValue:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: package_journey_segment
+        - addNotNullConstraint:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: shipment
+            validate: true
+        - dropDefaultValue:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: shipment
+        - addNotNullConstraint:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: shipment_journey
+            validate: true
+        - dropDefaultValue:
+            columnDataType: timestamp
+            columnName: create_time
+            tableName: shipment_journey
+  - changeSet:
+      id: SHPV2-152-3
+      author: bertanasco
+      comment: "Refactor Shipment table, add Order and Organization Tables"
+      changes:
+        - dropColumn:
+            columnName: customer_reference_id
+            tableName: shipment
+        - dropColumn:
+            columnName: org_code
+            tableName: shipment
+        - dropColumn:
+            columnName: org_id
+            tableName: shipment
+        - dropColumn:
+            columnName: org_name
+            tableName: shipment
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  name: customer_reference_id
+                  type: JSON
+              - column:
+                  name: order_group
+                  type: VARCHAR(32)
+            tableName: shipment_order
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  name: name
+                  type: VARCHAR(128)
+              - column:
+                  name: code
+                  type: VARCHAR(32)
+            tableName: organization
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+            tableName: shipment
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: shipment
+            constraintName: fk_shipment_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: shipment
+            constraintName: fk_shipment_order
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_order
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_milestone
+        - dropIndex:
+            indexName: fk_shipment_milestone_idx
+            tableName: shipment
+        - dropColumn:
+            columnName: milestone_id
+            tableName: shipment

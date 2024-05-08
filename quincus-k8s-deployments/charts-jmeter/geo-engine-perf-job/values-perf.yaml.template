@@ -1,0 +1,14 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: geo-engine-perf
+  build_id: $UUID
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: $ARGS
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: "$IMAGE_TAG"
+#deployed on $date_build

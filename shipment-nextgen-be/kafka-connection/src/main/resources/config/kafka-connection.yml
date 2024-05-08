@@ -1,0 +1,64 @@
+kafka:
+  connection:
+    url: "localhost:9092"
+  module: "-shipment-v2"
+  consumer-groups:
+    flight-stats:
+      id: "-flightstats"
+      sessionTimeout: 1080000 # 18 minutes
+      heartbeatInterval: 360000 # 6 minutes
+      enableAutoCommit: true
+      concurrency: 3
+      acknowledgementMode: RECORD
+      maxPollIntervalMs: 1440000 # 24 minutes
+      kafkaPreAuthenticationRequired: false
+    dispatch-milestone:
+      id: "-dispatch-milestone"
+      sessionTimeout: 90000 # 90 seconds
+      heartbeatInterval: 30000 # 30 seconds
+      enableAutoCommit: true
+      concurrency: 2
+      acknowledgementMode: RECORD
+      maxPollIntervalMs: 120000 # 2 minutes
+    orders:
+      id: "-orders"
+      sessionTimeout: 1260000 # 21 minutes
+      heartbeatInterval: 420000 # 7 minutes
+      enableAutoCommit: false
+      concurrency: 3
+      acknowledgementMode: MANUAL_IMMEDIATE
+      kafkaPreAuthenticationWithUserId: true
+      maxPollIntervalMs: 1500000 # 25 minutes
+    locations:
+      id: "-locations"
+      sessionTimeout: 180000 # 3 minutes
+      heartbeatInterval: 60000 # 1 minute
+      enableAutoCommit: true
+      concurrency: 3
+      acknowledgementMode: RECORD
+      maxPollIntervalMs: 300000 # 5 minutes
+  topics:
+    inbound:
+      dispatchModuleMilestone: -ext-v2-dispatch-milestone
+      flightStatsInbound: -gateway-flightstats-inbound
+      orderModule: -ext-ordermodule-orders_shpv2
+      qportalLocation: -ext-qportal-location
+    outbound:
+      shipmentPath: -ext-v2-shipment-shipment_path
+      shipmentSegment: -ext-v2-shipment-shipment-segments
+      shipmentMilestone: -ext-v2-shipment-milestone
+      segmentDispatch: -ext-v2-segment-dispatch
+      segmentDispatchChange: -ext-v2-segment-dispatch-change
+      segmentCancel: -ext-v2-segment-cancel
+      qShipSegment: -ext-v2-shipment-qship-segment
+      shipmentPackageDimensions: -ext-v2-shipment-package
+      shipmentCancel: -ext-v2-shipment-cancel_shipment
+      dispatchMilestoneError: -ext-v2-dispatch-milestone-error
+      flightStatsOutbound: -gateway-flightstats-outbound
+    dead-letter:
+      dispatchModuleMilestoneDlq: -ext-v2-dispatch-milestone-DLQ
+      flightStatsInboundDlq: -gateway-flightstats-inbound-DLQ
+      orderModuleDlq: -ext-ordermodule-orders_shpv2-DLQ
+      qportalLocationDlq: -ext-qportal-location-DLQ
+  debug:
+    writeResultEnabled: true

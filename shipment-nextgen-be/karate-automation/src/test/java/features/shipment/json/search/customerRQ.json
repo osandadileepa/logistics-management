@@ -1,0 +1,14 @@
+{
+  "data": {
+    "journey_status": "ACTIVE",
+    "customer": [
+      {
+        "id": "ff80808183caae1a0183cb6eb18b06f1",
+        "code": "CORPORATE",
+        "name": "CORPORATE"
+      }
+    ],
+    "size": 1,
+    "page_number": 1
+  }
+}

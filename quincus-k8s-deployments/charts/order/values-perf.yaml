@@ -1,0 +1,105 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4000
+    mem_required: 2000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    service_account: "sidekiq-sa"
+    healthcheck: true
+    healthcheck_command:
+       - sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi    
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 8192
+    mem_required: 3500
+    cpu_limit: 6000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 3000
+    cpu_required: 1500
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 4000
+    cpu_required: 2000 
+  namespace: perf
+  name: order
+  port: 3000
+  env: perf
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: perf
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/order-quincus-images
+  tag: "0b624be"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: perf/order
+  versionId: bef336fa-e903-451d-b4e4-15a6e9a6cd3e
+ingress:
+  enabled: true
+  hostName: api.order.perf.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://upsec.perf.qship.quincus.com, https://upsapspl.perf.qship.quincus.com, https://apxgroup.perf.qship.quincus.com, https://ups.perf.qship.quincus.com, https://mgxpress.perf.qship.quincus.com, https://quincus.perf.qship.quincus.com, https://qmodel.perf.qship.quincus.com, https://qdemo.perf.qship.quincus.com, https://upsecde.perf.qship.quincus.com, https://apxpoc.perf.qship.quincus.com, https://transtama.perf.qship.quincus.com, https://schneider.perf.qship.quincus.com, https://upsdryrun.perf.qship.quincus.com, https://apxdm.perf.qship.quincus.com, https://bbg.perf.qship.quincus.com, https://finfleet.perf.qship.quincus.com, https://acloudary.perf.qship.quincus.com, https://blk.perf.qship.quincus.com, https://acloudery.perf.qship.quincus.com, https://apxprod.perf.qship.quincus.com, https://proabc.perf.qship.quincus.com, https://ship60.perf.qship.quincus.com, https://ship60vn.perf.qship.quincus.com, https://mcgill.perf.qship.quincus.com, https://lzdtrl.perf.qship.quincus.com, https://gudings.perf.qship.quincus.com, https://121100.perf.qship.quincus.com, https://price2.perf.qship.quincus.com, https://sap.perf.qship.quincus.com, https://upsuat.perf.qship.quincus.com, https://upsus.perf.qship.quincus.com, https://krg.perf.qship.quincus.com, https://krgt.perf.qship.quincus.com, https://upsecp.perf.qship.quincus.com, https://ll888.perf.qship.quincus.com, https://bltznui.perf.qship.quincus.com, https://upsrun.perf.qship.quincus.com, https://upsex.perf.qship.quincus.com, https://shr.perf.qship.quincus.com, https://she.perf.qship.quincus.com, https://tnd.perf.qship.quincus.com, https://sapx.perf.qship.quincus.com, https://oslog.perf.qship.quincus.com, https://paxel.perf.qship.quincus.com, https://upsapuat.perf.qship.quincus.com, https://e2eauto.perf.qship.quincus.com, https://qdemo1.perf.qship.quincus.com, https://qdemo2.perf.qship.quincus.com, https://qdem.perf.qship.quincus.com, https://impexpmx.perf.qship.quincus.com, https://qtcsdemo.perf.qship.quincus.com, https://qtcs1demo.perf.qship.quincus.com, https://jnecarind.perf.qship.quincus.com, https://simtmsphl.perf.qship.quincus.com, https://skllogaus.perf.qship.quincus.com, https://qtd.perf.qship.quincus.com, https://hmstmssgp.perf.qship.quincus.com, https://upstmsapc.perf.qship.quincus.com, https://qtrain.perf.qship.quincus.com, https://upsexpc.perf.qship.quincus.com, https://qps.perf.qship.quincus.com, https://as01.perf.qship.quincus.com, https://segorg.perf.qship.quincus.com, https://qsol.perf.qship.quincus.com, https://apxsb.perf.qship.quincus.com, https://as02.perf.qship.quincus.com, https://apxgrp.perf.qship.quincus.com, https://upsecsb.perf.qship.quincus.com, https://bltzarn.perf.qship.quincus.com, https://dhlopsmex.perf.qship.quincus.com, https://bvatmscol.perf.qship.quincus.com, https://apxtst.perf.qship.quincus.com, https://ops.apx.group, https://oms.postsales.ups.com, https://oms.expresscritical.ups.com, https://track.postsales.ups.com, https://track.expresscritical.ups.com, https://dispatch.perf.quincus.com, https://shipment.perf.quincus.com, https://pricing.perf.quincus.com, https://common.perf.quincus.com, https://order.perf.quincus.com, https://perf.quincus.com, https://quincus.perf.qship.quincus.com, https://ops.skycargo.quincus.com, https://cust.skycargo.quincus.com, https://perf.quincus.app, https://qsol2.perf.qship.quincus.com, https://qsol.perf.qship.quincus.com, https://520e2e.perf.qship.quincus.com, https://140223.perf.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,timeout,platform"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: perf
+      node-type: spot
+  auth:
+    enabled: false
+#deployed on Tue May 30 10:23:20 UTC 2023

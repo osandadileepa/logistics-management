@@ -1,0 +1,264 @@
+{
+  "data": {
+    "shipment_tracking_id": "QCXXX001001-001",
+    "partner_id": "parterID-1010",
+    "order_id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+    "order": {
+      "id": "ORDER-MMMM-11",
+      "customer_reference_id": [
+        "propertyValue"
+      ],
+      "shipment_reference_id": [
+        "SHIPMENT_REF_ID1",
+        "SHIPMENT_REF_ID2"
+      ],
+      "group": "propertyValue",
+      "order_id_label": "ORDER-LABEL-SINGLE",
+      "pickup_start_time": "2022-12-24T08:30:00-04:00",
+      "pickup_commit_time": "2022-12-26T17:59:59-04:00",
+      "pickup_timezone": "UTC-4:00",
+      "delivery_start_time": "2023-01-04T06:00:00+08:00",
+      "delivery_commit_time": "2023-01-05T22:59:59+08:00",
+      "delivery_timezone": "GMT+8:00",
+      "note": "order notes",
+      "tags": [
+        "ORDER-S11",
+        "ORDER-S12"
+      ],
+      "attachments": [
+        {
+          "id": "uuid-attachment-1",
+          "file_name": "Single1-Attachment1.png",
+          "file_size": 12345,
+          "file_url": "https://single1-attachment.example.com/12345"
+        }
+      ],
+      "status": "Created"
+    },
+    "sender": {
+      "name": "Tom Brady",
+      "contact_number": "202-555-0166",
+      "email": "tombrady@example.com"
+    },
+    "origin": {
+      "country": "CANADA",
+      "state": "State",
+      "city": "City",
+      "line1": "123",
+      "line2": "Virginia Avenue",
+      "line3": "propertyValue",
+      "country_id": "testid",
+      "state_id": "state_id",
+      "city_id": "cityid",
+      "country_name": "country-name",
+      "state_name": "state-name",
+      "city_name": "city-name",
+      "postal_code": "postal",
+      "latitude": "",
+      "longitude": "",
+      "manual_coordinates": false,
+      "address": "123 Virginia Avenue propertyValue"
+    },
+    "consignee": {
+      "id": "Con111",
+      "name": "Michael Jordan",
+      "contact_number": "202-555-0193",
+      "email": "michaeljordan@example.com"
+    },
+    "destination": {
+      "country": "THAILAND",
+      "state": "TSTATE",
+      "city": "TCITY",
+      "line1": "123",
+      "line2": "Virginia Avenue",
+      "line3": "propertyValue",
+      "country_id": "testid",
+      "state_id": "state_id",
+      "city_id": "cityid",
+      "country_name": "country-name",
+      "state_name": "state-name",
+      "city_name": "city-name",
+      "postal_code": "postal",
+      "latitude": "",
+      "longitude": "",
+      "manual_coordinates": false,
+      "address": "123 Virginia Avenue propertyValue"
+    },
+    "pick_up_location": "propertyValue",
+    "delivery_location": "propertyValue",
+    "return_location": "propertyValue",
+    "extra_care_info": [
+      "Care-1",
+      "EX-CARE2"
+    ],
+    "insurance_info": [
+      "Insurance1",
+      "safety2"
+    ],
+    "service_type": {
+      "code": "code",
+      "name": "name"
+    },
+    "shipment_package": {
+      "ref_id": "6971a5eb-2b0a-4eed-9f31-4bd29ea3af6d",
+      "total_value": 199.69,
+      "total_items_count": 120012,
+      "currency": "PHP",
+      "type": "packageType",
+      "type_ref_id": "type-id-1",
+      "value": "propertyValue",
+      "ready_time": "2022-12-25T08:30:00",
+      "dimension": {
+        "measurement_unit": "METRIC",
+        "length": 1.01,
+        "width": 2.02,
+        "height": 3.03,
+        "volume_weight": 0.22,
+        "gross_weight": 0.33,
+        "chargeable_weight": 0.11,
+        "is_custom": false
+      },
+      "commodities": [
+        {
+          "name": "Food",
+          "quantity": 12,
+          "value": 205.69
+        },
+        {
+          "name": "Electronics",
+          "quantity": 120000,
+          "value": 20.22
+        }
+      ],
+      "pricing_info": {
+        "currency": "PHP",
+        "base_tariff": 73.79,
+        "service_type_charge": 34.35,
+        "surcharge": 13.96,
+        "insurance_charge": 32.26,
+        "extra_care_charge": 43.94,
+        "discount": 30.43,
+        "tax": 23.22,
+        "cod": 334.68,
+        "total": 1000
+      }
+    },
+    "user_id": "7fcec673-cc5d-5f33-ae99-5981a517b0bf",
+    "shipment_journey": {
+      "order_id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+      "journey_id": "7fcec673-cc5d-5f33-ae99-5981a517b0bc",
+      "shipment_id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+      "status": "PLANNED",
+      "package_journey_segments": [
+        {
+          "ref_id": "1",
+          "ops_type": "type-a1",
+          "status": "PLANNED",
+          "type": "LAST_MILE",
+          "transport_type": "GROUND",
+          "start_facility": {
+            "external_id": "startfacid",
+            "name": "startfacilityname",
+            "group": "group",
+            "code": "startfacilityname",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "country": "Mexico",
+              "state": "MA",
+              "city": "Boston",
+              "line1": "123 1",
+              "line2": "Virginia Avenue",
+              "line3": "propertyValue",
+              "country_id": "testid",
+              "state_id": "state_id",
+              "city_id": "cityid",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "end_facility": {
+            "external_id": "endfacid2",
+            "name": "endfacilityname",
+            "group": "group",
+            "code": "endfacilityname",
+            "type": "type",
+            "function": "function",
+            "status": "status",
+            "location": {
+              "country": "Mexico",
+              "state": "MA",
+              "city": "Boston",
+              "line1": "123 1",
+              "line2": "Virginia Avenue",
+              "line3": "propertyValue",
+              "country_id": "testid",
+              "state_id": "state_id",
+              "city_id": "cityid",
+              "postal_code": "postal",
+              "latitude": "",
+              "longitude": "",
+              "manual_coordinates": false,
+              "address": "123 Virginia Avenue propertyValue"
+            },
+            "tag": "thisis a tag",
+            "note": "this is a note"
+          },
+          "instruction": "Instruction A",
+          "vehicle_info": "vehicle-1",
+          "master_waybill": "ABCD1234",
+          "pick_up_time": "2023-05-25T17:27:02+08:00",
+          "drop_off_time": "2023-05-25T17:27:02+08:00",
+          "calculated_mileage": 0.9,
+          "calculated_mileage_unit": "MILE",
+          "duration": 1.2,
+          "duration_unit": "MINUTE",
+          "serviced_by": "propertyValue"
+        }
+      ]
+    },
+    "organization": {
+      "id": "Org2",
+      "name": "Org One",
+      "code": "Org Code 111111"
+    },
+    "milestone": {
+      "code": "1100",
+      "milestone_name": "Order Booked"
+    },
+    "customer": {
+      "code": "CORPORATE",
+      "name": "CORPORATE"
+    },
+    "status": "CREATED",
+    "eta_status": "ON_TIME",
+    "notes": "shipment notes S1",
+    "description": "This is a valid description",
+    "instructions": [
+      {
+        "id": "2678bdeb-73a5-4679-8d11-b169867cd901",
+        "label": "label",
+        "source": "order",
+        "value": "pickup-instruction",
+        "apply_to": "PICKUP",
+        "created_at": "2023-04-19T09:10:43.614Z",
+        "updated_at": "2023-04-19T09:10:43.614Z"
+      },
+      {
+        "id": "2678bdeb-73a5-1111-8d11-b169867cd901",
+        "label": "label",
+        "source": "order",
+        "value": "delivery-instruction",
+        "apply_to": "DELIVERY",
+        "created_at": "2023-04-19T09:10:43.614Z",
+        "updated_at": "2023-04-19T09:10:43.614Z"
+      }
+    ]
+  }
+}

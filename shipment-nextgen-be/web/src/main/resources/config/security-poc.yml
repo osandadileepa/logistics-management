@@ -1,0 +1,33 @@
+security:
+  allowed:
+    - "/sessions"
+    - "/v3/**"
+    - "/swagger-ui.html"
+    - "/swagger-ui/**"
+    - "/actuator/**"
+    - "/orders/**"
+    - "/kafka/**"
+    - "/shipments/**"
+    - "/costs/**"
+    - "/alerts/**"
+    - "/flight/**"
+    - "/files/**"
+    - "/utilities/**"
+    - "/cache/**"
+    - "/attachments/**"
+  origins:
+    - "*"
+  methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "OPTIONS"
+    - "DELETE"
+    - "PATCH"
+  headers:
+    - "*"
+  s2sTokens:
+    - name: "ORDER_MODULE"
+      value: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiT1JERVJfTU9EVUxFIiwianRpIjoiNmZhZTJiNDItMDIzYS00MTNlLWJhNjEtMjlhMTM2OTdhYTY0IiwiZW52IjoicG9jIiwib3JnYW5pc2F0aW9ucyI6W10sImV4cGlyZXNfYXQiOiIifQ.Ey_iqAAgL3Ji7x24o2YBO2EzK24M2sUCr59fR6evws0
+    - name: "APIG"
+      value: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoic2hpcG1lbnQtbmV4dGdlbi1iZS12MiIsImp0aSI6IjZmYWUyYjQyLTAyM2EtNDEzZS1iYTYxLTI5YTEzNjk3YWE2NCIsImVudiI6InBvYyIsIm9yZ2FuaXphdGlvbnMiOltdLCJleHBpcmVzX2F0IjoiMDEtMDEtMjAyNSJ9.LvQl9q1withS8sBcRD9AWEWbRRaxY1LRpf9pxph47og

@@ -1,0 +1,34 @@
+{{- if eq .Values.app.name  "order" }}
+{{- if ne .Values.app.region  "us-west-2"  }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ .Values.app.name }}-measurement-units-sync-up"
+spec:
+  schedule: "0 0,2,4,6,8,10,12,14,16,18,20,22 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: "{{ .Values.app.name }}-measurement-units-sync-up"
+            image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            command:
+            - /bin/bash
+            - -c
+            - -l
+            - 'cd /var/app/current && bin/init-config.sh && bundle exec rake cron:measurement_units_sync_up --silent'
+            envFrom:
+            - secretRef:
+                name: {{ .Values.app.name }}
+          restartPolicy: Never
+          {{- if .Values.app.node_selectors }}
+          nodeSelector: 
+            {{- range $key, $val := .Values.app.node_selectors }}
+            {{ $key }}: {{ $val }}
+            {{- end}}
+          {{- end}}
+{{- end }}
+{{- end }}

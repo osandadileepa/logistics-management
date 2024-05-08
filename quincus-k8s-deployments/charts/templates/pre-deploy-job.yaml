@@ -1,0 +1,54 @@
+{{- if .Values.app.preDeployScript.enabled }}
+{{- if ne .Values.app.region  "us-west-2"  }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Values.app.name }}-pre-deploy-job"
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  template:
+    spec:
+      containers:
+      - name: "{{ .Values.app.name }}-pre-deploy-job"
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        {{- if not .Values.app.preDeployScript.role_enabled }}
+        command:
+        - /bin/bash
+        - -c
+        - {{ .Values.app.preDeployScript.scriptPath }}
+        {{- end }}
+        {{- if .Values.app.preDeployScript.role_enabled }}
+        env:
+        - name: role
+          value: "migrate"        
+        {{- end }}           
+        envFrom:
+        - secretRef:
+            name: {{ .Values.app.name }}
+        resources:
+          limits:
+            {{- if (gt (.Values.app.puma.cpu_limit | default 0.0) 0.0) }}
+            cpu: {{.Values.app.puma.cpu_limit}}m
+            {{- end }}
+            {{- if (gt (.Values.app.puma.mem_limit | default 0.0) 0.0) }}
+            memory: {{.Values.app.puma.mem_limit}}Mi
+            {{- end }}
+          requests:
+            {{- if (gt (.Values.app.puma.cpu_required | default 0.0) 0.0) }}
+            cpu: {{.Values.app.puma.cpu_required}}m
+            {{- end }}
+            {{- if (gt (.Values.app.puma.mem_required | default 0.0) 0.0) }}
+            memory: {{.Values.app.puma.mem_required}}Mi
+            {{- end }}
+      restartPolicy: Never
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}
+  backoffLimit: 1
+{{- end }}
+{{- end }}

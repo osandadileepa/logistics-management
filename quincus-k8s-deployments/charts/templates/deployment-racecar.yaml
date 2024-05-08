@@ -1,0 +1,93 @@
+{{- if .Values.app.racecar }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.app.namespace | default "default" }}
+  name: "{{ .Values.app.name }}-racecar"
+  labels:
+    env: {{ .Values.app.env }}
+    name: "{{ .Values.app.name }}-racecar"
+    tags.datadoghq.com/env: {{ .Values.app.env }}
+    tags.datadoghq.com/service: "{{ .Values.app.name }}-racecar"
+spec:
+  selector:
+    matchLabels:
+      env: {{ .Values.app.env }}
+      name: "{{ .Values.app.name }}-racecar"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 40%
+  progressDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        env: {{ .Values.app.env }}
+        name: "{{ .Values.app.name }}-racecar"
+        tags.datadoghq.com/env: {{ .Values.app.env }}
+        tags.datadoghq.com/service: "{{ .Values.app.name }}-racecar"
+    spec:
+      containers:
+        - name: "{{ .Values.app.name }}-racecar"
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image_pull_policy | default "IfNotPresent" }}
+          lifecycle:
+            preStop:
+               exec: 
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - |
+                    ps -ef | grep /usr/local/bundle/bin/racecar | awk '{if ($3=="1") { print $2 }}' | xargs kill
+          env:
+          - name: role
+            value: "racecar"
+          envFrom:
+          - secretRef:
+              name: {{ .Values.app.name }}
+          {{- if .Values.app.port }}
+          ports:
+            - containerPort: {{ .Values.app.port }}
+          {{- end }}
+          {{- if .Values.app.racecar.healthcheck }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.app.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+          {{- end }}
+          resources:
+            limits:
+              {{- if (gt (.Values.app.racecar.cpu_limit | default 0.0) 0.0) }}
+              cpu: {{.Values.app.racecar.cpu_limit}}m
+              {{- end }}
+              {{- if (gt (.Values.app.racecar.mem_limit | default 0.0) 0.0) }}
+              memory: {{.Values.app.racecar.mem_limit}}Mi
+              {{- end }}
+            requests:
+              {{- if (gt (.Values.app.racecar.cpu_required | default 0.0) 0.0) }}
+              cpu: {{.Values.app.racecar.cpu_required}}m
+              {{- end }}
+              {{- if (gt (.Values.app.racecar.mem_required | default 0.0) 0.0) }}
+              memory: {{.Values.app.racecar.mem_required}}Mi
+              {{- end }}
+      {{- if .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.app.imagePullSecrets }}
+      {{- end}}
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}
+{{- end }}

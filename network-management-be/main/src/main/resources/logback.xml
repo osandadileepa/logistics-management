@@ -1,0 +1,34 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <!-- change to true for more readable logs -->
+                    <prettyPrint>false</prettyPrint>
+                </jsonFormatter>
+                <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+                <appendLineSeparator>true</appendLineSeparator>
+            </layout>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="CONSOLE"/>
+        <neverBlock>true</neverBlock>
+    </appender>
+
+    <logger name="org.hibernate.SQL" level="INFO"/>
+
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="INFO">
+        <appender-ref ref="ASYNC_CONSOLE"/>
+    </logger>
+
+    <logger name="org.apache.kafka" level="INFO">
+        <appender-ref ref="ASYNC_CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_CONSOLE"/>
+    </root>
+
+</configuration>

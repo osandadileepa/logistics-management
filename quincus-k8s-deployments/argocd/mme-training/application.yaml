@@ -1,0 +1,52 @@
+###mme-training
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mme-training-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - mme-training/values-dev.yaml
+  project: mme-training
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mme-training-test
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-python
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - mme-training/values-test.yaml
+  project: mme-training
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---

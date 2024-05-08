@@ -1,0 +1,35 @@
+{
+  "data": {
+    "milestone_name": "Ground Freight YYY",
+    "milestone_code": "1112",
+    "notes": "This is for Mang Thomas",
+    "milestone_time": "2023-05-11T07:31:26+00:00",
+    "source": "ORG",
+    "users_location": {
+      "location_id": "2efb867f-c0a3-43e4-9a07-a4e1ca56044b",
+      "location_facility_name": "BLACK PINK"
+    },
+    "attachments": [
+      {
+        "file_name": "new1.png",
+        "file_url": "https://attachment.example.com/FILENAME_67812156.png",
+        "file_size": 8531836571
+      },
+      {
+        "file_name": "new12.png",
+        "file_url": "https://attachment.example.com/FILENAME_05637426.png",
+        "file_size": 9115914535
+      },
+      {
+        "file_name": "new13.pdf",
+        "file_url": "https://attachment.example.com/FILENAME_12314408.pdf",
+        "file_size": 295262535
+      },
+      {
+        "file_name": "new14.pdf",
+        "file_url": "https://attachment.example.com/FILENAME_67812156.pdf",
+        "file_size": 8531836571
+      }
+    ]
+  }
+}

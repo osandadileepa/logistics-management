@@ -1,0 +1,75 @@
+{{- if or (eq .Values.app.name  "order") (eq .Values.app.name  "pricing") }}
+{{- if .Values.app.kafka }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.app.namespace | default "default" }}
+  name: "{{ .Values.app.name }}-kafka"
+  labels:
+    env: {{ .Values.app.env }}
+    name: "{{ .Values.app.name }}-kafka"
+spec:
+  selector:
+    matchLabels:
+      env: {{ .Values.app.env }}
+      name: "{{ .Values.app.name }}-kafka"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 40%
+  progressDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        env: {{ .Values.app.env }}
+        name: "{{ .Values.app.name }}-kafka"
+    spec:
+      containers:
+        - name: "{{ .Values.app.name }}-kafka"
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.app.image_pull_policy | default "IfNotPresent" }}
+          lifecycle:
+            preStop:
+               exec: 
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - |
+                    ps -ef | grep /usr/local/bundle/bin/rake | awk '{if ($3=="1") { print $2 }}' | xargs kill
+          env:
+          - name: role
+            value: "kafka"
+          envFrom:
+          - secretRef:
+              name: {{ .Values.app.name }}
+          resources:
+            limits:
+              {{- if (gt (.Values.app.kafka.cpu_limit | default 0.0) 0.0) }}
+              cpu: {{.Values.app.kafka.cpu_limit}}m
+              {{- end }}
+              {{- if (gt (.Values.app.kafka.mem_limit | default 0.0) 0.0) }}
+              memory: {{.Values.app.kafka.mem_limit}}Mi
+              {{- end }}
+            requests:
+              {{- if (gt (.Values.app.kafka.cpu_required | default 0.0) 0.0) }}
+              cpu: {{.Values.app.kafka.cpu_required}}m
+              {{- end }}
+              {{- if (gt (.Values.app.kafka.mem_required | default 0.0) 0.0) }}
+              memory: {{.Values.app.kafka.mem_required}}Mi
+              {{- end }}
+      {{- if .Values.app.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.app.imagePullSecrets }}
+      {{- end}}
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}
+{{- end }}
+{{- end }}
+
+

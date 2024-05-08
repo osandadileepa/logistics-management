@@ -1,0 +1,176 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-819
+      author: osanda
+      comment: "Add capacity with unit tables for node and connection"
+      changes:
+        - dropColumn:
+            columnName: capacity
+            tableName: node
+        - dropColumn:
+            columnName: capacity_unit
+            tableName: node
+        - dropColumn:
+            columnName: distance_unit
+            tableName: connection
+        - dropColumn:
+            columnName: dimension_unit
+            tableName: shipment_profile
+        - dropColumn:
+            columnName: weight_unit
+            tableName: shipment_profile
+        - dropColumn:
+            columnName: volume_unit
+            tableName: shipment_profile
+        - addColumn:
+            columns:
+              - column:
+                  name: capacity_profile_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: measurement_units_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+            tableName: connection
+        - addColumn:
+            columns:
+              - column:
+                  name: capacity_profile_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: measurement_units_id
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+            tableName: node
+
+        - createTable:
+            tableName: capacity_profile
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+              - column:
+                  name: max_shipment_count
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_weight
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_volume
+                  type: DECIMAL(16, 4)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: capacity_profile_id
+            baseTableName: node
+            constraintName: fk_node_capacity_profile
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: capacity_profile
+        - addForeignKeyConstraint:
+            baseColumnNames: capacity_profile_id
+            baseTableName: connection
+            constraintName: fk_connection_capacity_profile
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: capacity_profile
+
+        - createTable:
+            tableName: measurement_units
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+              - column:
+                  name: weight_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: volume_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dimension_unit
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distance_unit
+                  type: VARCHAR(64)
+        - addForeignKeyConstraint:
+            baseColumnNames: measurement_units_id
+            baseTableName: node
+            constraintName: fk_node_measurement__units
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: measurement_units
+        - addForeignKeyConstraint:
+            baseColumnNames: measurement_units_id
+            baseTableName: connection
+            constraintName: fk_connection_measurement__units
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: measurement_units
+  - changeSet:
+      id: NW-722
+      author: ajalbaniel
+      comment: "Added training_type on training_log"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: training_type
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: false
+            tableName: training_log

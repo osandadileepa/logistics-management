@@ -1,0 +1,148 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-2140
+      author: rmahhi
+      comment: "Added Vehicle and Driver info as json for package_journey_segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: vehicle
+                  type: JSON
+              - column:
+                  name: driver
+                  type: JSON
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-3100
+      author: leilcabahug
+      comment: "added qportal milestone id"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: milestone_ref_id
+                  type: varchar(48)
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-2644
+      author: imeehablero
+      comment: "Increase size for flight_origin and flight_destination"
+      changes:
+        - modifyDataType:
+            tableName: package_journey_segment
+            columnName: flight_origin
+            newDataType: VARCHAR(50)
+        - modifyDataType:
+            tableName: package_journey_segment
+            columnName: flight_destination
+            newDataType: VARCHAR(50)
+  - changeSet:
+      id: SHPV2-3184
+      author: clarc
+      comment: "Added external location ids in cost entity table, for easier handling of location coverage for each cost"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: location_external_ids
+                  type: json
+            tableName: cost
+  - changeSet:
+      id: SHPV2-2128
+      author: ehmencinas
+      comment: "Introduction of Instruction entity"
+      changes:
+        - dropColumn:
+            columnName: pick_up_instruction
+            tableName: package_journey_segment
+        - dropColumn:
+            columnName: delivery_instruction
+            tableName: package_journey_segment
+        - createTable:
+            tableName: instruction
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: VARCHAR(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: external_id
+                  type: VARCHAR(64)
+              - column:
+                  name: label
+                  type: VARCHAR(256)
+              - column:
+                  name: source
+                  type: VARCHAR(64)
+              - column:
+                  name: value
+                  type: VARCHAR(2000)
+              - column:
+                  name: apply_to
+                  type: VARCHAR(64)
+              - column:
+                  name: created_at
+                  type: VARCHAR(32)
+              - column:
+                  name: updated_at
+                  type: VARCHAR(32)
+              - column:
+                  name: package_journey_segment_id
+                  type: VARCHAR(64)
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: package_journey_segment_id
+            baseTableName: instruction
+            constraintName: fk_instruction_package_journey_segment
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-2115
+      author: argel
+      comment: "Added new fields for PackageJourneySegment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: drop_off_on_site_time
+                  type: varchar(50)
+              - column:
+                  name: drop_off_on_site_timezone
+                  type: varchar(255)
+              - column:
+                  name: pick_up_on_site_time
+                  type: varchar(50)
+              - column:
+                  name: pick_up_on_site_timezone
+                  type: varchar(255)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-1925
+      author: imeehablero
+      comment: "Drop unique index since Shipment to ShipmentJourney relationship is now ManyToOne"
+      changes:
+        - dropIndex:
+            indexName: fk_shipment_shipment_journey_idx
+            tableName: shipment

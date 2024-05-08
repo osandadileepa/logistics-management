@@ -1,0 +1,14 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: order-be-perf
+  build_id: 97
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: 
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: "order-be-b50b671"
+#deployed on Tue Jun 13 09:15:24 UTC 2023

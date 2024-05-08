@@ -1,0 +1,22 @@
+{
+  "data": {
+    "order_no": "d8a50a38-4",
+    "segment_id": 1,
+    "milestone_timestamp": "2023-05-03T04:25:17.757Z",
+    "awb_number": "12378945610",
+    "recipient_name": "John Doe",
+    "dept_floor_suite_comments": "HR Department, 2F Suite ABC, Package Delivered",
+    "pod_date_and_time": "2023-05-03T04:25:17.757Z",
+    "branch_name": "Main Branch",
+    "eta": "2023-05-03T04:25:17.757Z",
+    "vendor_id": "0ae30721-e8c1-4101-90be-e7b3555f061a",
+    "milestone": "1607",
+    "milestone_timestamp": "2023-08-16T09:51:15.220Z",
+    "milestone_coordinates": {
+      "latitude": 0,
+      "longitude": 1.1
+    },
+    "shipment_ids": ["shpId"],
+    "source": "VENDOR"
+  }
+}

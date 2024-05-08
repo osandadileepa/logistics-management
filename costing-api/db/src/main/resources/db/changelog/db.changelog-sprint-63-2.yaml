@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: ajalbaniel
+      comment: "QFINB-82 Removed is_default in weight_calculation_rule"
+      changes:
+        - dropColumn:
+            columnName: is_default
+            tableName: weight_calculation_rule

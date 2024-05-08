@@ -1,0 +1,202 @@
+###Admin
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-dev.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-test
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-test.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-uat
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: uat
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-uat.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-staging
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: staging
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-staging.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-poc
+spec:
+  destination:
+    name: ''
+    namespace: poc
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-poc.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-prod
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: prod
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-prod.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+piVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-demo
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: demo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-demo.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: admin-staging
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: staging
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - admin/values-staging.yaml
+  project: admin
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

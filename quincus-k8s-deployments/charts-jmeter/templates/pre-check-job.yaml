@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-check-job-{{ .Values.app.build_id }}
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+      - name: "pre-check-job"
+        image: "alpine/curl:3.14"
+        command: 
+          - "curl"
+          - "-X"
+          - "GET"
+          - "https://perf.quincus.com"
+      restartPolicy: Never
+      {{- if .Values.app.node_selectors }}
+      nodeSelector: 
+        {{- range $key, $val := .Values.app.node_selectors }}
+        {{ $key }}: {{ $val }}
+        {{- end}}
+      {{- end}}

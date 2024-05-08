@@ -1,0 +1,18 @@
+s3-integration:
+  region-name: ap-southeast-1
+  bucket-name: shipment-nextgen-nonprod-uploads
+  base-dir: test
+  url-expiry:
+    upload: 1440
+    read: 10080
+  supported-media-types:
+    shipment_attachments:
+      - image/jpeg
+      - image/png
+      - application/pdf
+    cost_attachments:
+      - image/jpeg
+      - image/png
+  allowed-subdirectories:
+    - shipment_attachments
+    - cost_attachments

@@ -1,0 +1,4 @@
+qlogger:
+  s2stoken: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoic2hpcG1lbnQtdjIiLCJqdGkiOiIwN2QzOTRiZC03YzUwLTQ2NmUtOWNkYi04NjkyNWJjYjRhOWUiLCJvcmdhbmlzYXRpb25zIjpbXSwiZXhwaXJlc19hdCI6IiJ9.viY0Zlbz3LGb87MZ9ySKMzW_nA6ThgOiswZnYFnbJ70
+  baseUrl: https://api.dev.quincus.com/
+  publishEventAPI: api/v1/q_logger/events.json

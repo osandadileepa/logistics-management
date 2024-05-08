@@ -1,0 +1,4 @@
+qlogger:
+  s2stoken: eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoic2hpcG1lbnRfdjIiLCJqdGkiOiI3NWVmYTdkYy0zNDRjLTRiODktODE0YS02ZWZhOTc3NGQyZWUiLCJvcmdhbmlzYXRpb25zIjpbXSwiZXhwaXJlc19hdCI6IiJ9.9IHSeiXRas6Mt-_zm7sisCMZLlCCo-HdMVmBIWJPXmo
+  baseUrl: https://api.poc.quincus.com/
+  publishEventAPI: api/v1/q_logger/events.json

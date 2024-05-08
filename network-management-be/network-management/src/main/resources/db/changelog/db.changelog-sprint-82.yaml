@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-522
+      author: ajalbaniel
+      comment: "Connection schedule"
+      changes:
+        - dropColumn:
+            columnName: air_schedule_departure
+            tableName: connection
+        - dropColumn:
+            columnName: air_schedule_arrival
+            tableName: connection
+        - dropColumn:
+            columnName: ground_duration
+            tableName: connection
+        - addColumn:
+            columns:
+              - column:
+                  name: duration
+                  type: integer
+                  constraints:
+                    nullable: false
+            tableName: connection
+        - createTable:
+            tableName: connection_schedule
+            columns:
+              - column:
+                  name: connection_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: schedule
+                  type: VARCHAR(512)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: connection_id
+            baseTableName: connection_schedule
+            constraintName: fk_connection_schedules
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: connection

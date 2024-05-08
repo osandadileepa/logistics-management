@@ -1,0 +1,12 @@
+{
+  "data": {
+    "milestone_name": "Delivery Successful",
+    "milestone_code": "1117",
+    "notes": "abcdefg",
+    "milestone_time": "2023-08-15T11:01:43.112Z",
+    "users_location": {
+      "location_id": "9607fa44-fe31-45c6-a3fc-426ddfa9e81a",
+      "location_facility_name": "NINOY AQUINO INTERNATIONAL AIRPORT"
+    }
+  }
+}

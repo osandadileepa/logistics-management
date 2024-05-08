@@ -1,0 +1,120 @@
+app:
+  region: us-west-2
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1024
+    cpu_required: 500
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           ps -ef | grep puma | awk '{if ($3=="1") { print $2 }}' | xargs kill
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    healthcheck: true
+    healthcheck_command:
+       - /bin/sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 2
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2000
+    mem_required: 400
+    cpu_limit: 500
+    cpu_required: 200
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  racecar:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 0
+    mem_required: 400
+    cpu_limit: 0
+    cpu_required: 100
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           ps -ef | grep /usr/local/bundle/bin/racecar | awk '{if ($3=="1") { print $2 }}' | xargs kill
+  namespace: dev
+  name: shipment
+  port: 3000
+  env: dev
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: dev
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.us-west-2.amazonaws.com/shipment-quincus-images
+  tag: "f7368bd"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/shipment
+  versionId: df3d7997-5bfa-4428-a8ce-8293f012c9ca
+ingress:
+  enabled: true
+  hostName_noram: api.shipment.dev-noram.quincus.com
+  hostName: api.shipment.dev.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 15m
+    nginx.ingress.kubernetes.io/custom-http-errors: "500,502,503,504"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.dev.quincus.com, https://shipment.dev.quincus.com, https://pricing.dev.quincus.com, https://common.dev.quincus.com, https://order.dev.quincus.com, https://dev.quincus.com, https://quincus.dev.qship.quincus.com, http://localhost:3000"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: dev
+      node-type: spot
+  auth:
+    enabled: false
+#deployed on Mon Jul  3 09:34:13 UTC 2023

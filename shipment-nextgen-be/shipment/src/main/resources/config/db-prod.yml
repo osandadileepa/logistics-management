@@ -1,0 +1,6 @@
+db:
+  datasource:
+    db: shipment_v2
+    url: jdbc:mysql://private-tidb.qjztbzftwfs.clusters.tidb-cloud.com:4000/${db.datasource.db}
+    username: shpv2.cntr
+    password: 5Q9gTjUdpwFLs3R3

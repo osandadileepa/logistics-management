@@ -1,0 +1,394 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-481-1
+      author: leilcabahug
+      comment: "Add order id label"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: order_id_label
+                  type: varchar(64)
+            tableName: shipment_order
+  - changeSet:
+      id: SHPV2-462-2
+      author: bertanasco
+      comment: "Change remaining ids to varchar(48) "
+      changes:
+        - modifyDataType:
+            columnName: org_id
+            newDataType: varchar(48)
+            tableName: location
+        - addForeignKeyConstraint:
+            baseColumnNames: org_id
+            baseTableName: location
+            constraintName: fk_location_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+        - dropForeignKeyConstraint:
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_organizatin
+        - modifyDataType:
+            columnName: org_id
+            newDataType: varchar(48)
+            tableName: location_hierarchy
+        - addForeignKeyConstraint:
+            baseColumnNames: org_id
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_customer
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_journey
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_organization
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_service
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_order
+        - dropForeignKeyConstraint:
+            baseTableName: shipment
+            constraintName: fk_shipment_package
+        - modifyDataType:
+            columnName: customer_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: shipment_journey_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: order_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: organization_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: package_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - modifyDataType:
+            columnName: service_id
+            newDataType: varchar(48)
+            tableName: shipment
+        - addForeignKeyConstraint:
+            baseColumnNames: customer_id
+            baseTableName: shipment
+            constraintName: fk_shipment_customer
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: customer
+        - addForeignKeyConstraint:
+            baseColumnNames: shipment_journey_id
+            baseTableName: shipment
+            constraintName: fk_shipment_journey
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_journey
+        - addForeignKeyConstraint:
+            baseColumnNames: order_id
+            baseTableName: shipment
+            constraintName: fk_shipment_order
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: shipment_order
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: shipment
+            constraintName: fk_shipment_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+        - addForeignKeyConstraint:
+            baseColumnNames: package_id
+            baseTableName: shipment
+            constraintName: fk_shipment_package
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: package
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: shipment
+            constraintName: fk_shipment_service
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: service_type
+  - changeSet:
+      id: SHPV2-454-2
+      author: bertanasco
+      comment: "add partner_id"
+      changes:
+        - renameColumn:
+            newColumnName: user_id
+            oldColumnName: userId
+            columnDataType: varchar(48)
+            tableName: shipment
+        - addColumn:
+            columns:
+              - column:
+                  name: partner_id
+                  type: varchar(48)
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-597-1
+      author: frankramos
+      comment: "Add Shipment Notes"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: notes
+                  type: varchar(2000)
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-596-1
+      author: frankramos
+      comment: "Add External ID"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: ext_id
+                  type: varchar(48)
+            tableName: location
+        - addColumn:
+            columns:
+              - column:
+                  name: ext_id
+                  type: varchar(48)
+            tableName: location_hierarchy
+  - changeSet:
+      id: SHPV2-456-1
+      author: banasco
+      comment: "Support shipment journey alerts"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: alerts
+                  type: json
+              - column:
+                  name: alerts_dismissed
+                  type: boolean
+            tableName: shipment_journey
+  - changeSet:
+      id: SHPV2-110-1
+      author: leilcabahug
+      comment: "Restructure Dimension and Commodity, Add notes, tags, attachments, pickup and delivery instructions"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: notes
+                  type: varchar(2000)
+              - column:
+                  name: tags
+                  type: json
+              - column:
+                  name: attachments
+                  type: json
+            tableName: shipment_order
+        - addColumn:
+            columns:
+              - column:
+                  name: pickup_instruction
+                  type: varchar(2000)
+              - column:
+                  name: delivery_instruction
+                  type: varchar(2000)
+            tableName: shipment
+        - addColumn:
+            columns:
+              - column:
+                  name: dimensions_id
+                  type: varchar(48)
+              - column:
+                  name: pricing_info
+                  type: json
+              - column:
+                  name: modify_time
+                  type: timestamp
+            tableName: package
+        - addColumn:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: chargeable_weight
+                  type: decimal(15, 4)
+              - column:
+                  name: is_custom
+                  type: boolean
+            tableName: package_dimensions
+        - dropColumn:
+            columnName: dimension
+            tableName: package
+        - dropColumn:
+            columnName: gross_weight
+            tableName: package
+        - dropColumn:
+            columnName: volume_weight
+            tableName: package
+        - dropColumn:
+            columnName: chargeable_weight
+            tableName: package
+        - dropColumn:
+            columnName: commodity
+            tableName: package
+        - dropColumn:
+            columnName: dimension
+            tableName: package_dimensions
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primary: true
+                  name: id
+                  type: varchar(48)
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: integer
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: varchar(45)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: quantity
+                  type: integer unsigned
+              - column:
+                  constraints:
+                    nullable: false
+                  name: value
+                  type: decimal(15, 4)
+            tableName: commodity
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: package_id
+                  type: varchar(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: commodities_id
+                  type: varchar(48)
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: integer
+            tableName: package_commodity
+  - changeSet:
+      id: SHPV2-109-1
+      author: imeehablero
+      comment: "Shipment Details: Left Panel"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: shipment_reference_id
+                  type: json
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-463-4
+      author: bertanasco
+      comment: "Facility changes"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_end_facility_address
+        - dropForeignKeyConstraint:
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_start_facility_address
+        ## Add start and end location_hierarchy
+        - addColumn:
+            columns:
+              - column:
+                  name: start_location_hierarchy
+                  type: varchar(48)
+              - column:
+                  name: end_location_hierarchy
+                  type: varchar(48)
+            tableName: package_journey_segment
+        - addForeignKeyConstraint:
+            baseColumnNames: start_location_hierarchy
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_start_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+        - addForeignKeyConstraint:
+            baseColumnNames: end_location_hierarchy
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_end_lh
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location_hierarchy
+        - addColumn:
+            columns:
+              - column:
+                  name: facility_code
+                  type: varchar(64)
+              - column:
+                  name: facility
+                  type: varchar(48)
+            tableName: location_hierarchy
+        - addForeignKeyConstraint:
+            baseColumnNames: facility
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_facility_location
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: location
+        - dropUniqueConstraint:
+            columnNames: org_id, country, state, city
+            constraintName: location_hierarchy_unique_constraint
+            tableName: location_hierarchy
+        - addUniqueConstraint:
+            columnNames: org_id, country, state, city, facility
+            constraintName: location_hierarchy_unique_constraint
+            tableName: location_hierarchy
+        - dropColumn:
+            columnName: end_facility_id
+            tableName: package_journey_segment
+        - dropColumn:
+            columnName: start_facility_id
+            tableName: package_journey_segment
+        - dropTable:
+            cascadeConstraints: true
+            tableName: facility

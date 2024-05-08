@@ -1,0 +1,150 @@
+###pricing
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-dev
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: dev
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-dev.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-test
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: test
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-test.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-uat
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: uat
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-uat.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-staging
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: staging
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-staging.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-poc
+spec:
+  destination:
+    name: ''
+    namespace: poc
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-poc.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pricing-prod
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: prod
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - pricing/values-prod.yaml
+  project: pricing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

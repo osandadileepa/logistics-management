@@ -1,0 +1,25 @@
+{
+  "data": {
+    "name": "Automation Rule",
+    "description": null,
+    "active": false,
+    "chargeable_weight_rule": "ALWAYS_PICK_VOLUME_WEIGHT",
+    "volume_weight_rule": "STANDARD",
+    "standard_volume_weight_rule_divisor": 2.0,
+    "rounding_logic": {
+      "round_to": 1,
+      "threshold": 0.5
+    },
+    "organization_id": "0",
+    "partners": [
+      {
+        "id": "0",
+        "name": "Automation Partner A"
+      },
+      {
+        "id": "1",
+        "name": "Automation Partner B"
+      }
+    ]
+  }
+}

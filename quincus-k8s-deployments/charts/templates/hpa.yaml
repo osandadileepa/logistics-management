@@ -1,0 +1,83 @@
+{{- if .Values.app.puma.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.app.namespace | default "default" }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.app.name }}
+  minReplicas: {{ .Values.app.puma.hpa.minReplicas }}
+  maxReplicas: {{ .Values.app.puma.hpa.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.puma.hpa.averageCPUUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.puma.hpa.averageMemoryUtilization }}
+{{- end }}
+---
+{{- if .Values.app.sidekiq.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Values.app.name }}-sidekiq"
+  namespace: {{ .Values.app.namespace | default "default" }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Values.app.name }}-sidekiq"
+  minReplicas: {{ .Values.app.sidekiq.hpa.minReplicas }}
+  maxReplicas: {{ .Values.app.sidekiq.hpa.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.sidekiq.hpa.averageCPUUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.sidekiq.hpa.averageMemoryUtilization }}
+{{- end }}
+---
+{{- if .Values.app.qlogger.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Values.app.name }}-qlogger"
+  namespace: {{ .Values.app.namespace | default "default" }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Values.app.name }}-qlogger"
+  minReplicas: {{ .Values.app.qlogger.hpa.minReplicas }}
+  maxReplicas: {{ .Values.app.qlogger.hpa.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.qlogger.hpa.averageCPUUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.app.qlogger.hpa.averageMemoryUtilization }}
+{{- end }}

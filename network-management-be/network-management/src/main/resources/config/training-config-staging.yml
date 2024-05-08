@@ -1,0 +1,3 @@
+mme:
+  trainingDelay: 60
+  debounceKeyPrefix: NETWORK-TRAINING-

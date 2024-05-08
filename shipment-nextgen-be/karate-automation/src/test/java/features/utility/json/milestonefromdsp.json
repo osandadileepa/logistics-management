@@ -1,0 +1,79 @@
+{
+  "data": {
+    "milestone_code": "1505",
+    "milestone_name": "Flight Departed",
+    "milestone_time": "2023-04-12T09:54:33.000+08:00",
+    "organisation_id": "82027602-402a-41f7-82dc-80cfbb011b4e",
+    "service_type": "Standard",
+    "job_type": "Pickup",
+    "from_location_id": "b55ac4b0-fd81-48b2-9484-278f99e3670e",
+    "from_country_id": "a6823ec9-8178-4cae-9065-68ffea9a38f9",
+    "from_state_id": "f29912be-83aa-48d6-8a33-6260b6273a0a",
+    "from_city_id": "831e5d10-f289-4c2a-a8b9-67ce66910f84",
+    "from_coordinates": {
+      "lat": 161.05,
+      "lon": 161.05
+    },
+    "to_location_id": "4912d6ab-f6a8-4fd1-9000-8769cd62844a",
+    "to_country_id": "a6823ec9-8178-4cae-9065-68ffea9a38f9",
+    "to_state_id": "5201888c-aa58-46bd-9ed5-c93597859474",
+    "to_city_id": "05007fa0-1e5f-488d-b666-2f6634d48b54",
+    "to_coordinates": {
+      "lat": 161.06,
+      "lon": 161.06
+    },
+    "user_id": "b69ad906-cb60-4896-a238-8f647fa71854",
+    "partner_id": "e42055c2-8369-423e-9902-8f731da966f0",
+    "shipment_tracking_id": "QC0123081500006-01",
+    "segment_id": "4028c4ef8798342c01879845bc4f004b",
+    "hub_id": "b55ac4b0-fd81-48b2-9484-278f99e3670e",
+    "driver_id": "b4ef6628-6a86-497f-a00f-b52acb734670",
+    "driver_name": "Mar Roxas",
+    "driver_phone_code": "+84",
+    "driver_phone_number": "9179971234",
+    "driver_email": "akona@tr.com",
+    "vehicle_id": "b4ef6628-6a86-497f-a00f-b52acb734690",
+    "vehicle_type": "SUV",
+    "vehicle_name": "Toyota Fortuner",
+    "vehicle_number": "AT 1234",
+    "sender_name": "SHIPV2 SENDER NAME",
+    "sender_company": "SENDER COMPANY",
+    "sender_department": "SENDER DEPT",
+    "receiver_name": "SHPV2 CONSIGNEE",
+    "receiver_company": "RECEIVER COMPANY",
+    "receiver_department": "RECEIVER DEPT",
+    "eta": "2023-04-17T19:06:28.000+08:00",
+    "failed_reason": "",
+    "failed_reason_code": "",
+    "milestone_coordinates": {
+      "lat": 161.07,
+      "lon": 161.07
+    },
+    "additional_info": {
+      "images": [
+        {
+          "file_name": "pod1.jpg",
+          "file_url": "https://api.shipment.TEST.quincus.com/pod1.jpg",
+          "file_size": 1000
+        },
+        {
+          "file_name": "pod2.jpg",
+          "file_url": "https://api.shipment.TEST.quincus.com/pod2.jpg",
+          "file_size": 2000
+        }
+      ],
+      "signature": [
+        {
+          "file_name": "sign2.png",
+          "file_url": "https://api.shipment.TEST.quincus.com/sign2.png",
+          "file_size": 1000
+        }
+      ],
+      "remarks": "Job message from DSP #: 1",
+      "cod": {
+        "amount": 5871,
+        "currency_code": "SGD"
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-1929
+      author: ehmencinas
+      comment: "Added fields for Commodity"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: description
+                  type: VARCHAR(128)
+              - column:
+                  name: code
+                  type: VARCHAR(45)
+              - column:
+                  name: hs_code
+                  type: VARCHAR(45)
+              - column:
+                  name: note
+                  type: VARCHAR(128)
+              - column:
+                  name: packaging_type
+                  type: VARCHAR(45)
+            tableName: commodity
+  - changeSet:
+      id: SHPV2-2134
+      author: ehmencinas
+      comment: "Added fields for Address"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: company
+                  type: VARCHAR(64)
+              - column:
+                  name: department
+                  type: VARCHAR(64)
+            tableName: address
+  - changeSet:
+      id: SHPV2-2112
+      author: argel
+      comment: "Added instructions, removed pickup_instruction & delivery_instruction columns in shipment table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: instructions
+                  type: json
+            tableName: shipment
+        - dropColumn:
+            columnName: pickup_instruction
+            tableName: shipment
+        - dropColumn:
+            columnName: delivery_instruction
+            tableName: shipment
+
+  - changeSet:
+      id: SHPV2-1923
+      author: clarc
+      comment: "Added additional ids in shipment entity and drop useless index in organization table since its id is already a primary key"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: internal_order_id
+                  type: VARCHAR(64)
+              - column:
+                  name: external_order_id
+                  type: VARCHAR(64)
+              - column:
+                  name: customer_order_id
+                  type: VARCHAR(64)
+              - column:
+                  name: additional_tracking_numbers
+                  type: json
+            tableName: shipment

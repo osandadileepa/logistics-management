@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-276
+      author: clarc
+      comment: "Added tracking_url to shipment_order"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: tracking_url
+                  type: VARCHAR(255)
+            tableName: shipment_order

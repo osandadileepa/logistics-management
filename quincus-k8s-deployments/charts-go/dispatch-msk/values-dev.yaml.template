@@ -1,0 +1,32 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: dev
+  name: msk-service
+  port: 80
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 2048
+  mem_required: 1024
+  cpu_limit: 1024
+  cpu_required: 512
+  node_selectors:
+    environment: dev
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/msk-service
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+ingress:
+  enabled: true
+  hostName: api.dispatch-nextgen.dev.quincus.com
+  path: /msk-service(/|$)(.*)
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2    
+#deployed on $date_build

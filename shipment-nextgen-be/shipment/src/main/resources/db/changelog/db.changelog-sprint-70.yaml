@@ -1,0 +1,336 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-244
+      author: mariaencinas
+      comment: "Added flight origin and destination columns"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: flight_origin
+                  type: varchar(3)
+              - column:
+                  name: flight_destination
+                  type: varchar(3)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-1866
+      author: leilcabahug
+      comment: "Increase buffer size for milestone code"
+      changes:
+        - modifyDataType:
+            columnName: code
+            newDataType: varchar(48)
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-252-1
+      author: frank
+      comment: "Added Flight and FlightStatus Table"
+      changes:
+        - createTable:
+            tableName: flight
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: flight_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: unique_flight_id
+              - column:
+                  name: carrier
+                  type: VARCHAR(3)
+              - column:
+                  name: flight_number
+                  type: VARCHAR(60)
+              - column:
+                  name: departure_date
+                  type: VARCHAR(60)
+              - column:
+                  name: origin
+                  type: VARCHAR(3)
+              - column:
+                  name: destination
+                  type: VARCHAR(3)
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+        - createIndex:
+            columns:
+              - column:
+                  name: flight_id
+            indexName: idx_flight_id
+            tableName: flight
+        - createTable:
+            tableName: flight_status
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: flight_table_id
+                  type: VARCHAR(48)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: flight_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+              - column:
+                  name: airline_code
+                  type: VARCHAR(3)
+              - column:
+                  name: airline_name
+                  type: VARCHAR(60)
+              - column:
+                  name: operating_airline_code
+                  type: VARCHAR(3)
+              - column:
+                  name: longitude
+                  type: VARCHAR(60)
+              - column:
+                  name: latitude
+                  type: VARCHAR(60)
+              - column:
+                  name: speed_mph
+                  type: VARCHAR(60)
+              - column:
+                  name: altitude_ft
+                  type: VARCHAR(60)
+              - column:
+                  name: event_date
+                  type: VARCHAR(60)
+              - column:
+                  name: event_type
+                  type: VARCHAR(60)
+              - column:
+                  name: event_name
+                  type: VARCHAR(60)
+              - column:
+                  name: departure_airport_code
+                  type: VARCHAR(3)
+              - column:
+                  name: departure_airport_name
+                  type: VARCHAR(60)
+              - column:
+                  name: departure_scheduled_time
+                  type: VARCHAR(60)
+              - column:
+                  name: departure_estimated_time
+                  type: VARCHAR(60)
+              - column:
+                  name: departure_actual_time
+                  type: VARCHAR(60)
+              - column:
+                  name: arrival_airport_code
+                  type: VARCHAR(3)
+              - column:
+                  name: arrival_airport_name
+                  type: VARCHAR(60)
+              - column:
+                  name: arrival_scheduled_time
+                  type: VARCHAR(60)
+              - column:
+                  name: arrival_estimated_time
+                  type: VARCHAR(60)
+              - column:
+                  name: arrival_actual_time
+                  type: VARCHAR(60)
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+        - createIndex:
+            columns:
+              - column:
+                  name: flight_id
+            indexName: idx_flight_id
+            tableName: flight_status
+        - addForeignKeyConstraint:
+            baseColumnNames: flight_table_id
+            baseTableName: flight_status
+            constraintName: fk_flight_flight_status
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: flight
+  - changeSet:
+      id: SHPV2-252-2
+      author: imeehablero
+      comment: "Add reference to Flight table"
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: flight_id
+            baseTableName: package_journey_segment
+            constraintName: fk_package_journey_segment_flight
+            onDelete: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: flight
+  - changeSet:
+      id: SHPV2-518
+      author: leilcabahug
+      comment: "Added shipment attachment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: shipment_attachments
+                  type: json
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-236-FIX
+      author: ajalbaniel
+      comment: "Increase buffer size for alert type"
+      changes:
+        - modifyDataType:
+            columnName: type
+            newDataType: varchar(48)
+            tableName: alert
+  - changeSet:
+      id: SHPV2-1621
+      author: clarc
+      comment: "Added common fields in particular entities"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+            tableName: address
+        - addColumn:
+            columns:
+              - column:
+                  name: version
+                  type: INTEGER
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+            tableName: alert
+        - addColumn:
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+            tableName: commodity
+        - addColumn:
+            columns:
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+            tableName: location
+        - renameColumn:
+            newColumnName: organization_id
+            oldColumnName: org_id
+            columnDataType: varchar(48)
+            tableName: location
+        - addColumn:
+            columns:
+              - column:
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  name: create_time
+                  type: timestamp
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  name: version
+                  type: INTEGER
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+            tableName: location_hierarchy
+        - renameColumn:
+            newColumnName: organization_id
+            oldColumnName: org_id
+            columnDataType: varchar(48)
+            tableName: location_hierarchy
+        - addColumn:
+            columns:
+              - column:
+                  name: version
+                  type: INTEGER
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+            tableName: milestone
+        - renameTable:
+            newTableName: package_dimension
+            oldTableName: package_dimensions
+        - renameColumn:
+            newColumnName: custom
+            oldColumnName: is_custom
+            columnDataType: boolean
+            tableName: package_dimension
+        - renameColumn:
+            newColumnName: deleted
+            oldColumnName: is_deleted
+            columnDataType: boolean
+            tableName: package_journey_segment
+        - addColumn:
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-252-3
+      author: imeehablero
+      comment: "Change flight_id to BIGINT"
+      changes:
+        - modifyDataType:
+            columnName: flight_id
+            newDataType: BIGINT
+            tableName: flight

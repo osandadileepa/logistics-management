@@ -1,0 +1,81 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4096
+    mem_required: 2048
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: prod
+  name: auth
+  port: 3000
+  env: prod
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: prod
+    node-type: on_demand
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/auth-quincus-images
+  tag: "4a67867"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: prod/auth
+  versionId: e0643061-b3f7-43b6-afde-6a46bd3202ea
+ingress:
+  enabled: true
+  hostName: api.auth.center.quincus.com
+  hostName_noram: api.auth.center-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 300
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"    
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: prod
+      node-type: on_demand
+  auth:
+    enabled: false

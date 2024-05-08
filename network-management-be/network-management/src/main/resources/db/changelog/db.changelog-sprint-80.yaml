@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: NW-393
+      author: osanda
+      comment: "Add Node code of departure and arrival Nodes to the connection table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: departure_node_code
+                  type: VARCHAR(256)
+              - column:
+                  name: arrival_node_code
+                  type: VARCHAR(256)
+            tableName: connection
+  - changeSet:
+      id: NW-336-1
+      author: clarc
+      comment: "Add organization id in connection, node, operating_hours, shipment_profile"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+            tableName: connection
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+            tableName: node
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+            tableName: operating_hours
+        - addColumn:
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(256)
+            tableName: shipment_profile
+  - changeSet:
+      id: NW-336-2
+      author: clarc
+      comment: "Drop existing unique constraints on node_code and connection_code, add composite unique constraints on node_code + organization_id and connection_code + organization_id"
+      changes:
+        - dropUniqueConstraint:
+            constraintName: unique_node_code
+            tableName: node
+        - addUniqueConstraint:
+            columnNames: node_code,organization_id
+            constraintName: unique_node_code_organization_id
+            tableName: node
+        - dropUniqueConstraint:
+            constraintName: unique_connection_code
+            tableName: connection
+        - addUniqueConstraint:
+            columnNames: connection_code,organization_id
+            constraintName: unique_connection_code_organization_id
+            tableName: connection
+  - changeSet:
+      id: NW-293
+      author: osanda
+      comment: "Allow maximum 10 integral digits and 2 fractional digits for cost"
+      changes:
+        - modifyDataType:
+            tableName: connection
+            columnName: cost
+            newDataType: DECIMAL(10, 2)
+  - changeSet:
+      id: NW-391
+      author: osanda
+      comment: "Add lat and lon columns to node table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: facility_lat
+                  type: DECIMAL(18, 15)
+              - column:
+                  name: facility_lon
+                  type: DECIMAL(18, 15)
+            tableName: node

@@ -1,0 +1,105 @@
+app:
+  region: ${REGION}
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 6000
+    mem_required: 3000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    healthcheck: true
+    healthcheck_command:
+       - /bin/sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 5200
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  racecar:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 12288
+    mem_required: 2600
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: prod
+  name: shipment
+  port: 3000
+  env: prod
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: prod
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/shipment-quincus-images
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: prod/shipment
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: true
+  hostName: api.shipment.center.quincus.com
+  hostName_noram: api.shipment.center-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 15m
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "platform,DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token"
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: prod
+      node-type: on_demand
+  auth:
+    enabled: false
+#deployed on $date_build

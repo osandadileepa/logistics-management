@@ -1,0 +1,39 @@
+replicaCount: 1
+app:
+  namespace: demo
+  name: baiduconnector
+  port: 5000
+  env: demo
+  image_pull_policy: IfNotPresent
+  mem_limit: 0
+  mem_required: 1024
+  cpu_limit: 0
+  cpu_required: 500
+  node_selectors:
+    environment: demo
+  hpa:
+    minReplicas: 1
+    maxReplicas: 2
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/baiduconnector
+  tag: "566ed08ff222fe2c1d9bbb92e5cfe25b576ca8e5"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: demo/baiduconnector
+  versionId: cca6b367-13e8-471d-8362-b9537411df4b
+ingress:
+  enabled: true
+  hostName: baiduconnector.demo.quincus.com
+  path: /
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-southeast-1:244836737383:certificate/9cc75b31-7e2d-48ca-a807-bb6806a3319b
+    alb.ingress.kubernetes.io/group.name: nonprod-public-alb
+    alb.ingress.kubernetes.io/load-balancer-name: nonprod-public-alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/security-groups: alb-sg-rule
+    alb.ingress.kubernetes.io/target-type: ip
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=300

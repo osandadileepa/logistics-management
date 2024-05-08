@@ -1,0 +1,14 @@
+app:
+  region: ap-southeast-1
+  namespace: perf
+  name: admin-be-perf
+  build_id: 83
+  node_selectors:
+    environment: perf
+    node-type: spot
+job:
+  args: 
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/quincus-jmeter
+  tag: "admin-be-460cf74"
+#deployed on Wed Jun  7 10:59:36 UTC 2023

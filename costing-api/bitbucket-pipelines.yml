@@ -1,0 +1,102 @@
+image: python:3.7.4-alpine3.10
+
+definitions:
+  steps:
+    - step: &build-test-sonarcloud
+        name: Maven Build and SonarQube analysis
+        image: maven:3-eclipse-temurin-17
+        caches:
+          - maven
+        script:
+          - mvn clean verify package -f pom.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          #- mvn clean install
+          - mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout > version.txt
+        artifacts:
+          - version.txt
+          - main/target/*.jar
+    - step: &build-docker-image
+        name: Build Docker Image
+        services:
+          - docker
+        caches:
+          - docker
+        script:
+          - PROJECT_VERSION=$( cat version.txt )
+          - IMAGE_NAME=$BITBUCKET_REPO_SLUG
+          - docker build . --file Dockerfile --tag $IMAGE_NAME:$PROJECT_VERSION
+          - docker images
+          - docker save --output "${IMAGE_NAME}-${PROJECT_VERSION}.tar" $IMAGE_NAME:$PROJECT_VERSION
+          - ls ./
+        artifacts:
+          - "*.tar"
+          - version.txt
+    - step: &deploy-image-to-ecr
+        name: Deploy Docker Image to ECR
+        caches:
+          - pip
+        script:
+          - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+          - wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz
+          - tar --extract --file=docker-20.10.5.tgz
+          - ls -al ./docker
+          - export PATH=./docker:$PATH
+          - which docker
+          - docker version
+          - pip3 install awscli
+          - aws configure set aws_access_key_id ${AWS_ECR_ACCESS_KEY}
+          - aws configure set aws_secret_access_key ${AWS_ECR_SECRET_ACCESS_KEY}
+          - eval $(aws ecr get-login --no-include-email --region ap-southeast-1 | sed 's;https://;;g')
+          - PROJECT_VERSION=$( cat version.txt )
+          - IMAGE_NAME=$BITBUCKET_REPO_SLUG
+          - echo selected image name is ${IMAGE_NAME}-${PROJECT_VERSION}
+          - docker load --input "${IMAGE_NAME}-${PROJECT_VERSION}.tar"
+          - VERSION="${PROJECT_VERSION}"
+          - echo build version = ${VERSION}
+          - IMAGE=244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/${IMAGE_NAME}
+          - docker tag "${IMAGE_NAME}:${VERSION}" "${IMAGE}:${VERSION}-${BITBUCKET_COMMIT_SHORT}"
+          - docker push --all-tags "${IMAGE}"
+          - echo successfully pushed latest image with all tags to ECR
+        services:
+          - docker
+        artifacts:
+          - version.txt
+    - step: &deploy-eks
+        name: deploy-eks
+        image: atlassian/default-image:3
+        script:
+          - PROJECT_VERSION=$( cat version.txt )
+          - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+          - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip";unzip awscliv2.zip;./aws/install
+          - cd ..
+          - if [ ! -n "$(grep "^bitbucket.org " ~/.ssh/known_hosts)" ]; then ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts 2>/dev/null; fi
+          - git clone https://quincus-platform:$QUINCUS_K8S_DEPLOYMENTS_GIT_PASSWORD@bitbucket.org/quincus-saas/quincus-k8s-deployments.git
+          - export IMAGE_TAG=$PROJECT_VERSION-$BITBUCKET_COMMIT_SHORT
+          - cd quincus-k8s-deployments/charts-springboot/costing-api
+          - export date_build=`date`
+          # update helm value
+          - envsubst < values-$ARGO_ENV.yaml.template > values-$ARGO_ENV.yaml
+          - git config --local user.email "platform@quincus.com" && git config --local user.name "quincus-platform" && git commit -am "Deploy new costing-api version to $ARGO_ENV"
+          - git push
+clone:
+  depth: full    # SonarCloud scanner needs the full history to assign issues properly
+
+pipelines:
+  branches:
+    develop:
+      - step: *build-test-sonarcloud
+      - step: *build-docker-image
+      - step: *deploy-image-to-ecr
+      - step:
+          <<: *deploy-eks
+          deployment: Development
+          name: Deploy to Dev
+      - step:
+          <<: *deploy-eks
+          deployment: Test
+          name: Deploy to Test
+          trigger: manual
+      - step:
+          <<: *deploy-eks
+          deployment: Staging
+          name: Deploy to Staging
+          trigger: manual

@@ -1,0 +1,3 @@
+db:
+  datasource:
+    db: network_management_uat

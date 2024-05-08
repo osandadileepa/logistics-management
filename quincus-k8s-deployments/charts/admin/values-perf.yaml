@@ -1,0 +1,84 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 8000
+    mem_required: 4000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1000
+    cpu_required: 500
+  qlogger:
+    healthcheck: false
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 11000
+    mem_required: 5500
+    cpu_limit: 3000
+    cpu_required: 1500
+  namespace: perf
+  name: admin
+  port: 3000
+  env: perf
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: perf
+    node-type: spot
+  preDeployScript:
+    enabled: true
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/admin-quincus-images
+  tag: "d18c40e"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: perf/admin
+  versionId: dc6b1bc9-7a96-48b6-b9a5-1d0025013ff0
+ingress:
+  enabled: true
+  hostName: api.perf.quincus.com
+  hostName_noram: api.perf-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: 300
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://upsec.perf.qship.quincus.com, https://upsapspl.perf.qship.quincus.com, https://apxgroup.perf.qship.quincus.com, https://ups.perf.qship.quincus.com, https://mgxpress.perf.qship.quincus.com, https://quincus.perf.qship.quincus.com, https://qmodel.perf.qship.quincus.com, https://qdemo.perf.qship.quincus.com, https://upsecde.perf.qship.quincus.com, https://apxpoc.perf.qship.quincus.com, https://transtama.perf.qship.quincus.com, https://schneider.perf.qship.quincus.com, https://upsdryrun.perf.qship.quincus.com, https://apxdm.perf.qship.quincus.com, https://bbg.perf.qship.quincus.com, https://finfleet.perf.qship.quincus.com, https://acloudary.perf.qship.quincus.com, https://blk.perf.qship.quincus.com, https://acloudery.perf.qship.quincus.com, https://apxprod.perf.qship.quincus.com, https://proabc.perf.qship.quincus.com, https://ship60.perf.qship.quincus.com, https://ship60vn.perf.qship.quincus.com, https://mcgill.perf.qship.quincus.com, https://lzdtrl.perf.qship.quincus.com, https://gudings.perf.qship.quincus.com, https://121100.perf.qship.quincus.com, https://price2.perf.qship.quincus.com, https://sap.perf.qship.quincus.com, https://upsuat.perf.qship.quincus.com, https://upsus.perf.qship.quincus.com, https://krg.perf.qship.quincus.com, https://krgt.perf.qship.quincus.com, https://upsecp.perf.qship.quincus.com, https://ll888.perf.qship.quincus.com, https://bltznui.perf.qship.quincus.com, https://upsrun.perf.qship.quincus.com, https://upsex.perf.qship.quincus.com, https://shr.perf.qship.quincus.com, https://she.perf.qship.quincus.com, https://tnd.perf.qship.quincus.com, https://sapx.perf.qship.quincus.com, https://oslog.perf.qship.quincus.com, https://paxel.perf.qship.quincus.com, https://upsapuat.perf.qship.quincus.com, https://e2eauto.perf.qship.quincus.com, https://qdemo1.perf.qship.quincus.com, https://qdemo2.perf.qship.quincus.com, https://qdem.perf.qship.quincus.com, https://impexpmx.perf.qship.quincus.com, https://qtcsdemo.perf.qship.quincus.com, https://qtcs1demo.perf.qship.quincus.com, https://jnecarind.perf.qship.quincus.com, https://simtmsphl.perf.qship.quincus.com, https://skllogaus.perf.qship.quincus.com, https://qtd.perf.qship.quincus.com, https://hmstmssgp.perf.qship.quincus.com, https://upstmsapc.perf.qship.quincus.com, https://qtrain.perf.qship.quincus.com, https://upsexpc.perf.qship.quincus.com, https://qps.perf.qship.quincus.com, https://as01.perf.qship.quincus.com, https://segorg.perf.qship.quincus.com, https://qsol.perf.qship.quincus.com, https://apxsb.perf.qship.quincus.com, https://as02.perf.qship.quincus.com, https://apxgrp.perf.qship.quincus.com, https://upsecsb.perf.qship.quincus.com, https://bltzarn.perf.qship.quincus.com, https://dhlopsmex.perf.qship.quincus.com, https://bvatmscol.perf.qship.quincus.com, https://apxtst.perf.qship.quincus.com, https://ops.apx.group, https://oms.postsales.ups.com, https://oms.expresscritical.ups.com, https://track.postsales.ups.com, https://track.expresscritical.ups.com, https://dispatch.perf.quincus.com, https://shipment.perf.quincus.com, https://pricing.perf.quincus.com, https://common.perf.quincus.com, https://order.perf.quincus.com, https://perf.quincus.com, https://quincus.perf.qship.quincus.com, https://ops.skycargo.quincus.com, https://cust.skycargo.quincus.com, https://perf.quincus.app, https://qsol2.perf.qship.quincus.com, https://qsol.perf.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform" 
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    nodeSelector:
+      environment: perf
+      node-type: spot
+  auth:
+    enabled: false

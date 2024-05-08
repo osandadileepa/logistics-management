@@ -1,0 +1,80 @@
+app:
+  region: ${REGION}
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 8
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 2048
+    mem_required: 1024
+    cpu_limit: 1000
+    cpu_required: 500
+  sidekiq:
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  qlogger:
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 800
+    mem_required: 400
+    cpu_limit: 200
+    cpu_required: 100
+  namespace: staging
+  name: auth
+  port: 3000
+  env: staging
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: staging
+    node-type: spot
+  preDeployScript:
+    enabled: false
+    scriptPath: post-deploy/post-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: ""
+  schedule: ""
+image:
+  name: 244836737383.dkr.ecr.${REGION}.amazonaws.com/auth-quincus-images
+  tag: "$IMAGE_TAG"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: staging/auth
+  versionId: ${AWS_SECRET_VERSION_ID}
+ingress:
+  enabled: true
+  hostName: api.auth.staging.quincus.com
+  path: /
+  nginx_annotations:    
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '300'
+    nginx.ingress.kubernetes.io/custom-http-errors: "511" # Added 511 just to override nginx error message, basic errors will be handled in app
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.staging.quincus.com, https://shipment.staging.quincus.com, https://pricing.staging.quincus.com, https://common.staging.quincus.com, https://order.staging.quincus.com, https://staging.quincus.com, https://quincus.staging.qship.quincus.com, https://qship.quincus.app, https://staging.quincus.app, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com, https://shpstg08.staging.qship.quincus.com, https://3011sg.staging.qship.quincus.com, https://segorg.staging.qship.quincus.com, https://qship.quincus.app, https://staging.quincus.app, https://140223.staging.qship.quincus.com, https://e2eauto.staging.qship.quincus.com, https://07022023.staging.qship.quincus.com, https://UPSSTG.staging.qship.quincus.com, https://VYPM.staging.qship.quincus.com, https://seg1512.staging.qship.quincus.com, https://nseg1512.staging.qship.quincus.com, https://kafka.staging.qship.quincus.com, https://shpstg08.staging.qship.quincus.com, https://qapistg.staging.qship.quincus.com, https://140223.staging.qship.quincus.com, https://520e2e.staging.qship.quincus.com, https://nseg1512.staging.qship.quincus.com, https://seg1512.staging.qship.quincus.com, https://e2eauto.staging.qship.quincus.com, https://qps.staging.qship.quincus.com, https://jkct.staging.qship.quincus.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,platform"
+redis:
+  architecture: standalone
+  enabled: false
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: staging
+      node-type: spot
+  auth:
+    enabled: false

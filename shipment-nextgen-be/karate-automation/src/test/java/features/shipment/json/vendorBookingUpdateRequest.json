@@ -1,0 +1,10 @@
+{
+  "data": {
+    "type": "BOOKING_CREATED",
+    "booking_id": "550e8400-e29b-41d4-a716-446655440000",
+    "booking_vendor_reference_id": "BR20230925002",
+    "booking_status": "PENDING",
+    "rejection_reason": "",
+    "waybill_number": "WB20230925001"
+  }
+}

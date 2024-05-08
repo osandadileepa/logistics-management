@@ -1,0 +1,22 @@
+security:
+  path:
+    allowed:
+      - "/sessions"
+      - "/v3/**"
+      - "/swagger-ui.html"
+      - "/swagger-ui/**"
+      - "/actuator/**"
+      - "/weight-calculation-rules/**"
+      - "/weight-calculation/**"
+      - "/rate-cards/**"
+      - "/rate-calculation/**"
+      - "/rounding-logic/**"
+    origins:
+      - "*"
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "OPTIONS"
+    headers:
+      - "*"

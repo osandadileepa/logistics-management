@@ -1,0 +1,179 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-234
+      author: ajalbaniel
+      comment: "Added segment_id in milestone events"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: segment_id
+                  type: varchar(255)
+            tableName: milestone_events
+  - changeSet:
+      id: SHPV2-234-2
+      author: ajalbaniel
+      comment: "Rename milestone_events table to milestone, removed current_milestone in shipment to varchar"
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: milestone
+        - renameTable:
+            newTableName: milestone
+            oldTableName: milestone_events
+        - dropColumn:
+            columnName: current_milestone
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-253-1
+      author: clarc
+      comment: "Add modify_time, create_time, version in package_dimensions"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+                  name: version
+                  type: INTEGER
+            tableName: package_dimensions
+  - changeSet:
+      id: SHPV2-1243
+      author: banasco
+      comment: "Increase package_journey_segment.airline's length from 50 to 65"
+      changes:
+        - modifyDataType:
+            columnName: airline
+            newDataType: varchar(65)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-1114-1
+      author: clarc
+      comment: "Add timezone in location table and user_name in milestone table"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: timezone
+                  type: varchar(255)
+            tableName: location
+        - addColumn:
+            columns:
+              - column:
+                  name: user_name
+                  type: varchar(255)
+            tableName: milestone
+  - changeSet:
+      id: SHPV2-544
+      author: leilcabahug
+      comment: "change milestone description to remarks and add additional milestone fields"
+      changes:
+        - renameColumn:
+            newColumnName: remarks
+            oldColumnName: description
+            columnDataType: varchar(256)
+            tableName: milestone
+        - addColumn:
+            columns:
+              - column:
+                  name: org_id
+                  type: varchar(48)
+              - column:
+                  name: milestone_name
+                  type: varchar(48)
+              - column:
+                  name: milestone_time
+                  type: varchar(50)
+              - column:
+                  name: service_type
+                  type: varchar(48)
+              - column:
+                  name: job_type
+                  type: varchar(48)
+              - column:
+                  name: from_location_id
+                  type: varchar(48)
+              - column:
+                  name: from_city_id
+                  type: varchar(48)
+              - column:
+                  name: from_state_id
+                  type: varchar(48)
+              - column:
+                  name: from_country_id
+                  type: varchar(48)
+              - column:
+                  name: to_location_id
+                  type: varchar(48)
+              - column:
+                  name: to_city_id
+                  type: varchar(48)
+              - column:
+                  name: to_state_id
+                  type: varchar(48)
+              - column:
+                  name: to_country_id
+                  type: varchar(48)
+              - column:
+                  name: user_id
+                  type: varchar(48)
+              - column:
+                  name: partner_id
+                  type: varchar(48)
+              - column:
+                  name: hub_id
+                  type: varchar(48)
+              - column:
+                  name: driver_id
+                  type: varchar(48)
+              - column:
+                  name: driver_name
+                  type: varchar(64)
+              - column:
+                  name: driver_phone_code
+                  type: varchar(10)
+              - column:
+                  name: driver_phone_number
+                  type: varchar(24)
+              - column:
+                  name: vehicle_id
+                  type: varchar(48)
+              - column:
+                  name: vehicle_type
+                  type: varchar(64)
+              - column:
+                  name: vehicle_name
+                  type: varchar(64)
+              - column:
+                  name: vehicle_number
+                  type: varchar(24)
+              - column:
+                  name: sender_name
+                  type: varchar(128)
+              - column:
+                  name: receiver_name
+                  type: varchar(128)
+              - column:
+                  name: eta
+                  type: varchar(50)
+              - column:
+                  name: failed_pickup_reason
+                  type: varchar(255)
+              - column:
+                  name: failed_delivery_reason
+                  type: varchar(255)
+              - column:
+                  name: milestone_coordinates
+                  type: json
+              - column:
+                  name: additional_info
+                  type: json
+            tableName: milestone

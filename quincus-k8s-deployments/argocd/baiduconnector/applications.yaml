@@ -1,0 +1,26 @@
+###Baiduconnector
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: baiduconnector-demo
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: demo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts-le-ge
+    repoURL: 'git@bitbucket.org:quincus-saas/quincus-k8s-deployments.git'
+    targetRevision: master
+    helm:
+      valueFiles:
+        - baiduconnector/values-demo.yaml
+  project: baiduconnector
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

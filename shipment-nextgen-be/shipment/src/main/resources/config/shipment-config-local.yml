@@ -1,0 +1,26 @@
+shipment:
+  baseUrl: http://localhost:8080
+  readPreSignedPath: /files/read-pre-signed-link
+  async:
+    internal-task-executor:
+      corePoolSize: 2
+      maxPoolSize: 5
+      threadNamePrefix: "InternalAsync-"
+      awaitTerminationSeconds: 30
+    external-task-executor:
+      corePoolSize: 5
+      maxPoolSize: 10
+      threadNamePrefix: "ExternalApiAsync-"
+      awaitTerminationSeconds: 30
+    shipmentDeletionInterval: 86400000 # every 24 hours
+    packageJourneySegmentDeletionInterval: 86400000 # every 24 hours
+    lockoutCheckInterval: 300000 # every 5 minutes
+
+retry:
+  maxAttempts: 3
+  maxDelay: 500
+  maxDelayStaleException: 5000
+
+shipment-journey:
+  organizationIdsToSkipSegmentCreationFromPayload:
+    - 0de022d7-767e-4205-b18c-5bfea27f4082

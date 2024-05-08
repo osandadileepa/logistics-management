@@ -1,0 +1,30 @@
+image: python:3.7.4-alpine3.10
+
+definitions:
+  steps:
+    - step: &build-test-sonarcloud
+        name: Maven Build and SonarQube analysis
+        image: maven:3-eclipse-temurin-17
+        caches:
+          - maven
+        script:
+          - mvn install -N
+          - mvn clean verify package -f pom.xml org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          - mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout > version.txt
+        artifacts:
+          - version.txt
+          - core/target/*.jar
+          - web/target/*.jar
+          - authentication-api-integration/target/*.jar
+          - qportal-api-integration/target/*.jar
+
+clone:
+  depth: full    # SonarCloud scanner needs the full history to assign issues properly
+
+pipelines:
+  pull-requests:
+    "**":
+      - step: *build-test-sonarcloud
+  branches:
+    develop:
+      - step: *build-test-sonarcloud

@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-5364
+      author: ehmencinas
+      comment: "Adding multi tenant fields for Service Type"
+      changes:
+        - addColumn:
+            tableName: service_type
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+  - changeSet:
+      id: SHPV2-5410
+      author: leilcabahug
+      comment: "order_id on instructions"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: order_id
+                  type: varchar(48)
+            tableName: instruction
+        - createIndex:
+            tableName: instruction
+            indexName: idx_order_id
+            columns:
+              - column:
+                  name: order_id
+  - changeSet:
+      id: SHPV2-5502
+      author: paullabis
+      comment: "increase VARCHAR limit from 128 to 200"
+      changes:
+        - modifyDataType:
+            tableName: address
+            columnName: line1
+            newDataType: VARCHAR(200)
+        - modifyDataType:
+            tableName: address
+            columnName: line2
+            newDataType: VARCHAR(200)
+        - modifyDataType:
+            tableName: address
+            columnName: line3
+            newDataType: VARCHAR(200)

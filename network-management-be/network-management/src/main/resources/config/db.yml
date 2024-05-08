@@ -1,0 +1,13 @@
+db:
+  datasource:
+    db: network_management_dev
+    url: jdbc:mysql://tidb.sunlaxftua0.clusters.tidb-cloud.com:4000/${db.datasource.db}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: networkman.root
+    password: 98Xe2xEk8Wy8hQTm
+  jpa:
+    databasePlatform: org.hibernate.dialect.MySQL8Dialect
+    generateDdl: false
+    showSql: false
+    modelPackages:
+      - "com.quincus.networkmanagement.impl.repository.entity"

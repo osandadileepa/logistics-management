@@ -1,0 +1,152 @@
+osanda.wedamulla@quincus.com
+OdW@quic$1989
+
+-----------------------------------------------------------------------
+RUN Karate-Test
+
+then run > mvn clean test "-Dkarate.env=local"
+
+##These needs to be running locally for sucessfull Karate Tests
+
+
+CONTAINER ID   IMAGE                          COMMAND                  CREATED       STATUS                 PORTS                                                                                  NAMES
+659b3d2f4aa5   localstack/localstack          "docker-entrypoint.sh"   5 hours ago   Up 5 hours (healthy)   127.0.0.1:4510-4559->4510-4559/tcp, 127.0.0.1:4566->4566/tcp, 5678/tcp                 localstack_main
+ec2aa3446929   tchiotludo/akhq                "docker-entrypoint.s…"   5 hours ago   Up 5 hours (healthy)   0.0.0.0:9085->8080/tcp, :::9085->8080/tcp                                              kafka_akhq_1
+6dff5cef5597   confluentinc/cp-server:7.2.0   "/etc/confluent/dock…"   5 hours ago   Up 5 hours             0.0.0.0:9092->9092/tcp, :::9092->9092/tcp, 0.0.0.0:9101->9101/tcp, :::9101->9101/tcp   kafka
+a050590b631c   confluentinc/cp-zookeeper      "/etc/confluent/dock…"   5 hours ago   Up 5 hours             2181/tcp, 2888/tcp, 3888/tcp                                                           kafka_zookeeper_1
+7645831f97ee   mysql:5.7.30                   "docker-entrypoint.s…"   5 hours ago   Up 5 hours             33060/tcp, 0.0.0.0:3307->3306/tcp, :::3307->3306/tcp                                   shipmentv2-mysql
+
+
+===================================
+# Docker remove dangaling volumes
+
+docker volume rm $(docker volume ls -qf dangling=true)
+-----------------------------------------------------------------
+TiDB cloud 
+
+mysql --connect-timeout 15 -u '2qC9FZNFPoEgoGC.root' -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=/etc/ssl/cert.pem -p3tPGuAHdEeShwpcS
+PASSWORD: 3tPGuAHdEeShwpcS
+
+My TiDB - Cluster-0
+===============================================
+
+username: 2qC9FZNFPoEgoGC.root
+url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/${db.datasource.db}
+password 3tPGuAHdEeShwpcS
+
+mysqldump -P 4000 -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -u 2qC9FZNFPoEgoGC.root -p shipmentv2_local > dump_20230607.sql
+3tPGuAHdEeShwpcS
+
+mysql -u root -p shipmentv2_local < testdump.sql
+root
+====================
+My Local
+
+
+db.datasource.url=jdbc:mysql://127.0.0.1:3307/${db.datasource.db}
+usename=root
+password=root
+
+
+==============================================================
+
+db:
+  datasource:
+    db: shipmentv2_local
+    url: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/${db.datasource.db}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: 2ZaWcMUbgbz8DAm.root
+    password: 8AZDUqN6efUgdrry
+    
+    
+My TiDB
+
+db.datasource.url=jdbc:mysql://127.0.0.1:3307/${db.datasource.db}
+mysql -u root -p shipmentv2_local < testdump.sql
+
+
+-------------
+
+db.datasource.db=
+db.datasource.url=jdbc:mysql://127.0.0.1:3307/${db.datasource.db}
+db.datasource.username=root
+db.datasource.password=root
+spring.profiles.active=local
+
+cache.expireAfterWriteMinutes=60
+cache.maximumSize=1000
+------------------------------------------------------------
+
+DROP SCHEMA shipmentv2_local;
+CREATE SCHEMA shipmentv2_local;
+use shipmentv2_local;
+SET @@global.tidb_enable_clustered_index=OFF;
+
+--------------------------------------------------------------------------------------------------------
+
+
+=============================================================================
+AWS
+
+NONE_PROD -> aws ssm start-session --target i-0d84e7b9ac8fc3470 --document-name AWS-StartPortForwardingSession --parameters '{"portNumber":["9000"], "localPortNumber":["9090"]}'
+    
+--------------------------------------------------------------
+TiDB 2023/06/02
+
+mysql --connect-timeout 15 -u '4TEziuTD1heUZx7.root' -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=/etc/ssl/certs/ca-certificates.crt -pooG2RqsB4RlUa4KL
+
+URL: gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/${db.datasource.db}
+USERNAME: 4TEziuTD1heUZx7.root
+PASSWORD: ooG2RqsB4RlUa4KL 
+
+mysqldump -P 4000 -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -u 4TEziuTD1heUZx7.root -p shipmentv2_local > testdump.sql
+mysql -u root -p shipmentv2_local < testdump.sql
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+git update-index --assume-unchanged karate-automation/src/test/java/com/quincus/karate/automation/RunnerTest.java
+git update-index --no-assume-unchanged karate-automation/src/test/java/com/quincus/karate/automation/RunnerTest.java
+
+---------------------------------------------------------------------------------------------------------------------------
+Network Managemnet PROD
+
+mysqldump -P 4000 -h tidb.sunlaxftua0.clusters.tidb-cloud.com -u networkman.root -p network_management_test > dump.sql
+PW: 98Xe2xEk8Wy8hQTm
+
+mysql -u root -p network_management_local < dump.sql
+
+--------------------------------------------------------------------------
+ALTER TABLE `network_management_local`.`connection` DROP COLUMN `arrival_node_code`, DROP COLUMN `departure_node_code`;
+
+------------------------------------------------------------------------------------------
+
+lsof -t -i:8080
+
+------------------------------------------------------------------------------
+
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM network_management_local.DATABASECHANGELOG WHERE id = "NW-395";
+SET SQL_SAFE_UPDATES = 1;
+
+--------------------------------------------------------------------------------------------------------
+
+mysql --comments --connect-timeout 15 -u '2qC9FZNFPoEgoGC.root' -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=/etc/ssl/cert.pem -p<your_password>
+
+username - 2qC9FZNFPoEgoGC.root
+password - 3tPGuAHdEeShwpcS
+
+
+URL: gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/${db.datasource.db}
+USERNAME: 2qC9FZNFPoEgoGC.root
+PASSWORD: 3tPGuAHdEeShwpcS
+
+
+--------------------------------------------------------------------------------
+mvn test "-Dkarate.options=--tags @ShipmentCreate"
+
+
+----------------------------------------------------------------------------------------------------
+  webhookApiKey: ${WHITEBIT_WEBHOOK_API_KEY}
+  webhookApiSecret: ${WHITEBIT_WEBHOOK_API_SECRET}
+

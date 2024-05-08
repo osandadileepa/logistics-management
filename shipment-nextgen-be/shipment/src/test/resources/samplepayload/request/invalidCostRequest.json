@@ -1,0 +1,52 @@
+{
+  "data": {
+    "cost_type": {
+      "id": "c28ddc77d089470a8d0934d23d8c1396"
+    },
+    "cost_amount": 10000000000000000000000.00000000000000,
+    "currency": {
+      "id": "a"
+    },
+    "source": "This text has more than 50 characters. This text has more than 50 characters. This text has more than 50 characters. ",
+    "driver_id": "aaaa",
+    "issued_date": "2023-02-11T14:50:00.000Z",
+    "shipments": [
+      {
+        "id": "1",
+        "segments": [
+          {
+            "segment_id": "2"
+          }
+        ]
+      }
+    ],
+    "proof_of_cost": [
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://www.example.com/#bike",
+        "file_name": "rec",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "http://www.example.com/#brother",
+        "file_name": "rece",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://example.com/birds/birth.htm",
+        "file_name": "recei",
+        "file_size": 1608
+      },
+      {
+        "id": "7fcec673-cc5d-4f33-ae99-5981a517b0bc",
+        "url": "https://www.example.com/berry/bells",
+        "file_name": "rece",
+        "file_size": 1608
+      }
+    ],
+    "remarks": "4 receipts combined",
+    "organization_id": "aaa"
+  }
+}

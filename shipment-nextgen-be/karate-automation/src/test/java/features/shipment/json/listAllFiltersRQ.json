@@ -1,0 +1,66 @@
+{
+  "data": {
+    "journey_status": "ACTIVE",
+    "origin_locations": {
+      "city_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "country_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "state_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ]
+    },
+    "destination_locations": {
+      "city_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "country_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "state_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ]
+    },
+    "facility_locations": {
+      "city_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "country_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ],
+      "state_ids": [
+        "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      ]
+    },
+    "origin": [
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79",
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+    ],
+    "facilities": [
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79",
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+    ],
+    "destination": [
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79",
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+    ],
+    "tracking_ids": [
+      "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+    ],
+    "service_type": [
+      {
+        "id": "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+      }
+    ],
+    "order": {
+      "id": "ac0429fd-9eb5-432c-b361-675e76ed3c79"
+    },
+    "keys": [
+      "SHP7d180c26-a95"
+    ],
+    "size": 1,
+    "page_number": 1
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "10d95526-4f18-4497-93b4-e74747f71f13",
+  "create_time": "2023-05-19T09:36:03Z",
+  "modify_time": "2023-05-19T09:36:03Z",
+  "milestone_code": "1608",
+  "milestone_name": "Driver arrived for delivery",
+  "milestone_time": "2023-05-19T09:36:02.389129Z",
+  "organization_id": "82027602-402a-41f7-82dc-80cfbb011b4e",
+  "from_location_id": "f4e53fcd-aeb0-4a98-8af4-1e3b0e21749a",
+  "from_country_id": "a261830e-2ffa-4734-912a-0d66808d72ca",
+  "from_state_id": "3ece4a5b-7c51-46d1-8d18-4714b16f4fdf",
+  "from_city_id": "c211a5f4-d007-4c57-8268-c8364276b720",
+  "to_location_id": "e573d11e-e8e9-40ab-9593-80354e173b11",
+  "to_country_id": "9ff46f38-9fc5-40a6-a561-6fd27c24177d",
+  "to_state_id": "6b7a742b-a3eb-4f60-9433-58de73fd1bcc",
+  "to_city_id": "c23fe456-3395-46c0-abc9-af7fbc376d95",
+  "user_id": "8131f514-f39d-4949-ba9a-2f95b289abf7",
+  "shipment_tracking_id": "QC0123081500006-01",
+  "segment_id": "2",
+  "service_type": "pickup",
+  "job_type": "pickup",
+  "hub_id": "9da3e0d4-da13-4cc0-815b-d3b507b4f1a8",
+  "driver_id": "6b374174-e7d4-44bc-9bfb-3c16c8369448",
+  "driver_name": "Bruce Banner",
+  "driver_phone_code": "+1",
+  "driver_phone_number": "2025550000",
+  "vehicle_id": "0123456789VV",
+  "vehicle_type": "SUV",
+  "vehicle_number": "Lexus RX",
+  "sender_name": "Bruce Wayne",
+  "receiver_name": "Clark Kent",
+  "eta": "2023-04-30T14:31:59.000+08:00",
+  "failed_reason": "This is only a test fail",
+  "failed_reason_code": "FAIL1",
+  "milestone_coordinates": {
+    "lat": 16.0715831,
+    "lon": 16.0715831
+  },
+  "additional_info": {
+    "images": [
+      {
+        "file_name": "pod1.jpg",
+        "file_url": "https://api.shipment.TEST.quincus.com/pod1.jpg",
+        "file_size": 1000
+      },
+      {
+        "file_name": "pod2.jpg",
+        "file_url": "https://api.shipment.TEST.quincus.com/pod2.jpg",
+        "file_size": 2000
+      }
+    ],
+    "signature": [
+      {
+        "file_name": "sign2.png",
+        "file_url": "https://api.shipment.TEST.quincus.com/sign2.png",
+        "file_size": 1000
+      }
+    ],
+    "remarks": "This is OK",
+    "cod": {
+      "amount": 100.00,
+      "currency_code": "MYR"
+    }
+  }
+}

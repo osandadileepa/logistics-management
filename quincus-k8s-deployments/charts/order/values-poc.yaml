@@ -1,0 +1,105 @@
+app:
+  region: ap-southeast-1
+  puma:
+    healthcheck: true
+    enabled: true
+    hpa:
+      minReplicas: 2
+      maxReplicas: 4
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 4000
+    mem_required: 2000
+    cpu_limit: 2000
+    cpu_required: 1000
+  sidekiq:
+    lifecycle:
+      preStop:
+       command:
+         - /bin/sh
+         - '-c'
+         - |
+           kill -TERM $(ps -aux| grep -i 'sidekiq' | awk 'NR==1{print $2}')  
+    service_account: "sidekiq-sa"
+    healthcheck: true
+    healthcheck_command:
+       - sh
+       - '-c'
+       - |
+         if [ $(($(cat /sys/fs/cgroup/memory/memory.usage_in_bytes)*100/$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes))) -gt 75 ]; then exit 1;fi    
+    enabled: true
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 3000
+    cpu_required: 1500
+  qlogger:
+    healthcheck: false
+    enabled: false
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 3000
+    cpu_required: 1500
+  kafka:
+    hpa:
+      minReplicas: 1
+      maxReplicas: 1
+      averageCPUUtilization: 75
+      averageMemoryUtilization: 75
+    mem_limit: 7000
+    mem_required: 3500
+    cpu_limit: 4000
+    cpu_required: 2000
+  namespace: poc
+  name: order
+  port: 3000
+  env: poc
+  image_pull_policy: IfNotPresent
+  node_selectors:
+    environment: poc
+    node-type: on_demand
+  preDeployScript:
+    enabled: true
+    scriptPath: pre-deploy/pre-deploy.sh #script to be ran inside the container
+cron:
+  enabled: false
+  command: "cd /var/app/current; bin/init-config.sh; bundle exec rake open_api_counters:reset --silent"
+  schedule: "0 * * * *"
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/order-quincus-images
+  tag: "f825214"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: poc/order
+  versionId: f5e4763c-3ae9-40a2-9f8a-d1956578fd71
+ingress:
+  enabled: true
+  hostName: api.order.poc.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://dispatch.poc.quincus.com, https://shipment.poc.quincus.com, https://pricing.poc.quincus.com, https://common.poc.quincus.com, https://order.poc.quincus.com, https://poc.quincus.com, https://quincus.poc.qship.quincus.com, https://staging-ops.apx.group, https://oms.postsales.ams1907.com, https://oms.expresscritical.ams1907.com, https://track.postsales.ams1907.com, https://track.expresscritical.ams1907.com"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,locale,token,timeout,platform"    
+redis:
+  architecture: standalone
+  enabled: true
+  master:
+    persistence:
+      size: 8Gi
+    node_selectors:
+      environment: poc
+      node-type: on_demand
+  auth:
+    enabled: false
+#deployed on Thu May 18 06:10:36 UTC 2023

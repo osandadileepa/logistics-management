@@ -1,0 +1,33 @@
+{{- if ne .Values.app.region  "us-west-2"  }}
+{{- if .Values.cron.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ .Values.app.name }}-cronjob"
+spec:
+  concurrencyPolicy: Forbid
+  schedule: {{ .Values.cron.schedule | quote }}
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: "{{ .Values.app.name }}-cronjob"
+            image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            command:
+            - /bin/bash
+            - -c
+            - {{ .Values.cron.command }}
+            envFrom:
+            - secretRef:
+                name: {{ .Values.app.name }}
+          restartPolicy: Never
+          {{- if .Values.app.node_selectors }}
+          nodeSelector: 
+            {{- range $key, $val := .Values.app.node_selectors }}
+            {{ $key }}: {{ $val }}
+            {{- end}}
+          {{- end}}
+{{- end }}
+{{- end }}

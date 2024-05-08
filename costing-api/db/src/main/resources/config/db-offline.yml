@@ -1,0 +1,6 @@
+db:
+  datasource:
+    url: jdbc:mysql://localhost:3306/costing
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123qwe

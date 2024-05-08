@@ -1,0 +1,215 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-3437
+      author: paullabis
+      comment: "Update on location_hierarchy table fields, indexes and constraints"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_country_location
+        - dropForeignKeyConstraint:
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_state_location
+        - dropForeignKeyConstraint:
+            baseTableName: location_hierarchy
+            constraintName: fk_location_hierarchy_city_location
+        - dropUniqueConstraint:
+            constraintName: location_hierarchy_unique_constraint
+            tableName: location_hierarchy
+        - renameColumn:
+            oldColumnName: country
+            newColumnName: country_id
+            columnDataType: varchar(48)
+            tableName: location_hierarchy
+        - renameColumn:
+            oldColumnName: state
+            newColumnName: state_id
+            columnDataType: varchar(48)
+            tableName: location_hierarchy
+        - renameColumn:
+            oldColumnName: city
+            newColumnName: city_id
+            columnDataType: varchar(48)
+            tableName: location_hierarchy
+        - renameColumn:
+            oldColumnName: facility
+            newColumnName: facility_id
+            columnDataType: varchar(48)
+            tableName: location_hierarchy
+        - addUniqueConstraint:
+            columnNames: organization_id, country_id, state_id, city_id, facility_id
+            constraintName: location_hierarchy_unique_constraint
+            tableName: location_hierarchy
+        - addIndex:
+            columns: organization_id, country_id, state_id, city_id, facility_id
+            indexName: idx_location_hierarchy
+            tableName: location_hierarchy
+  - changeSet:
+      id: SHPV2-2046
+      author: ehmencinas
+      comment: "Added index"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: shipmentjourney_id
+              - column:
+                  name: version
+            indexName: package_journey_segment_shipmentjourney_id_version_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_tracking_id
+              - column:
+                  name: order_id
+            indexName: shipment_shipment_tracking_id_order_id_idx
+            tableName: shipment
+        - createIndex:
+            columns:
+              - column:
+                  name: order_id
+              - column:
+                  name: organization_id
+            indexName: shipment_order_id_org_id_idx
+            tableName: shipment
+        - createIndex:
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: organization_id
+            indexName: shipment_id_org_id_idx
+            tableName: shipment
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_tracking_id
+              - column:
+                  name: organization_id
+            indexName: shipment_shipment_tracking_id_org_id_idx
+            tableName: shipment
+        - createIndex:
+            columns:
+              - column:
+                  name: shipmentjourney_id
+            indexName: package_journey_segment_shipment_journey_id_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: status
+            indexName: package_journey_segment_status_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: transport_type
+            indexName: package_journey_segment_status_transport_type_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: start_location_hierarchy
+            indexName: package_journey_segment_start_location_hierarchy_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: end_location_hierarchy
+            indexName: package_journey_segment_end_location_hierarchy_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: deleted
+            indexName: package_journey_segment_id_deleted_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: airline_code
+              - column:
+                  name: flight_number
+              - column:
+                  name: departure_time
+              - column:
+                  name: flight_origin
+              - column:
+                  name: flight_destination
+            indexName: package_journey_segment_acode_flt_no_dtime_origin_dest_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: transport_type
+              - column:
+                  name: status
+              - column:
+                  name: id
+            indexName: package_journey_segment_transport_type_status_id_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: airline
+              - column:
+                  name: organization_id
+            indexName: package_journey_segment_airline_org_id_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: shipmentjourney_id
+              - column:
+                  name: organization_id
+              - column:
+                  name: deleted
+            indexName: package_journey_segment_shipment_journey_id_org_id_deleted_idx
+            tableName: package_journey_segment
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_id
+            indexName: milestone_shipment_id_idx
+            tableName: milestone
+        - createIndex:
+            columns:
+              - column:
+                  name: package_journey_segment_id
+              - column:
+                  name: type
+            indexName: alert_package_journey_segment_id_type_idx
+            tableName: alert
+        - createIndex:
+            columns:
+              - column:
+                  name: ext_id
+              - column:
+                  name: organization_id
+            indexName: location_ext_id_org_id_idx
+            tableName: location
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+              - column:
+                  name: type
+              - column:
+                  name: code
+              - column:
+                  name: name
+            indexName: location_org_id_type_code_name_idx
+            tableName: location
+        - createIndex:
+            columns:
+              - column:
+                  name: organization_id
+              - column:
+                  name: type
+            indexName: location_org_id_type_idx
+            tableName: location

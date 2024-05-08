@@ -1,0 +1,146 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-469-1
+      author: frank
+      comment: "Add Order Status"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: status
+                  type: varchar(50)
+            tableName: shipment_order
+        - dropNotNullConstraint:
+            columnName: status
+            tableName: shipment
+            columnDataType: varchar(50)
+  - changeSet:
+      id: SHPV2-242-1
+      author: frank
+      comment: "Add Segment Columns"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: cost
+                  type: varchar(45)
+              - column:
+                  name: ref_id
+                  type: varchar(50)
+              - column:
+                  name: airline
+                  type: varchar(50)
+              - column:
+                  name: partner_id
+                  type: varchar(50)
+              - column:
+                  name: currency_id
+                  type: varchar(50)
+              - column:
+                  name: instruction
+                  type: varchar(2000)
+              - column:
+                  name: flight_number
+                  type: varchar(50)
+              - column:
+                  name: master_waybill
+                  type: varchar(50)
+              - column:
+                  name: transport_category
+                  type: varchar(50)
+              - column:
+                  name: arrival_time
+                  type: varchar(50)
+              - column:
+                  name: pick_up_time
+                  type: varchar(50)
+              - column:
+                  name: drop_off_time
+                  type: varchar(50)
+              - column:
+                  name: lock_out_time
+                  type: varchar(50)
+              - column:
+                  name: recovery_time
+                  type: varchar(50)
+              - column:
+                  name: departure_time
+                  type: varchar(50)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-228-1
+      author: imeehablero
+      comment: "Add new columns"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: sequence
+                  type: varchar(45)
+              - column:
+                  name: vehicle_info
+                  type: varchar(50)
+              - column:
+                  name: airline_code
+                  type: varchar(50)
+              - column:
+                  name: calculated_mileage
+                  type: decimal(15, 4)
+              - column:
+                  name: duration
+                  type: decimal(15, 4)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-790-1
+      author: clarc
+      comment: "Add Modify Time in shipment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+            tableName: shipment
+  - changeSet:
+      id: SHPV2-233-1
+      author: leilcabahug
+      comment: "Add Reference ID in package, type in package_journey_segment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: ref_id
+                  type: varchar(48)
+            tableName: package
+        - addColumn:
+            columns:
+              - column:
+                  name: type
+                  type: varchar(16)
+            tableName: package_journey_segment
+  - changeSet:
+      id: SHPV2-110-2
+      author: leilcabahug
+      comment: "Add Pickup and Delivery Times to Order"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: pickup_start_time
+                  type: datetime
+              - column:
+                  name: pickup_commit_time
+                  type: datetime
+              - column:
+                  name: pickup_timezone
+                  type: varchar(48)
+              - column:
+                  name: delivery_start_time
+                  type: datetime
+              - column:
+                  name: delivery_commit_time
+                  type: datetime
+              - column:
+                  name: delivery_timezone
+                  type: varchar(48)
+            tableName: shipment_order

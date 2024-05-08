@@ -1,0 +1,37 @@
+replicaCount: 1
+app:
+  region: ap-southeast-1
+  namespace: dev
+  name: le-optimizer-flask
+  port: 5000
+  env: dev
+  image_pull_policy: IfNotPresent
+  mem_limit: 2048
+  mem_required: 1024
+  cpu_limit: 1000
+  cpu_required: 500
+  node_selectors:
+    environment: dev
+    node-type: spot
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+    averageCPUUtilization: 75
+    averageMemoryUtilization: 75
+image:
+  name: 244836737383.dkr.ecr.ap-southeast-1.amazonaws.com/le-optimizer
+  tag: "9aefd4a"
+service:
+  type: ClusterIP
+secretManager:
+  secretId: dev/le/le-optimizer-flask
+  versionId: 12403b54-bf70-4a83-9047-0aadb7932a7e  
+ingress:
+  enabled: true
+  hostName: api.logistics-optimizer.dev.quincus.com
+  hostName_noram: api.logistics-optimizer.dev-noram.quincus.com
+  path: /
+  nginx_annotations:
+    nginx.org/client-max-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+#deployed on Thu Aug  3 16:35:42 UTC 2023

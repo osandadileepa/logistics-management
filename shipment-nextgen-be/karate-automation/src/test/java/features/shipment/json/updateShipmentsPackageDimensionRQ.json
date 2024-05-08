@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "shipment_tracking_id": "shipment 1",
+      "type": "Package Type Name",
+      "value_of_goods": {
+        "height": 12.123,
+        "length": 12.44,
+        "width": 12.123,
+        "gross_weight": 12.123,
+        "measurement_unit": "IMPERIAL"
+      }
+    },
+    {
+      "shipment_tracking_id": "shipment 2",
+      "type": "Package Type Name",
+      "value_of_goods": {
+        "height": 12.123,
+        "length": 12.44,
+        "width": 12.123,
+        "gross_weight": 12.123,
+        "measurement_unit": "IMPERIAL"
+      }
+    }
+  ]
+}

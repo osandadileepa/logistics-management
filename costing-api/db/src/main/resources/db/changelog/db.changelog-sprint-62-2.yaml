@@ -1,0 +1,92 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: cinfante
+      comment: "QFIN-13 Renamed weight_calculation_rules to weight_calculation_rule, added column organization_id as FK in weight_calculation_rule, and created organization table."
+      changes:
+        - renameTable:
+            newTableName: weight_calculation_rule
+            oldTableName: weight_calculation_rules
+        - addColumn:
+            tableName: weight_calculation_rule
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: organization
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: create_time
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseColumnNames: organization_id
+            baseTableName: weight_calculation_rule
+            constraintName: fk_weight_calculation_rule_organization
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: organization
+  - changeSet:
+      id: 4
+      author: cinfante
+      comment: "QFIN-13 Created partner table and mapping weight_calculation_rule_partners table."
+      changes:
+        - createTable:
+            tableName: partner
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: create_time
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: TIMESTAMP
+        - createTable:
+            tableName: weight_calculation_rule_partner
+            columns:
+              - column:
+                  name: weight_calculation_rule_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: partner_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: weight_calculation_rule_id
+            baseTableName: weight_calculation_rule_partner
+            constraintName: fk_weight_calculation_rule_partner_segment1
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: weight_calculation_rule
+        - addForeignKeyConstraint:
+            baseColumnNames: partner_id
+            baseTableName: weight_calculation_rule_partner
+            constraintName: fk_weight_calculation_rule_partner_segment2
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: partner

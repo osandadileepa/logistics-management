@@ -1,0 +1,4 @@
+authentication:
+  baseUrl: https://api.auth.staging.quincus.com/
+  loginAPI: api/v1/users/login.json/
+  validateTokenAPI: api/v1/users/validate_token.json/

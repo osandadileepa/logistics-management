@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-4768
+      author: clarc
+      comment: "Adding the 'archived' table"
+      changes:
+        - createTable:
+            tableName: archived
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(48)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: create_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_time
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+              - column:
+                  name: reference_id
+                  type: VARCHAR(48)
+              - column:
+                  name: class_name
+                  type: VARCHAR(255)
+              - column:
+                  name: data
+                  type: json
+  - changeSet:
+      id: SHPV2-4768-2
+      author: clarc
+      comment: "Adding index on 'reference_id' and 'organization_id' in 'archived' table"
+      changes:
+        - createIndex:
+            tableName: archived
+            indexName: idx_archived_reference_organization
+            columns:
+              - column:
+                  name: reference_id
+              - column:
+                  name: organization_id
+  - changeSet:
+      id: SHPV2-4768-3
+      author: clarc
+      comment: "Dropping the existing foreign key constraint to allow for modification"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: instruction
+            constraintName: fk_instruction_package_journey_segment
+
+  - changeSet:
+      id: SHPV2-4768-4
+      author: clarc
+      comment: "Adding a new foreign key constraint with RESTRICT onUpdate and CASCADE onDelete behavior"
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: package_journey_segment_id
+            baseTableName: instruction
+            constraintName: fk_instruction_package_journey_segment
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+
+  - changeSet:
+      id: SHPV2-4768-5
+      author: clarc
+      comment: "Drop existing foreign key constraint from alert to package_journey_segment"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: alert
+            constraintName: fk_alert_package_journey_segment
+
+  - changeSet:
+      id: SHPV2-4768-6
+      author: clarc
+      comment: "Add new foreign key constraint from alert to package_journey_segment with onDelete: CASCADE"
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: package_journey_segment_id
+            baseTableName: alert
+            constraintName: fk_alert_package_journey_segment
+            referencedColumnNames: id
+            referencedTableName: package_journey_segment
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+  - changeSet:
+      id: SHPV2-5152-1
+      author: rahhi
+      comment: "Update index and constraint to interchange which fields should be unique and index only"
+      changes:
+        - dropUniqueConstraint:
+            columnNames: organization_id, type, code
+            constraintName: location_unique_constraint
+            tableName: location
+        - dropIndex:
+            indexName: location_ext_id_org_id_idx
+            tableName: location
+        - addUniqueConstraint:
+            columnNames: ext_id, organization_id
+            constraintName: location_unique_constraint
+            tableName: location
+        - addIndex:
+            columns: organization_id, type, code
+            indexName: location_org_type_code_idx
+            tableName: location

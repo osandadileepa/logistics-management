@@ -1,0 +1,1 @@
+mysql -u root -p shipmentv2_local < testdump.sql

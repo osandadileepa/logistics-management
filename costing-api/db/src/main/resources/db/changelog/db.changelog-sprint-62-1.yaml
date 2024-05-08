@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: ajalbaniel
+      comment: "QFIN-14 Initial schema definition for special_volume_weight_rules"
+      changes:
+        - addColumn:
+            tableName: weight_calculation_rules
+            columns:
+              - column:
+                  name: special_volume_weight_rule_id
+                  type: VARCHAR(36)
+        - createTable:
+            tableName: special_volume_weight_rule
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_uploaded
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: custom_formula
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: conversions
+                  type: BLOB
+        - addForeignKeyConstraint:
+            baseColumnNames: special_volume_weight_rule_id
+            baseTableName: weight_calculation_rules
+            constraintName: fk_weight_calculation_rule_special_volume_weight_rule
+            onDelete: RESTRICT
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: special_volume_weight_rule

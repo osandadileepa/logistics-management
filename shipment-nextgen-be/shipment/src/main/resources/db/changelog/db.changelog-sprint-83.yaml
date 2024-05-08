@@ -1,0 +1,178 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-5427
+      author: clarc
+      comment: "Drop null constraints with driver_id, partner_id and currency_id in cost"
+      changes:
+        - dropNotNullConstraint:
+            columnName: driver_id
+            columnDataType: VARCHAR(48)
+            tableName: cost
+        - dropNotNullConstraint:
+            columnName: partner_id
+            columnDataType: VARCHAR(48)
+            tableName: cost
+        - dropNotNullConstraint:
+            columnName: currency_id
+            columnDataType: VARCHAR(48)
+            tableName: cost
+  - changeSet:
+      id: SHPV2-5354
+      author: RM
+      comment: "Adding Multi Tenant Fields for Customer"
+      changes:
+        - addColumn:
+            tableName: customer
+            columns:
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+  - changeSet:
+      id: SHPV2-5354-2
+      author: Clarc
+      comment: "version for Customer"
+      changes:
+        - addColumn:
+            tableName: customer
+            columns:
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+  - changeSet:
+      id: SHPV2-5476
+      author: ehmencinas
+      comment: "Updated Pickup and Delivery Times Type for Order"
+      changes:
+        - modifyDataType:
+            columnName: pickup_start_time
+            newDataType: varchar(50)
+            tableName: shipment_order
+        - modifyDataType:
+            columnName: pickup_commit_time
+            newDataType: varchar(50)
+            tableName: shipment_order
+        - modifyDataType:
+            columnName: delivery_start_time
+            newDataType: varchar(50)
+            tableName: shipment_order
+        - modifyDataType:
+            columnName: delivery_commit_time
+            newDataType: varchar(50)
+            tableName: shipment_order
+
+  - changeSet:
+      id: SHPV2-5527
+      author: leilcabahug
+      comment: "external_order_id on milestone"
+      changes:
+        - addColumn:
+            tableName: milestone
+            columns:
+              - column:
+                  name: external_order_id
+                  type: varchar(64)
+
+  - changeSet:
+      id: SHPV2-0000
+      author: clarc
+      comment: "convert shipment_order table to multi-tenant"
+      changes:
+        - addColumn:
+            tableName: shipment_order
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+
+  - changeSet:
+      id: SHPV2-0000-1
+      author: clarc
+      comment: "added fields in organization table"
+      changes:
+        - addColumn:
+            tableName: organization
+            columns:
+              - column:
+                  name: modify_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: create_time
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: version
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+                  defaultValue: 1
+
+  - changeSet:
+      id: SHPV2-0000-2
+      author: clarc
+      comment: "Add organization_id to multiple tables for multi-tenancy support."
+      changes:
+        - addColumn:
+            tableName: commodity
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+        - addColumn:
+            tableName: package_dimension
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+        - addColumn:
+            tableName: address
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+        - addColumn:
+            tableName: package
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+        - addColumn:
+            tableName: shipment_journey
+            columns:
+              - column:
+                  name: organization_id
+                  type: VARCHAR(48)
+
+  - changeSet:
+      id: SHPV2-5551
+      author: leilcabahug
+      comment: "add deleted flag on shipment"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: deleted
+                  type: boolean
+            tableName: shipment

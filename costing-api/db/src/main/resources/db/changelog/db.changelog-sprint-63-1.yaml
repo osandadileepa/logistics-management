@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: ajalbaniel
+      comment: "QFINB-00 Modified ids to standard UUID format"
+      changes:
+#        - modifyDataType:
+#            tableName: weight_calculation_rule
+#            columnName: id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: weight_calculation_rule
+#            columnName: special_volume_weight_rule_id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: weight_calculation_rule
+#            columnName: organization_id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: special_volume_weight_rule
+#            columnName: id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: organization
+#            columnName: id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: partner
+#            columnName: id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: weight_calculation_rule_partner
+#            columnName: weight_calculation_rule_id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: weight_calculation_rule_partner
+#            columnName: partner_id
+#            newDataType: VARCHAR(36)
+#        - modifyDataType:
+#            tableName: rate_card
+#            columnName: id
+#            newDataType: VARCHAR(36)

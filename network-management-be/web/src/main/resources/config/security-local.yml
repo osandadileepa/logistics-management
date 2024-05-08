@@ -1,0 +1,17 @@
+security:
+  allowed:
+    - "/sessions"
+    - "/v3/**"
+    - "/swagger-ui/**"
+    - "/actuator/**"
+  origins:
+    - "*"
+  methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "OPTIONS"
+    - "DELETE"
+    - "PATCH"
+  headers:
+    - "*"

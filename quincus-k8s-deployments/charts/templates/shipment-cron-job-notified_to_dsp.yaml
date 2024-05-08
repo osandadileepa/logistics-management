@@ -1,0 +1,34 @@
+{{- if eq .Values.app.name  "shipment" }}
+{{- if ne .Values.app.region  "us-west-2"  }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ .Values.app.name }}-notified-to-dsp"
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+          - name: "{{ .Values.app.name }}-notified-to-dsp"
+            image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+            command:
+            - /bin/bash
+            - -c
+            - -l
+            - 'cd /var/app/current && bin/init-config.sh && bundle exec rake segment:notified_to_dsp'
+            envFrom:
+            - secretRef:
+                name: {{ .Values.app.name }}
+          restartPolicy: Never
+          {{- if .Values.app.node_selectors }}
+          nodeSelector: 
+            {{- range $key, $val := .Values.app.node_selectors }}
+            {{ $key }}: {{ $val }}
+            {{- end}}
+          {{- end}}
+{{- end }}
+{{- end }}

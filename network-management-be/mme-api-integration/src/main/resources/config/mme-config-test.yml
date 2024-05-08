@@ -1,0 +1,7 @@
+mme:
+  authValue: fa64a904237b769763f507ed673a105405a966fde049fe613dc6103ba69e3d73
+  baseUrl: https://wiremock.quincus.com/
+  trainModel: train-model
+  checkTrainModel: get-trained-model
+  predict: predict
+  checkPrediction: get-prediction

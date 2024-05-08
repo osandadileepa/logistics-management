@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: SHPV2-583
+      author: clarc
+      comment: "Added index for shipment_tracking_id in shipment and deleted in package_journey_segment"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: shipment_tracking_id
+            indexName: shipment_shipment_tracking_id_idx
+            tableName: shipment
+        - createIndex:
+            columns:
+              - column:
+                  name: deleted
+            indexName: package_journey_segment_deleted_idx
+            tableName: package_journey_segment
+
+  - changeSet:
+      id: SHPV2-263
+      author: clarc
+      comment: "Added index for issued_date from cost table"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: issued_date
+            indexName: cost_issued_date_idx
+            tableName: cost
+
+  - changeSet:
+      id: SHPV2-1285
+      author: leilcabahug
+      comment: "Added required fields for Segment Dispatch"
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: external_id
+                  type: VARCHAR(48)
+            tableName: commodity
+        - addColumn:
+            columns:
+              - column:
+                  name: ops_type
+                  type: VARCHAR(32)
+            tableName: shipment_order
+        - addColumn:
+            columns:
+              - column:
+                  name: hub_id
+                  type: VARCHAR(48)
+            tableName: package_journey_segment
+        - addColumn:
+            columns:
+              - column:
+                  name: external_id
+                  type: VARCHAR(48)
+              - column:
+                  name: postal_code
+                  type: VARCHAR(32)
+              - column:
+                  name: full_address
+                  type: VARCHAR(400)
+              - column:
+                  name: latitude
+                  type: VARCHAR(48)
+              - column:
+                  name: longitude
+                  type: VARCHAR(48)
+              - column:
+                  name: manual_coordinates
+                  type: boolean
+            tableName: address
+  - changeSet:
+      id: SHPV2-2622
+      author: clarc
+      comment: "Added index for order_id_label from shipment_order table"
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: order_id_label
+            indexName: shipment_order_order_id_label_idx
+            tableName: shipment_order
